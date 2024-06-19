@@ -1,58 +1,81 @@
-import React, { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login, register } from '../services/authService.tsx';
-import axios from 'axios';
+import React, { useCallback, useMemo, useState } from 'react';
+import useAuth from '../hooks/useAuth.tsx';
+import * as yup from 'yup';
+import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik';
 
-interface ErrorData {
-    msg: string
-}
+const useValidationSchema = () => {
+  return yup.object().shape({
+    email: yup.string().required('Please fill in your email.').email(),
+    password: yup.string().required('Please fill in your password.')
+  });
+};
+
+type LoginFormValues = {
+  email: string;
+  password: string;
+};
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const { login, isLoading } = useAuth();
 
-  const handleLogin = async (event: FormEvent) => {
-    event.preventDefault();
-    try {
-      await login({ email, password });
-      navigate('/login');
-    } catch (err: unknown) {
-        if (axios.isAxiosError(err) && err.response) {
-            const errorData: ErrorData = err.response.data;
-            setError(errorData.msg);
+  const onSubmit: FormikConfig<LoginFormValues>['onSubmit'] = useCallback(
+    async values => {
+      try {
+        await login(values.email, values.password);
+        setError('Login succesfull!');
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
         } else {
-            setError('An unexpected error occurred');
+          setError('An unknown error occurred.');
         }
-    }
-  };
+      }
+    },
+    [login]
+  );
+
+  const valSchema = useValidationSchema();
+
+  const formik: FormikConfig<LoginFormValues> = useMemo(
+    () => ({
+      onSubmit,
+      initialValues: {
+        email: '',
+        password: ''
+      },
+      validationSchema: valSchema
+    }),
+    [onSubmit, valSchema]
+  );
 
   return (
     <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email</label>
-          <input
+      <Formik<LoginFormValues> {...formik} key={'login-formik'}>
+        <Form>
+          <h2>Login</h2>
+          <Field
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            name="email"
+            placeholder="Email"
+            aria-label="Email"
+            autoComplete="email"
           />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
+          <ErrorMessage name="email" component="div" className="error" />
+          <Field
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            name="password"
+            placeholder="Password"
+            aria-label="Password"
+            autoComplete="current-password"
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+          <ErrorMessage name="password" component="div" className="error" />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+          {error && <div className="error">{error}</div>}
+        </Form>
+      </Formik>
     </div>
   );
 };
