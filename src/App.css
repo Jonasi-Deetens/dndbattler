@@ -1,8 +1,23 @@
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
+}
+
+.bg-home {
+  background: url('../src/assets/home.webp') no-repeat center center;
+  background-size: cover;
+}
+
+.bg-login {
+  background: url('../src/assets/login.webp') no-repeat center center;
+  background-size: cover;
+}
+
+.bg-register {
+  background: url('../src/assets/register.webp') no-repeat center center;
+  background-size: cover;
 }
 
 .logo {

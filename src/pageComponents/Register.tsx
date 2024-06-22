@@ -63,9 +63,9 @@ const Register: React.FC = () => {
   );
 
   return (
-    <div>
+    <div className="bg-register h-screen w-full flex flex-col justify-center">
       <Formik<RegisterFormValues> {...formik} key={'register-formik'}>
-        <Form>
+        <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg">
           <h2>Register</h2>
           <Field
             type="username"

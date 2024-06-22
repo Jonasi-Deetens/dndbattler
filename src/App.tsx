@@ -7,14 +7,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useEffect } from 'react';
 import useAuth from './hooks/useAuth';
 import Dashboard from './pageComponents/Dashboard';
+import CharacterSelect from './pageComponents/CharacterSelect';
+import CharacterCreate from './pageComponents/CharacterCreate';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate('dashboard');
-  }, [isAuthenticated, navigate]);
+    if (isAuthenticated) navigate('/characterSelect');
+    else navigate('/');
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -27,6 +30,22 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/characterSelect"
+          element={
+            <ProtectedRoute>
+              <CharacterSelect />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/characterCreate"
+          element={
+            <ProtectedRoute>
+              <CharacterCreate />
             </ProtectedRoute>
           }
         />

@@ -4,10 +4,12 @@ const API_URL = 'http://localhost:3001/api';
 
 interface LoginResponse {
   token: string;
+  userData: JSON;
 }
 
 interface RegisterResponse {
   token: string;
+  userData: JSON;
 }
 
 interface LoginData {
@@ -33,7 +35,10 @@ const register = async ({
       `${API_URL}/auth/register`,
       { email, password, confirmPassword, username }
     );
-    if (response.data.token) localStorage.setItem('token', response.data.token);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userData', JSON.stringify(response.data.userData));
+    }
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -55,7 +60,10 @@ const login = async ({
       email,
       password
     });
-    if (response.data.token) localStorage.setItem('token', response.data.token);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userData', JSON.stringify(response.data.userData));
+    }
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -68,6 +76,7 @@ const login = async ({
 
 const logout = () => {
   localStorage.removeItem('token');
+  localStorage.removeItem('userData');
 };
 
 export { register, login, logout };

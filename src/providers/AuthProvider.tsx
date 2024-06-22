@@ -1,4 +1,10 @@
-import { ReactNode, createContext, useEffect, useReducer } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useEffect,
+  useReducer,
+  useState
+} from 'react';
 import {
   login as authLogin,
   logout as authLogout,
@@ -19,6 +25,7 @@ interface AuthContextType extends AuthState {
     confirmPassword: string
   ) => Promise<void>;
   logout: () => void;
+  userData: UserData | null;
 }
 
 type AuthAction =
@@ -26,6 +33,12 @@ type AuthAction =
   | { type: 'LOGIN_FAILURE' }
   | { type: 'LOGOUT' }
   | { type: 'LOADING' };
+
+type UserData = {
+  id: string;
+  email: string;
+  username: string;
+};
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -63,11 +76,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      dispatch({ type: 'LOGIN_SUCCESS' });
+      const localUserData = localStorage.getItem('userData');
+      console.log(localUserData);
+      if (localUserData) {
+        try {
+          const parsedUserData: UserData = JSON.parse(localUserData);
+          setUserData(parsedUserData);
+          dispatch({ type: 'LOGIN_SUCCESS' });
+        } catch (error) {
+          console.error('Failed to parse user data from localStorage:', error);
+          localStorage.removeItem('userData');
+        }
+      }
     }
   }, []);
 
@@ -106,7 +131,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ ...state, login, register, logout, userData }}
+    >
       {children}
     </AuthContext.Provider>
   );

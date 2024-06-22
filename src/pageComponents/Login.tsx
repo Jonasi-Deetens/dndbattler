@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth.tsx';
 import * as yup from 'yup';
 import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik';
+import { useNavigate } from 'react-router-dom';
 
 const useValidationSchema = () => {
   return yup.object().shape({
@@ -18,12 +19,14 @@ type LoginFormValues = {
 const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { login, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit: FormikConfig<LoginFormValues>['onSubmit'] = useCallback(
     async values => {
       try {
         await login(values.email, values.password);
         setError('Login succesfull!');
+        navigate('/characterSelect');
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -32,7 +35,7 @@ const Login: React.FC = () => {
         }
       }
     },
-    [login]
+    [login, navigate]
   );
 
   const valSchema = useValidationSchema();
@@ -50,9 +53,9 @@ const Login: React.FC = () => {
   );
 
   return (
-    <div>
+    <div className="bg-login h-screen w-full flex flex-col justify-center">
       <Formik<LoginFormValues> {...formik} key={'login-formik'}>
-        <Form>
+        <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg">
           <h2>Login</h2>
           <Field
             type="email"
