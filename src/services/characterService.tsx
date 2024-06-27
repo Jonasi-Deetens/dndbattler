@@ -3,13 +3,17 @@ import { Character, NewCharacter } from '../types/DBTypes';
 
 const API_URL = 'http://localhost:3001/api/characters'; // Adjust as necessary
 
+export type CharacterPromise = {
+  allCharacters: Character[];
+};
+
 // Fetch all characters
 export const getAllCharacters = async (
   userId: string
-): Promise<Character[]> => {
+): Promise<CharacterPromise> => {
   console.log(userId);
   try {
-    const response: AxiosResponse<Character[]> = await axios.get(API_URL, {
+    const response: AxiosResponse<CharacterPromise> = await axios.get(API_URL, {
       params: { userId }
     });
     return response.data;
@@ -26,7 +30,9 @@ export const addCharacter = async (
   try {
     const response: AxiosResponse<Character> = await axios.post(
       API_URL + '/add',
-      characterData
+      {
+        characterData
+      }
     );
     return response.data;
   } catch (error) {

@@ -55,14 +55,15 @@ const Login: React.FC = () => {
   return (
     <div className="bg-login h-screen w-full flex flex-col justify-center">
       <Formik<LoginFormValues> {...formik} key={'login-formik'}>
-        <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg">
-          <h2>Login</h2>
+        <Form className="m-auto w-11/12 md:w-1/3 bg-slate-700 p-10 rounded-lg shadow-lg flex flex-col gap-y-5">
+          <h2 className="text-2xl">Login</h2>
           <Field
             type="email"
             name="email"
             placeholder="Email"
             aria-label="Email"
             autoComplete="email"
+            className="p-2 text-gray-500"
           />
           <ErrorMessage name="email" component="div" className="error" />
           <Field
@@ -71,10 +72,19 @@ const Login: React.FC = () => {
             placeholder="Password"
             aria-label="Password"
             autoComplete="current-password"
+            className="p-2 text-gray-500"
           />
           <ErrorMessage name="password" component="div" className="error" />
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+          <button
+            className="bg-transparent"
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            &lt; back
           </button>
           {error && <div className="error">{error}</div>}
         </Form>

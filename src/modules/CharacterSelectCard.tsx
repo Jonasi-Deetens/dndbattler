@@ -6,7 +6,7 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
 }) => {
   return (
     <div>
-      <h1>{character.name}</h1>
+      <p>{character.name}</p>
     </div>
   );
 };

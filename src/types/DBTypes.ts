@@ -1,7 +1,7 @@
 export type Character = {
     id: number;
     name: string;
-    userId: number;
+    userId: string;
     classId: number;
     raceId: number;
     subraceId: number;
@@ -60,7 +60,8 @@ export type Class = {
 };
 
 export type Language = {
-    // Define properties of Relationship
+    id: number;
+    name: string;
 };
 
 export type Enemy = {
@@ -115,6 +116,7 @@ export type Subrace = {
     id: number;
     name: string;
     abilityScoreIncreases: JSON;
+    parentRaceId: number;
     speed: number;
     // Other properties of Subrace
 };

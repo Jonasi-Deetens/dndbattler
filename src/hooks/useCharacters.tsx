@@ -14,7 +14,7 @@ const useCharacters = () => {
       if (userData) {
         try {
           const data = await getAllCharacters(userData?.id);
-          setCharacters(data);
+          setCharacters(data.allCharacters);
         } catch (error) {
           setError('Failed to fetch characters');
         } finally {
