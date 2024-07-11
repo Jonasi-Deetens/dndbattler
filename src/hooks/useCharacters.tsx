@@ -7,13 +7,13 @@ const useCharacters = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { userData } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCharacters = async () => {
-      if (userData) {
+      if (user) {
         try {
-          const data = await getAllCharacters(userData?.id);
+          const data = await getAllCharacters(user?.id);
           setCharacters(data.allCharacters);
         } catch (error) {
           setError('Failed to fetch characters');
@@ -24,7 +24,7 @@ const useCharacters = () => {
     };
 
     fetchCharacters();
-  }, [userData]);
+  }, [user]);
 
   const handleAddCharacter = async (characterData: NewCharacter) => {
     try {

@@ -1,11 +1,10 @@
 export type User = {
   id: string;
   email: string;
-  password: string;
   username?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  characters: Character[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  characters?: Character[];
 };
 
 export type Campaign = {
@@ -56,10 +55,10 @@ export type Character = {
   stats: Record<string, unknown>;
   senses: Sense[];
   userId: string;
-  user: User;
-  race: Race;
-  class: Class;
-  subrace?: Subrace;
+  user: User | null;
+  race: Race | null;
+  class: Class | null;
+  subrace?: Subrace | null;
   abilities: Ability[];
   memberships: Membership[];
 };
@@ -459,4 +458,5 @@ export enum DamageType {
   VARIES = 'VARIES'
 }
 
-export interface NewCharacter extends Omit<Character, 'id'> {}
+export interface NewCharacter
+  extends Omit<Character, 'id' | 'raceId' | 'classId' | 'userId'> {}

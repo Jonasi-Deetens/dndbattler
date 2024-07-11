@@ -4,12 +4,12 @@ const API_URL = 'http://localhost:3001/api';
 
 interface LoginResponse {
   token: string;
-  userData: JSON;
+  user: JSON;
 }
 
 interface RegisterResponse {
   token: string;
-  userData: JSON;
+  user: JSON;
 }
 
 interface LoginData {
@@ -37,7 +37,7 @@ const register = async ({
     );
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userData', JSON.stringify(response.data.userData));
+      localStorage.setItem('user', JSON.stringify(response.data.user));
     }
     return response.data;
   } catch (error: unknown) {
@@ -62,7 +62,7 @@ const login = async ({
     });
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userData', JSON.stringify(response.data.userData));
+      localStorage.setItem('user', JSON.stringify(response.data.user));
     }
     return response.data;
   } catch (error: unknown) {
@@ -76,7 +76,7 @@ const login = async ({
 
 const logout = () => {
   localStorage.removeItem('token');
-  localStorage.removeItem('userData');
+  localStorage.removeItem('user');
 };
 
 export { register, login, logout };

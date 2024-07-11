@@ -44,7 +44,7 @@ const CharacterCreate: React.FC = () => {
   const { races } = useRaces();
   const { subraces } = useSubraces();
   const { classes } = useClasses();
-  const { userData } = useAuth();
+  const { user } = useAuth();
 
   const onSubmit: FormikConfig<NewCharacter>['onSubmit'] = useCallback(
     async values => {
@@ -71,10 +71,40 @@ const CharacterCreate: React.FC = () => {
       onSubmit,
       initialValues: {
         name: '',
-        userId: userData?.id || '',
-        classId: 1,
-        subraceId: 1,
-        raceId: 1,
+        currentLocation: '',
+        user: user,
+        ideals: [],
+        bonds: [],
+        flaws: [],
+        fears: [],
+        savingThrows: [],
+        magicSavingThrows: [],
+        advantages: [],
+        disadvantages: [],
+        resistances: [],
+        immunities: [],
+        obstacles: [],
+        internalConflicts: [],
+        vices: [],
+        skills: [],
+        abilities: [],
+        memberships: [],
+        personalityTraits: [],
+        appearance: '',
+        items: [],
+        spells: [],
+        senses: [],
+        race: null,
+        class: null,
+        age: 0,
+        background: '',
+        speed: 30,
+        alignment: 'Neutral',
+        primaryGoal: '',
+        secondaryGoals: [],
+        relationships: [],
+        backstory: '',
+        size: 'Medium',
         level: 1,
         experience: 0,
         health: 8,
@@ -221,7 +251,7 @@ const CharacterCreate: React.FC = () => {
                 >
                   {subraces &&
                     subraces.map(option => {
-                      if (option.parentRaceId === values.raceId) {
+                      if (option.parentRaceId === values.race?.id) {
                         return (
                           <option key={option.id} value={option.id}>
                             {option.name}
