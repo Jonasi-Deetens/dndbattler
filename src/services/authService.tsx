@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = "http://localhost:3001/api";
 
 interface LoginResponse {
   token: string;
@@ -28,7 +28,7 @@ const register = async ({
   username,
   email,
   password,
-  confirmPassword
+  confirmPassword,
 }: RegisterData): Promise<RegisterResponse> => {
   try {
     const response = await axios.post<RegisterResponse>(
@@ -36,14 +36,14 @@ const register = async ({
       { email, password, confirmPassword, username }
     );
     if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
     }
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       const customError = new Error(
-        error.response.data.msg || 'Registration failed'
+        error.response.data.msg || "Registration failed"
       );
       throw customError;
     }
@@ -53,21 +53,21 @@ const register = async ({
 
 const login = async ({
   email,
-  password
+  password,
 }: LoginData): Promise<LoginResponse> => {
   try {
     const response = await axios.post<LoginResponse>(`${API_URL}/auth/login`, {
       email,
-      password
+      password,
     });
     if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
     }
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      const customError = new Error(error.response.data.msg || 'Login failed');
+      const customError = new Error(error.response.data.msg || "Login failed");
       throw customError;
     }
     throw error;
@@ -75,8 +75,8 @@ const login = async ({
 };
 
 const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
 };
 
 export { register, login, logout };
