@@ -1,17 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import useAuth from '../hooks/useAuth';
-import * as yup from 'yup';
-import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import * as yup from "yup";
+import { ErrorMessage, Field, Form, Formik, FormikConfig } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const useValidationSchema = () => {
   return yup.object().shape({
-    username: yup.string().required('Please fill in your username.'),
-    email: yup.string().required('Please fill in your email.').email(),
-    password: yup.string().required('Please fill in your password.'),
+    username: yup.string().required("Please fill in your username."),
+    email: yup.string().required("Please fill in your email.").email(),
+    password: yup.string().required("Please fill in your password."),
     confirmPassword: yup
       .string()
-      .required('Please fill in password confirmation.')
+      .required("Please fill in password confirmation."),
   });
 };
 
@@ -27,8 +27,8 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { register, isLoading } = useAuth();
 
-  const onSubmit: FormikConfig<RegisterFormValues>['onSubmit'] = useCallback(
-    async values => {
+  const onSubmit: FormikConfig<RegisterFormValues>["onSubmit"] = useCallback(
+    async (values) => {
       try {
         await register(
           values.username,
@@ -36,12 +36,12 @@ const Register: React.FC = () => {
           values.password,
           values.confirmPassword
         );
-        setError('Succesfully registered!');
+        setError("Succesfully registered!");
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
         } else {
-          setError('An unknown error occurred.');
+          setError("An unknown error occurred.");
         }
       }
     },
@@ -54,19 +54,19 @@ const Register: React.FC = () => {
     () => ({
       onSubmit,
       initialValues: {
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       },
-      validationSchema: valSchema
+      validationSchema: valSchema,
     }),
     [onSubmit, valSchema]
   );
 
   return (
     <div className="bg-register h-screen w-full flex flex-col justify-center">
-      <Formik<RegisterFormValues> {...formik} key={'register-formik'}>
+      <Formik<RegisterFormValues> {...formik} key={"register-formik"}>
         <Form className="m-auto w-11/12 md:w-1/3 bg-slate-700 p-10 rounded-lg shadow-lg flex flex-col gap-y-5">
           <h2 className="text-2xl">Register</h2>
           <Field
@@ -97,7 +97,7 @@ const Register: React.FC = () => {
           />
           <ErrorMessage name="password" component="div" className="error" />
           <Field
-            type="confirmPassword"
+            type="password"
             name="confirmPassword"
             placeholder="Confirm password"
             aria-label="ConfirmPassword"
@@ -110,12 +110,12 @@ const Register: React.FC = () => {
             className="error"
           />
           <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Registering...' : 'Register'}
+            {isLoading ? "Registering..." : "Register"}
           </button>
           <button
             className="bg-transparent"
             onClick={() => {
-              navigate('/');
+              navigate("/");
             }}
           >
             &lt; back

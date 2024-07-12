@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Race } from '../types/DBTypes';
-import { getAllRaces } from '../services/raceService';
+import { useEffect, useState } from "react";
+import { Race } from "../types/DBTypes";
+import { getAllRaces, getRaceByIdService } from "../services/raceService";
 
 const useRaces = () => {
   const [races, setRaces] = useState<Race[]>([]);
@@ -13,7 +13,7 @@ const useRaces = () => {
         const data = await getAllRaces();
         setRaces(data);
       } catch (error) {
-        setError('Failed to fetch races');
+        setError("Failed to fetch races");
       } finally {
         setLoading(false);
       }
@@ -22,7 +22,16 @@ const useRaces = () => {
     fetchRaces();
   }, []);
 
-  return { races, loading, error };
+  const getRaceById = async ({ id }: { id: number }) => {
+    try {
+      const race = await getRaceByIdService({ id: id });
+      return race;
+    } catch (error) {
+      throw new Error("Failed to fetch race by id");
+    }
+  };
+
+  return { races, loading, error, getRaceById };
 };
 
 export default useRaces;
