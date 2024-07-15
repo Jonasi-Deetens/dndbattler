@@ -1,46 +1,46 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React, { useEffect, useState } from "react";
-import useRaces from "../../hooks/useRaces";
-import useSubraces from "../../hooks/useSubraces";
-import { Character } from "../../types/DBTypes";
+import { ErrorMessage, Field, useFormikContext } from 'formik';
+import React, { useEffect, useState } from 'react';
+import useRaces from '../../hooks/useRaces';
+import useSubraces from '../../hooks/useSubraces';
+import { NewCharacter } from '../../types/DBTypes';
 
 const StepOne: React.FC = () => {
-  const { setFieldValue, values } = useFormikContext<Character>();
+  const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { races } = useRaces();
   const { subraces } = useSubraces();
   const [hasSubraces, setHasSubraces] = useState<boolean>(true);
 
   useEffect(() => {
     if (races && races.length > 0 && !values.raceId)
-      setFieldValue("raceId", races[0].id);
+      setFieldValue('raceId', races[0].id);
   }, [races, values.raceId, setFieldValue]);
 
   useEffect(() => {
     const matchingSubraces = subraces.filter(
-      (subrace) => subrace.parentRaceId === values.raceId
+      subrace => subrace.parentRaceId === values.raceId
     );
     setHasSubraces(matchingSubraces.length > 0);
     if (matchingSubraces.length > 0 && !values.subraceId) {
-      setFieldValue("subraceId", matchingSubraces[0].id);
+      setFieldValue('subraceId', matchingSubraces[0].id);
     }
   }, [subraces, values.raceId, values.subraceId, setFieldValue]);
 
   const handleRaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newRaceId = parseInt(e.target.value);
-    setFieldValue("raceId", newRaceId);
+    setFieldValue('raceId', newRaceId);
     const matchingSubraces = subraces.filter(
-      (subrace) => subrace.parentRaceId === newRaceId
+      subrace => subrace.parentRaceId === newRaceId
     );
     setHasSubraces(matchingSubraces.length > 0);
     if (matchingSubraces.length > 0) {
-      setFieldValue("subraceId", matchingSubraces[0].id);
+      setFieldValue('subraceId', matchingSubraces[0].id);
     } else {
-      setFieldValue("subraceId", undefined);
+      setFieldValue('subraceId', undefined);
     }
   };
 
   const handSubraceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFieldValue("subraceId", parseInt(e.target.value));
+    setFieldValue('subraceId', parseInt(e.target.value));
   };
 
   return (
@@ -54,7 +54,7 @@ const StepOne: React.FC = () => {
         onChange={handleRaceChange}
       >
         {races &&
-          races.map((option) => (
+          races.map(option => (
             <option key={option.id} value={option.id}>
               {option.name}
             </option>
@@ -71,7 +71,7 @@ const StepOne: React.FC = () => {
             onChange={handSubraceChange}
           >
             {subraces &&
-              subraces.map((option) => {
+              subraces.map(option => {
                 if (option.parentRaceId === values.raceId) {
                   return (
                     <option key={option.id} value={option.id}>

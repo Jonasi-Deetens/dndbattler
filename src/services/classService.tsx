@@ -29,3 +29,19 @@ export const getAllSpellsFromClassService = async ({
     throw error;
   }
 };
+
+export const getClassByIdService = async ({
+  id
+}: {
+  id: number;
+}): Promise<Class> => {
+  try {
+    const response: AxiosResponse<Class> = await axios.get(
+      API_URL + '/byId/' + id
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching class:', error);
+    throw error;
+  }
+};

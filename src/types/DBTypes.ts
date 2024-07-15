@@ -22,6 +22,7 @@ export type Character = {
   raceId: number;
   classId: number;
   subraceId?: number;
+  subclassId?: number;
   background: string;
   alignment: string;
   primaryGoal: string;
