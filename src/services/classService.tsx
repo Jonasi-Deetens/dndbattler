@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { Class } from "../types/DBTypes";
+import { Class, Spell } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/classes"; // Adjust as necessary
+const API_URL = "http://localhost:3055/api/classes"; // Adjust as necessary
 
 // Fetch all classes
 export const getAllClasses = async (): Promise<Class[]> => {
@@ -10,6 +10,22 @@ export const getAllClasses = async (): Promise<Class[]> => {
     return response.data;
   } catch (error) {
     console.error("Error fetching classes:", error);
+    throw error;
+  }
+};
+
+export const getAllSpellsFromClassService = async ({
+  className,
+}: {
+  className: string;
+}): Promise<Spell[]> => {
+  try {
+    const response: AxiosResponse<Spell[]> = await axios.get(
+      API_URL + "/spells/" + className
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching spells from class:", error);
     throw error;
   }
 };

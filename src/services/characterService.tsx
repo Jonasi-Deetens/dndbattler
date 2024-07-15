@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Character, NewCharacter } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/characters"; // Adjust as necessary
+const API_URL = "http://localhost:3055/api/characters"; // Adjust as necessary
 
 export type CharacterPromise = {
   allCharacters: Character[];

@@ -55,9 +55,9 @@ export type Character = {
   stats: Record<string, unknown>;
   senses: Sense[];
   userId: string;
-  user: User | null;
-  race: Race | null;
-  class: Class | null;
+  user: User;
+  race: Race;
+  class: Class;
   subrace?: Subrace | null;
   abilities: Ability[];
   memberships: Membership[];
@@ -383,80 +383,84 @@ export type Membership = {
 };
 
 export enum FightingStyle {
-  ARCHERY = 'ARCHERY',
-  DEFENSE = 'DEFENSE',
-  DUELING = 'DUELING',
-  GREAT_WEAPON_FIGHTING = 'GREAT_WEAPON_FIGHTING',
-  PROTECTION = 'PROTECTION',
-  TWO_WEAPON_FIGHTING = 'TWO_WEAPON_FIGHTING'
+  ARCHERY = "ARCHERY",
+  DEFENSE = "DEFENSE",
+  DUELING = "DUELING",
+  GREAT_WEAPON_FIGHTING = "GREAT_WEAPON_FIGHTING",
+  PROTECTION = "PROTECTION",
+  TWO_WEAPON_FIGHTING = "TWO_WEAPON_FIGHTING",
 }
 
 export enum School {
-  ABJURATION = 'ABJURATION',
-  CONJURATION = 'CONJURATION',
-  DIVINATION = 'DIVINATION',
-  ENCHANTMENT = 'ENCHANTMENT',
-  EVOCATION = 'EVOCATION',
-  ILLUSION = 'ILLUSION',
-  NECROMANCY = 'NECROMANCY',
-  TRANSMUTATION = 'TRANSMUTATION',
-  TRANSFIGURATION = 'TRANSFIGURATION'
+  ABJURATION = "ABJURATION",
+  CONJURATION = "CONJURATION",
+  DIVINATION = "DIVINATION",
+  ENCHANTMENT = "ENCHANTMENT",
+  EVOCATION = "EVOCATION",
+  ILLUSION = "ILLUSION",
+  NECROMANCY = "NECROMANCY",
+  TRANSMUTATION = "TRANSMUTATION",
+  TRANSFIGURATION = "TRANSFIGURATION",
 }
 
 export enum Dice {
-  D4 = 'D4',
-  D6 = 'D6',
-  D8 = 'D8',
-  D10 = 'D10',
-  D12 = 'D12',
-  D20 = 'D20',
-  D100 = 'D100'
+  D4 = "D4",
+  D6 = "D6",
+  D8 = "D8",
+  D10 = "D10",
+  D12 = "D12",
+  D20 = "D20",
+  D100 = "D100",
 }
 
 export enum AbilityScore {
-  STR = 'STR',
-  DEX = 'DEX',
-  CON = 'CON',
-  INT = 'INT',
-  WIS = 'WIS',
-  CHA = 'CHA'
+  STR = "STR",
+  DEX = "DEX",
+  CON = "CON",
+  INT = "INT",
+  WIS = "WIS",
+  CHA = "CHA",
 }
 
 export enum EffectType {
-  BUFF = 'BUFF',
-  DEBUFF = 'DEBUFF',
-  HEALING = 'HEALING',
-  DAMAGE = 'DAMAGE',
-  CONTROL = 'CONTROL',
-  SUMMONING = 'SUMMONING',
-  UTILITY = 'UTILITY',
-  PROTECTION = 'PROTECTION',
-  MOVEMENT = 'MOVEMENT',
-  DETECTION = 'DETECTION',
-  TRANSFORMATION = 'TRANSFORMATION',
-  TRANSPORTATION = 'TRANSPORTATION',
-  RESTORATION = 'RESTORATION',
-  INSTANT_DEATH = 'INSTANT_DEATH',
-  COMMUNICATION = 'COMMUNICATION',
-  ILLUSION = 'ILLUSION'
+  BUFF = "BUFF",
+  DEBUFF = "DEBUFF",
+  HEALING = "HEALING",
+  DAMAGE = "DAMAGE",
+  CONTROL = "CONTROL",
+  SUMMONING = "SUMMONING",
+  UTILITY = "UTILITY",
+  PROTECTION = "PROTECTION",
+  MOVEMENT = "MOVEMENT",
+  DETECTION = "DETECTION",
+  TRANSFORMATION = "TRANSFORMATION",
+  TRANSPORTATION = "TRANSPORTATION",
+  RESTORATION = "RESTORATION",
+  INSTANT_DEATH = "INSTANT_DEATH",
+  COMMUNICATION = "COMMUNICATION",
+  ILLUSION = "ILLUSION",
 }
 
 export enum DamageType {
-  ACID = 'ACID',
-  BLUDGEONING = 'BLUDGEONING',
-  COLD = 'COLD',
-  FIRE = 'FIRE',
-  FORCE = 'FORCE',
-  LIGHTNING = 'LIGHTNING',
-  NECROTIC = 'NECROTIC',
-  PIERCING = 'PIERCING',
-  POISON = 'POISON',
-  PSYCHIC = 'PSYCHIC',
-  RADIANT = 'RADIANT',
-  SLASHING = 'SLASHING',
-  THUNDER = 'THUNDER',
-  VARIES = 'VARIES'
+  ACID = "ACID",
+  BLUDGEONING = "BLUDGEONING",
+  COLD = "COLD",
+  FIRE = "FIRE",
+  FORCE = "FORCE",
+  LIGHTNING = "LIGHTNING",
+  NECROTIC = "NECROTIC",
+  PIERCING = "PIERCING",
+  POISON = "POISON",
+  PSYCHIC = "PSYCHIC",
+  RADIANT = "RADIANT",
+  SLASHING = "SLASHING",
+  THUNDER = "THUNDER",
+  VARIES = "VARIES",
 }
 
 export interface NewCharacter
-  extends Omit<Character, 'id' | 'raceId' | 'classId' | 'userId'> {}
+  extends Omit<Character, "id" | "race" | "class" | "user"> {
+  dwarfToolProficiency?: string;
+  highElfBonusCantripId?: number;
+  highElfBonusLanguageId?: number;
+}

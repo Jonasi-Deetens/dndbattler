@@ -3,25 +3,54 @@ import React, { useEffect, useState } from "react";
 import useRaces from "../../hooks/useRaces";
 import useSubraces from "../../hooks/useSubraces";
 import { Character, Race, Subrace } from "../../types/DBTypes";
-import DwarfForm from "../../forms/races/DwarfForm";
-import HillDwarfForm from "../../forms/subraces/HillDwarfForm";
+import { DwarfForm, ElfForm } from "../../forms/races";
+import {
+  DarkElfForm,
+  HighElfForm,
+  HillDwarfForm,
+  MountainDwarfForm,
+  WoodElfForm,
+} from "../../forms/subraces";
 
-type RaceName = "Dwarf";
+type RaceName =
+  | "Dwarf"
+  | "Elf"
+  | "Halfling"
+  | "Human"
+  | "Dragonborn"
+  | "Gnome"
+  | "Half Elf"
+  | "Half Orc"
+  | "Tiefling";
 
 type RaceFormComponents = {
   [key in RaceName as string]: React.FC<object>;
 };
 const raceFormComponents: RaceFormComponents = {
   Dwarf: DwarfForm,
+  Elf: ElfForm,
 };
 
-type SubraceName = "Hill Dwarf";
+type SubraceName =
+  | "Hill Dwarf"
+  | "Mountain Dwarf"
+  | "High Elf"
+  | "Wood Elf"
+  | "Dark Elf"
+  | "Lightfoot"
+  | "Stout"
+  | "Forest Gnome"
+  | "Rock Gnome";
 
 type SubraceFormComponents = {
   [key in SubraceName as string]: React.FC<object>;
 };
 const subraceFormComponents: SubraceFormComponents = {
   "Hill Dwarf": HillDwarfForm,
+  "Mountain Dwarf": MountainDwarfForm,
+  "High Elf": HighElfForm,
+  "Wood Elf": WoodElfForm,
+  "Dark Elf": DarkElfForm,
 };
 
 const StepTwo: React.FC = () => {
