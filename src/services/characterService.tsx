@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from "axios";
-import { Character, NewCharacter } from "../types/DBTypes";
+import axios, { AxiosResponse } from 'axios';
+import { Character, NewCharacter } from '../types/DBTypes';
 
-const API_URL = "http://localhost:3055/api/characters"; // Adjust as necessary
+const API_URL = 'http://localhost:3001/api/characters'; // Adjust as necessary
 
 export type CharacterPromise = {
   allCharacters: Character[];
@@ -14,11 +14,11 @@ export const getAllCharacters = async (
   console.log(userId);
   try {
     const response: AxiosResponse<CharacterPromise> = await axios.get(API_URL, {
-      params: { userId },
+      params: { userId }
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching characters:", error);
+    console.error('Error fetching characters:', error);
     throw error;
   }
 };
@@ -29,14 +29,14 @@ export const addCharacter = async (
 ): Promise<Character> => {
   try {
     const response: AxiosResponse<Character> = await axios.post(
-      API_URL + "/add",
+      API_URL + '/add',
       {
-        characterData,
+        characterData
       }
     );
     return response.data;
   } catch (error) {
-    console.error("Error adding character:", error);
+    console.error('Error adding character:', error);
     throw error;
   }
 };

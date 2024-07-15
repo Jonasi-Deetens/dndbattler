@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React from "react";
-import { NewCharacter } from "../../types/DBTypes";
+import { ErrorMessage, Field, useFormikContext } from 'formik';
+import React from 'react';
+import { NewCharacter } from '../../types/DBTypes';
 
 const DwarfForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
@@ -10,7 +10,7 @@ const DwarfForm: React.FC = () => {
     <div>
       <h2 className="border p-2">DWARF</h2>
 
-      <p className="border-b p-2">
+      <p className="border-b p-2 w-fit m-auto">
         Select 1 out of the following 3 tools, you will be proficient with
         those.
       </p>
@@ -20,12 +20,12 @@ const DwarfForm: React.FC = () => {
         aria-label="DwarfToolProficiency"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("dwarfToolProficiency", e.target.value);
+          setFieldValue('dwarfToolProficiency', e.target.value);
         }}
         value={values.dwarfToolProficiency}
       >
         {toolOptions &&
-          toolOptions.map((option) => {
+          toolOptions.map(option => {
             return (
               <option key={option} value={option}>
                 {option}
