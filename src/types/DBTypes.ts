@@ -384,104 +384,104 @@ export type Membership = {
 };
 
 export enum FightingStyle {
-  ARCHERY = "ARCHERY",
-  DEFENSE = "DEFENSE",
-  DUELING = "DUELING",
-  GREAT_WEAPON_FIGHTING = "GREAT_WEAPON_FIGHTING",
-  PROTECTION = "PROTECTION",
-  TWO_WEAPON_FIGHTING = "TWO_WEAPON_FIGHTING",
+  ARCHERY = 'Archery',
+  DEFENSE = 'Defense',
+  DUELING = 'Dueling',
+  GREAT_WEAPON_FIGHTING = 'Great Weapon Fighting',
+  PROTECTION = 'Protection',
+  TWO_WEAPON_FIGHTING = 'Two Weapon Fighting'
 }
 
 export enum SkillChecks {
-  Acrobatics = "Acrobatics",
-  AnimalHandling = "Animal Handling",
-  Arcana = "Arcana",
-  Athletics = "Athletics",
-  Deception = "Deception",
-  History = "History",
-  Insight = "Insight",
-  Intimidation = "Intimidation",
-  Investigation = "Investigation",
-  Medicine = "Medicine",
-  Nature = "Nature",
-  Perception = "Perception",
-  Performance = "Performance",
-  Persuasion = "Persuasion",
-  Religion = "Religion",
-  SleightOfHand = "Sleight of Hand",
-  Stealth = "Stealth",
-  Survival = "Survival",
+  Acrobatics = 'Acrobatics',
+  AnimalHandling = 'Animal Handling',
+  Arcana = 'Arcana',
+  Athletics = 'Athletics',
+  Deception = 'Deception',
+  History = 'History',
+  Insight = 'Insight',
+  Intimidation = 'Intimidation',
+  Investigation = 'Investigation',
+  Medicine = 'Medicine',
+  Nature = 'Nature',
+  Perception = 'Perception',
+  Performance = 'Performance',
+  Persuasion = 'Persuasion',
+  Religion = 'Religion',
+  SleightOfHand = 'Sleight of Hand',
+  Stealth = 'Stealth',
+  Survival = 'Survival'
 }
 
 export enum School {
-  ABJURATION = "ABJURATION",
-  CONJURATION = "CONJURATION",
-  DIVINATION = "DIVINATION",
-  ENCHANTMENT = "ENCHANTMENT",
-  EVOCATION = "EVOCATION",
-  ILLUSION = "ILLUSION",
-  NECROMANCY = "NECROMANCY",
-  TRANSMUTATION = "TRANSMUTATION",
-  TRANSFIGURATION = "TRANSFIGURATION",
+  ABJURATION = 'ABJURATION',
+  CONJURATION = 'CONJURATION',
+  DIVINATION = 'DIVINATION',
+  ENCHANTMENT = 'ENCHANTMENT',
+  EVOCATION = 'EVOCATION',
+  ILLUSION = 'ILLUSION',
+  NECROMANCY = 'NECROMANCY',
+  TRANSMUTATION = 'TRANSMUTATION',
+  TRANSFIGURATION = 'TRANSFIGURATION'
 }
 
 export enum Dice {
-  D4 = "D4",
-  D6 = "D6",
-  D8 = "D8",
-  D10 = "D10",
-  D12 = "D12",
-  D20 = "D20",
-  D100 = "D100",
+  D4 = 'D4',
+  D6 = 'D6',
+  D8 = 'D8',
+  D10 = 'D10',
+  D12 = 'D12',
+  D20 = 'D20',
+  D100 = 'D100'
 }
 
 export enum AbilityScore {
-  STR = "STR",
-  DEX = "DEX",
-  CON = "CON",
-  INT = "INT",
-  WIS = "WIS",
-  CHA = "CHA",
+  STR = 'STR',
+  DEX = 'DEX',
+  CON = 'CON',
+  INT = 'INT',
+  WIS = 'WIS',
+  CHA = 'CHA'
 }
 
 export enum EffectType {
-  BUFF = "BUFF",
-  DEBUFF = "DEBUFF",
-  HEALING = "HEALING",
-  DAMAGE = "DAMAGE",
-  CONTROL = "CONTROL",
-  SUMMONING = "SUMMONING",
-  UTILITY = "UTILITY",
-  PROTECTION = "PROTECTION",
-  MOVEMENT = "MOVEMENT",
-  DETECTION = "DETECTION",
-  TRANSFORMATION = "TRANSFORMATION",
-  TRANSPORTATION = "TRANSPORTATION",
-  RESTORATION = "RESTORATION",
-  INSTANT_DEATH = "INSTANT_DEATH",
-  COMMUNICATION = "COMMUNICATION",
-  ILLUSION = "ILLUSION",
+  BUFF = 'BUFF',
+  DEBUFF = 'DEBUFF',
+  HEALING = 'HEALING',
+  DAMAGE = 'DAMAGE',
+  CONTROL = 'CONTROL',
+  SUMMONING = 'SUMMONING',
+  UTILITY = 'UTILITY',
+  PROTECTION = 'PROTECTION',
+  MOVEMENT = 'MOVEMENT',
+  DETECTION = 'DETECTION',
+  TRANSFORMATION = 'TRANSFORMATION',
+  TRANSPORTATION = 'TRANSPORTATION',
+  RESTORATION = 'RESTORATION',
+  INSTANT_DEATH = 'INSTANT_DEATH',
+  COMMUNICATION = 'COMMUNICATION',
+  ILLUSION = 'ILLUSION'
 }
 
 export enum DamageType {
-  ACID = "ACID",
-  BLUDGEONING = "BLUDGEONING",
-  COLD = "COLD",
-  FIRE = "FIRE",
-  FORCE = "FORCE",
-  LIGHTNING = "LIGHTNING",
-  NECROTIC = "NECROTIC",
-  PIERCING = "PIERCING",
-  POISON = "POISON",
-  PSYCHIC = "PSYCHIC",
-  RADIANT = "RADIANT",
-  SLASHING = "SLASHING",
-  THUNDER = "THUNDER",
-  VARIES = "VARIES",
+  ACID = 'ACID',
+  BLUDGEONING = 'BLUDGEONING',
+  COLD = 'COLD',
+  FIRE = 'FIRE',
+  FORCE = 'FORCE',
+  LIGHTNING = 'LIGHTNING',
+  NECROTIC = 'NECROTIC',
+  PIERCING = 'PIERCING',
+  POISON = 'POISON',
+  PSYCHIC = 'PSYCHIC',
+  RADIANT = 'RADIANT',
+  SLASHING = 'SLASHING',
+  THUNDER = 'THUNDER',
+  VARIES = 'VARIES'
 }
 
 export interface NewCharacter
-  extends Omit<Character, "id" | "race" | "class" | "user"> {
+  extends Omit<Character, 'id' | 'race' | 'class' | 'user'> {
   dwarfToolProficiency?: string;
   highElfBonusCantripId?: number;
   highElfBonusLanguageId?: number;
@@ -498,4 +498,105 @@ export interface NewCharacter
   bardBonusSkillProficiencyOne?: string;
   bardBonusSkillProficiencyTwo?: string;
   bardBonusSkillProficiencyThree?: string;
+  barbarianEquipmentOne?: string;
+  barbarianEquipmentTwo?: string;
+  bardEquipmentOne?: string;
+  bardEquipmentTwo?: string;
+  bardEquipmentThree?: string;
+  bardBonusMusicalProficiencyOne?: string;
+  bardBonusMusicalProficiencyTwo?: string;
+  bardBonusMusicalProficiencyThree?: string;
+  bardBonusCantripIdOne?: number;
+  bardBonusCantripIdTwo?: number;
+  bardBonusSpellIdOne?: number;
+  bardBonusSpellIdTwo?: number;
+  bardBonusSpellIdThree?: number;
+  bardBonusSpellIdFour?: number;
+  clericSkillProficiencyOne?: string;
+  clericSkillProficiencyTwo?: string;
+  clericCantripIdOne?: number;
+  clericCantripIdTwo?: number;
+  clericCantripIdThree?: number;
+  clericEquipmentOne?: string;
+  clericEquipmentTwo?: string;
+  clericEquipmentThree?: string;
+  clericEquipmentFour?: string;
+  druidSkillProficiencyOne?: string;
+  druidSkillProficiencyTwo?: string;
+  druidEquipmentOne?: string;
+  druidEquipmentTwo?: string;
+  druidCantripIdOne?: number;
+  druidCantripIdTwo?: number;
+  druidSpellIdOne?: number;
+  druidSpellIdTwo?: number;
+  fighterBonusSkillProficiencyOne?: string;
+  fighterBonusSkillProficiencyTwo?: string;
+  fighterEquipmentOne?: string;
+  fighterEquipmentTwo?: string;
+  fighterEquipmentThree?: string;
+  fighterEquipmentFour?: string;
+  fighterEquipmentFive?: string;
+  fighterFightingStyle?: string;
+  monkSkillProficiencyOne?: string;
+  monkSkillProficiencyTwo?: string;
+  monkEquipmentOne?: string;
+  monkEquipmentTwo?: string;
+  monkProficiency?: string;
+  paladinBonusSkillProficiencyOne?: string;
+  paladinBonusSkillProficiencyTwo?: string;
+  paladinEquipmentOne?: string;
+  paladinEquipmentTwo?: string;
+  paladinEquipmentThree?: string;
+  paladinEquipmentFour?: string;
+  rangerSkillProficiencyOne?: string;
+  rangerSkillProficiencyTwo?: string;
+  rangerSkillProficiencyThree?: string;
+  rangerEquipmentOne?: string;
+  rangerEquipmentTwo?: string;
+  rangerEquipmentThree?: string;
+  rangerBonusLanguageId?: number;
+  rogueSkillProficiencyOne?: string;
+  rogueSkillProficiencyTwo?: string;
+  rogueSkillProficiencyThree?: string;
+  rogueSkillProficiencyFour?: string;
+  rogueSkillProficiencyFive?: string;
+  rogueEquipmentOne?: string;
+  rogueEquipmentTwo?: string;
+  rogueEquipmentThree?: string;
+  sorcererSkillProficiencyOne?: string;
+  sorcererSkillProficiencyTwo?: string;
+  sorcererEquipmentOne?: string;
+  sorcererEquipmentTwo?: string;
+  sorcererEquipmentThree?: string;
+  sorcererCantripIdOne?: number;
+  sorcererCantripIdTwo?: number;
+  sorcererCantripIdThree?: number;
+  sorcererCantripIdFour?: number;
+  sorcererCantripIdFive?: number;
+  sorcererSpellIdOne?: number;
+  sorcererSpellIdTwo?: number;
+  warlockSkillProficiencyOne?: string;
+  warlockSkillProficiencyTwo?: string;
+  warlockEquipmentOne?: string;
+  warlockEquipmentTwo?: string;
+  warlockEquipmentThree?: string;
+  warlockCantripIdOne?: number;
+  warlockCantripIdTwo?: number;
+  warlockSpellIdOne?: number;
+  warlockSpellIdTwo?: number;
+  wizardSkillProficiencyOne?: string;
+  wizardSkillProficiencyTwo?: string;
+  wizardEquipmentOne?: string;
+  wizardEquipmentTwo?: string;
+  wizardEquipmentThree?: string;
+  wizardCantripIdOne?: number;
+  wizardCantripIdTwo?: number;
+  wizardCantripIdThree?: number;
+  wizardSpellIdOne?: number;
+  wizardSpellIdTwo?: number;
+  wizardSpellIdThree?: number;
+  wizardSpellIdFour?: number;
+  wizardSpellIdFive?: number;
+  wizardSpellIdSix?: number;
+  [key: string]: unknown;
 }

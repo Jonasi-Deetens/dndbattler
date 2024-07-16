@@ -1,107 +1,267 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks } from "../../types/DBTypes";
+import { useFormikContext } from 'formik';
+import React, { useEffect } from 'react';
+import { NewCharacter, SkillChecks, Spell, Item } from '../../types/DBTypes';
+import useClasses from '../../hooks/useClasses';
+import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
+import ItemSelectField from '../../components/inputs/ItemSelectField';
+import SpellSelectField from '../../components/inputs/SpellSelectField';
 
 const skillChecks = Object.values(SkillChecks);
 
 const BardForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
+  const { getAllSpellsFromClass } = useClasses();
+
+  const itemChoicesOne = ['Rapier', 'Longsword', 'Simple Weapon'];
+  const itemChoicesTwo = ["Diplomat's Pack", "Entertainer's Pack"];
+  const itemChoicesThree = ['Musical Instrument'];
 
   useEffect(() => {
-    setFieldValue("bardBonusSkillProficiencyOne", skillChecks[0]);
-    setFieldValue("bardBonusSkillProficiencyTwo", skillChecks[1]);
-    setFieldValue("bardBonusSkillProficiencyThree", skillChecks[2]);
+    const fetchSpellsByClass = async () => {
+      try {
+        const spellsData = await getAllSpellsFromClass({ className: 'Bard' });
+        if (spellsData) {
+          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
+          const levelOneSpells = spellsData.filter(
+            spell => spell.spellLevel === 1
+          );
+
+          if (cantrips.length > 1) {
+            if (!values.bardBonusCantripIdOne)
+              setFieldValue('bardBonusCantripIdOne', cantrips[0].id);
+            if (!values.bardBonusCantripIdTwo)
+              setFieldValue('bardBonusCantripIdTwo', cantrips[1].id);
+          }
+
+          if (levelOneSpells.length > 3) {
+            if (!values.bardBonusSpellIdOne)
+              setFieldValue('bardBonusSpellIdOne', levelOneSpells[0].id);
+            if (!values.bardBonusSpellIdTwo)
+              setFieldValue('bardBonusSpellIdTwo', levelOneSpells[1].id);
+            if (!values.bardBonusSpellIdThree)
+              setFieldValue('bardBonusSpellIdThree', levelOneSpells[2].id);
+            if (!values.bardBonusSpellIdFour)
+              setFieldValue('bardBonusSpellIdFour', levelOneSpells[3].id);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSpellsByClass();
+
+    if (!values.bardBonusSkillProficiencyOne)
+      setFieldValue('bardBonusSkillProficiencyOne', skillChecks[0]);
+    if (!values.bardBonusSkillProficiencyTwo)
+      setFieldValue('bardBonusSkillProficiencyTwo', skillChecks[1]);
+    if (!values.bardBonusSkillProficiencyThree)
+      setFieldValue('bardBonusSkillProficiencyThree', skillChecks[2]);
+
+    if (!values.bardBonusMusicalProficiencyOne)
+      setFieldValue('bardBonusMusicalProficiencyOne', 'Bagpipes');
+    if (!values.bardBonusMusicalProficiencyTwo)
+      setFieldValue('bardBonusMusicalProficiencyTwo', 'Dulcimer');
+    if (!values.bardBonusMusicalProficiencyThree)
+      setFieldValue('bardBonusMusicalProficiencyThree', 'Drum');
   }, []);
 
   return (
     <div>
       <h2 className="border p-2">BARD</h2>
 
-      <p className="border-b p-2 w-fit m-auto">Select skill proficiency.</p>
-      <Field
-        as="select"
+      <SkillCheckSelectField
         name="bardBonusSkillProficiencyOne"
-        aria-label="BardBonusSkillProficiencyOne"
-        className="p-1 text-gray-500 mt-5"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("bardBonusSkillProficiencyOne", e.target.value);
-        }}
-        value={values.bardBonusSkillProficiencyOne}
-      >
-        {skillChecks
-          .filter(
-            (skill) =>
-              skill !== values.bardBonusSkillProficiencyTwo &&
-              skill !== values.bardBonusSkillProficiencyThree
-          )
-          .map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-      </Field>
-      <ErrorMessage
-        name="bardBonusSkillProficiencyOne"
-        component="div"
-        className="error"
+        filter={(option: SkillChecks) =>
+          option !== values.bardBonusSkillProficiencyTwo &&
+          option !== values.bardBonusSkillProficiencyThree
+        }
+        label="Select skill proficiency."
+        onChange={(value: SkillChecks) =>
+          setFieldValue('bardBonusSkillProficiencyOne', value)
+        }
       />
-      <hr className="border-dotted border-t-8 w-1/4 m-auto my-5" />
-      <p className="border-b p-2 w-fit m-auto">Select skill proficiency.</p>
-      <Field
-        as="select"
+      <SkillCheckSelectField
         name="bardBonusSkillProficiencyTwo"
-        aria-label="BardBonusSkillProficiencyTwo"
-        className="p-1 text-gray-500 mt-5"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("bardBonusSkillProficiencyTwo", e.target.value);
-        }}
-        value={values.bardBonusSkillProficiencyTwo}
-      >
-        {skillChecks
-          .filter(
-            (skill) =>
-              skill !== values.bardBonusSkillProficiencyOne &&
-              skill !== values.bardBonusSkillProficiencyThree
-          )
-          .map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-      </Field>
-      <ErrorMessage
-        name="bardBonusSkillProficiencyTwo"
-        component="div"
-        className="error"
+        filter={(option: SkillChecks) =>
+          option !== values.bardBonusSkillProficiencyOne &&
+          option !== values.bardBonusSkillProficiencyThree
+        }
+        label="Select skill proficiency."
+        onChange={(value: SkillChecks) =>
+          setFieldValue('bardBonusSkillProficiencyTwo', value)
+        }
       />
-      <hr className="border-dotted border-t-8 w-1/4 m-auto my-5" />
-      <p className="border-b p-2 w-fit m-auto">Select skill proficiency.</p>
-      <Field
-        as="select"
+      <SkillCheckSelectField
         name="bardBonusSkillProficiencyThree"
-        aria-label="BardBonusSkillProficiencyThree"
-        className="p-1 text-gray-500 mt-5"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("bardBonusSkillProficiencyThree", e.target.value);
-        }}
-        value={values.bardBonusSkillProficiencyThree}
-      >
-        {skillChecks
-          .filter(
-            (skill) =>
-              skill !== values.bardBonusSkillProficiencyOne &&
-              skill !== values.bardBonusSkillProficiencyTwo
-          )
-          .map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-      </Field>
-      <ErrorMessage
-        name="bardBonusSkillProficiencyThree"
-        component="div"
-        className="error"
+        filter={(option: SkillChecks) =>
+          option !== values.bardBonusSkillProficiencyTwo &&
+          option !== values.bardBonusSkillProficiencyOne
+        }
+        label="Select skill proficiency."
+        onChange={(value: SkillChecks) =>
+          setFieldValue('bardBonusSkillProficiencyThree', value)
+        }
+      />
+
+      <ItemSelectField
+        name="bardEquipmentOne"
+        filter={(option: Item) =>
+          option.name !== values.bardEquipmentTwo &&
+          option.name !== values.bardEquipmentThree &&
+          (itemChoicesOne.includes(option.name) ||
+            itemChoicesOne.includes(option.type))
+        }
+        label="Select equipment."
+        onChange={(value: Item) =>
+          setFieldValue('bardEquipmentOne', value.name)
+        }
+      />
+      <ItemSelectField
+        name="bardEquipmentTwo"
+        filter={(option: Item) =>
+          option.name !== values.bardEquipmentOne &&
+          option.name !== values.bardEquipmentThree &&
+          (itemChoicesTwo.includes(option.name) ||
+            itemChoicesTwo.includes(option.type))
+        }
+        label="Select equipment."
+        onChange={(value: Item) =>
+          setFieldValue('bardEquipmentTwo', value.name)
+        }
+      />
+      <ItemSelectField
+        name="bardEquipmentThree"
+        filter={(option: Item) =>
+          option.name !== values.bardEquipmentOne &&
+          option.name !== values.bardEquipmentTwo &&
+          (itemChoicesThree.includes(option.name) ||
+            itemChoicesThree.includes(option.type))
+        }
+        label="Select equipment."
+        onChange={(value: Item) =>
+          setFieldValue('bardEquipmentThree', value.name)
+        }
+      />
+
+      <ItemSelectField
+        name="bardBonusMusicalProficiencyOne"
+        filter={(option: Item) =>
+          option.name !== values.bardBonusMusicalProficiencyTwo &&
+          option.name !== values.bardBonusMusicalProficiencyThree &&
+          (itemChoicesThree.includes(option.name) ||
+            itemChoicesThree.includes(option.type))
+        }
+        label="Select musical proficiency."
+        onChange={(value: Item) =>
+          setFieldValue('bardBonusMusicalProficiencyOne', value.name)
+        }
+      />
+      <ItemSelectField
+        name="bardBonusMusicalProficiencyTwo"
+        filter={(option: Item) =>
+          option.name !== values.bardBonusMusicalProficiencyOne &&
+          option.name !== values.bardBonusMusicalProficiencyThree &&
+          (itemChoicesThree.includes(option.name) ||
+            itemChoicesThree.includes(option.type))
+        }
+        label="Select musical proficiency."
+        onChange={(value: Item) =>
+          setFieldValue('bardBonusMusicalProficiencyTwo', value.name)
+        }
+      />
+      <ItemSelectField
+        name="bardBonusMusicalProficiencyThree"
+        filter={(option: Item) =>
+          option.name !== values.bardBonusMusicalProficiencyOne &&
+          option.name !== values.bardBonusMusicalProficiencyTwo &&
+          (itemChoicesThree.includes(option.name) ||
+            itemChoicesThree.includes(option.type))
+        }
+        label="Select musical proficiency."
+        onChange={(value: Item) =>
+          setFieldValue('bardBonusMusicalProficiencyThree', value.name)
+        }
+      />
+
+      <SpellSelectField
+        name="bardBonusCantripIdOne"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 0 && option.id !== values.bardBonusCantripIdTwo
+        }
+        label="Select 1 of the following bard cantrips."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusCantripIdOne', value.id)
+        }
+      />
+      <SpellSelectField
+        name="bardBonusCantripIdTwo"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 0 && option.id !== values.bardBonusCantripIdOne
+        }
+        label="Select 1 of the following bard cantrips."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusCantripIdTwo', value.id)
+        }
+      />
+
+      <SpellSelectField
+        name="bardBonusSpellIdOne"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 1 &&
+          option.id !== values.bardBonusSpellIdTwo &&
+          option.id !== values.bardBonusSpellIdThree &&
+          option.id !== values.bardBonusSpellIdFour
+        }
+        label="Select 1 of the following bard spells."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusSpellIdOne', value.id)
+        }
+      />
+      <SpellSelectField
+        name="bardBonusSpellIdTwo"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 1 &&
+          option.id !== values.bardBonusSpellIdOne &&
+          option.id !== values.bardBonusSpellIdThree &&
+          option.id !== values.bardBonusSpellIdFour
+        }
+        label="Select 1 of the following bard spells."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusSpellIdTwo', value.id)
+        }
+      />
+      <SpellSelectField
+        name="bardBonusSpellIdThree"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 1 &&
+          option.id !== values.bardBonusSpellIdOne &&
+          option.id !== values.bardBonusSpellIdTwo &&
+          option.id !== values.bardBonusSpellIdFour
+        }
+        label="Select 1 of the following bard spells."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusSpellIdThree', value.id)
+        }
+      />
+      <SpellSelectField
+        name="bardBonusSpellIdFour"
+        spellClass="Bard"
+        filter={(option: Spell) =>
+          option.spellLevel === 1 &&
+          option.id !== values.bardBonusSpellIdOne &&
+          option.id !== values.bardBonusSpellIdTwo &&
+          option.id !== values.bardBonusSpellIdThree
+        }
+        label="Select 1 of the following bard spells."
+        onChange={(value: Spell) =>
+          setFieldValue('bardBonusSpellIdFour', value.id)
+        }
+        noDivider={true}
       />
     </div>
   );

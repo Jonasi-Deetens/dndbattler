@@ -1,85 +1,89 @@
-import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks } from "../../types/DBTypes";
-import { ErrorMessage, Field, useFormikContext } from "formik";
+import { useFormikContext } from 'formik';
+import React, { useEffect } from 'react';
+import { NewCharacter, SkillChecks, Item } from '../../types/DBTypes';
+import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
+import ItemSelectField from '../../components/inputs/ItemSelectField';
 
-const skillChecks = Object.values(SkillChecks);
+const barbarianSkillChoices = [
+  'Animal Handling',
+  'Athletics',
+  'Intimidation',
+  'Nature',
+  'Perception',
+  'Survival'
+];
 
 const BarbarianForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
-  const skillsToChooseFrom = [
-    "Animal Handling",
-    "Athletics",
-    "Intimidation",
-    "Nature",
-    "Perception",
-    "Survival",
-  ];
+
+  const itemChoicesOne = ['Greataxe', 'Martial Weapon'];
+  const itemChoicesTwo = ['Handaxe', 'Simple Weapon'];
 
   useEffect(() => {
-    setFieldValue("barbarianBonusSkillProficiencyOne", skillChecks[1]);
-    setFieldValue("barbarianBonusSkillProficiencyTwo", skillChecks[3]);
-  }, []);
+    if (!values.barbarianBonusSkillProficiencyOne)
+      setFieldValue(
+        'barbarianBonusSkillProficiencyOne',
+        barbarianSkillChoices[1]
+      );
+    if (!values.barbarianBonusSkillProficiencyTwo)
+      setFieldValue(
+        'barbarianBonusSkillProficiencyTwo',
+        barbarianSkillChoices[3]
+      );
+  }, [setFieldValue]);
 
   return (
     <div>
       <h2 className="border p-2">Barbarian</h2>
 
-      <p className="border-b p-2 w-fit m-auto">Select skill proficiency.</p>
-      <Field
-        as="select"
+      <SkillCheckSelectField
         name="barbarianBonusSkillProficiencyOne"
-        aria-label="BarbarianBonusSkillProficiencyOne"
-        className="p-1 text-gray-500 mt-5"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("barbarianBonusSkillProficiencyOne", e.target.value);
-        }}
-        value={values.barbarianBonusSkillProficiencyOne}
-      >
-        {skillChecks
-          .filter(
-            (skill) =>
-              skill !== values.barbarianBonusSkillProficiencyTwo &&
-              skillsToChooseFrom.includes(skill)
-          )
-          .map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-      </Field>
-      <ErrorMessage
-        name="barbarianBonusSkillProficiencyOne"
-        component="div"
-        className="error"
+        filter={(option: SkillChecks) =>
+          option !== values.barbarianBonusSkillProficiencyTwo &&
+          barbarianSkillChoices.includes(option)
+        }
+        label="Select skill proficiency."
+        onChange={(value: SkillChecks) =>
+          setFieldValue('barbarianBonusSkillProficiencyOne', value)
+        }
       />
-      <hr className="border-dotted border-t-8 w-1/4 m-auto my-5" />
-      <p className="border-b p-2 w-fit m-auto">Select skill proficiency.</p>
-      <Field
-        as="select"
+      <SkillCheckSelectField
         name="barbarianBonusSkillProficiencyTwo"
-        aria-label="BarbarianBonusSkillProficiencyTwo"
-        className="p-1 text-gray-500 mt-5"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue("barbarianBonusSkillProficiencyTwo", e.target.value);
-        }}
-        value={values.barbarianBonusSkillProficiencyTwo}
-      >
-        {skillChecks
-          .filter(
-            (skill) =>
-              skill !== values.barbarianBonusSkillProficiencyOne &&
-              skillsToChooseFrom.includes(skill)
-          )
-          .map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-      </Field>
-      <ErrorMessage
-        name="barbarianBonusSkillProficiencyTwo"
-        component="div"
-        className="error"
+        filter={(option: SkillChecks) =>
+          option !== values.barbarianBonusSkillProficiencyOne &&
+          barbarianSkillChoices.includes(option)
+        }
+        label="Select skill proficiency."
+        onChange={(value: SkillChecks) =>
+          setFieldValue('barbarianBonusSkillProficiencyTwo', value)
+        }
+      />
+
+      <ItemSelectField
+        name="barbarianEquipmentOne"
+        filter={(option: Item) =>
+          option.name !== values.barbarianEquipmentTwo &&
+          (itemChoicesOne.includes(option.name) ||
+            itemChoicesOne.includes(option.type)) &&
+          option.rangeType === 'Melee'
+        }
+        label="Select equipment."
+        onChange={(value: Item) =>
+          setFieldValue('barbarianEquipmentOne', value.name)
+        }
+      />
+      <ItemSelectField
+        name="barbarianEquipmentTwo"
+        filter={(option: Item) =>
+          option.name !== values.barbarianEquipmentOne &&
+          (itemChoicesTwo.includes(option.name) ||
+            itemChoicesTwo.includes(option.type))
+        }
+        label="Select equipment."
+        onChange={(value: Item) =>
+          setFieldValue('barbarianEquipmentTwo', value.name)
+        }
+        noDivider={true}
       />
     </div>
   );
