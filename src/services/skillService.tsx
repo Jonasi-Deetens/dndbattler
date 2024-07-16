@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { Skill } from '../types/DBTypes';
+import axios, { AxiosResponse } from "axios";
+import { Skill } from "../types/DBTypes";
 
-const API_URL = 'http://localhost:3001/api/skills'; // Adjust as necessary
+const API_URL = "http://localhost:3001/api/skills"; // Adjust as necessary
 
 // Fetch all skills
 export const getAllSkills = async (): Promise<Skill[]> => {
@@ -9,7 +9,7 @@ export const getAllSkills = async (): Promise<Skill[]> => {
     const response: AxiosResponse<Skill[]> = await axios.get(API_URL);
     return response.data;
   } catch (error) {
-    console.error('Error fetching languages:', error);
+    console.error("Error fetching languages:", error);
     throw error;
   }
 };

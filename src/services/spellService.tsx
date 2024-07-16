@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { Spell } from '../types/DBTypes';
+import axios, { AxiosResponse } from "axios";
+import { Spell } from "../types/DBTypes";
 
-const API_URL = 'http://localhost:3001/api/spells'; // Adjust as necessary
+const API_URL = "http://localhost:3001/api/spells"; // Adjust as necessary
 
 // Fetch all spells
 export const getAllSpells = async (): Promise<Spell[]> => {
@@ -10,23 +10,23 @@ export const getAllSpells = async (): Promise<Spell[]> => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching spells:', error);
+    console.error("Error fetching spells:", error);
     throw error;
   }
 };
 
 export const getSpellsByListService = async ({
-  spellList
+  spellList,
 }: {
   spellList: string[];
 }): Promise<Spell[]> => {
   try {
     const response: AxiosResponse<Spell[]> = await axios.get(
-      API_URL + '/byList/' + spellList
+      API_URL + "/byList/" + spellList
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching spells:', error);
+    console.error("Error fetching spells:", error);
     throw error;
   }
 };
