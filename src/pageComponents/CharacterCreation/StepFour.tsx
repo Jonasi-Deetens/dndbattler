@@ -156,13 +156,16 @@ const StepFour: React.FC = () => {
   const ClassFormComponent = charClass
     ? classFormComponents[charClass.name]
     : null;
-  const SubclassFormComponent = subclass
-    ? subclassFormComponents[subclass.name]
-    : null;
+  const SubclassFormComponent =
+    subclass && charClass?.subClassAvailableAtLevel === 1
+      ? subclassFormComponents[subclass.name]
+      : null;
   return (
     <div>
       {ClassFormComponent && <ClassFormComponent />}
-      <hr className="border-dashed border-t-2 w-1/2 m-auto my-5" />
+      {charClass?.subClassAvailableAtLevel === 1 && (
+        <hr className="border-dashed border-t-2 w-1/2 m-auto my-5" />
+      )}
       {SubclassFormComponent && <SubclassFormComponent />}
     </div>
   );

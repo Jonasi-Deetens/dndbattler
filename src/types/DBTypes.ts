@@ -26,9 +26,23 @@ export type Character = {
   background: string;
   alignment: string;
   primaryGoal: string;
+  exhaustionLevel: number;
+  numberOfRages: number;
+  rageDamage: number;
+  kiPoints: number;
+  sorceryPoints: number;
+  sneakAttack: number;
+  invocationsKnown: number;
+  cantripsKnown: number;
+  spellsKnown: number;
   secondaryGoals: string[];
   personalQuest?: string;
+  primaryAbilityScoreModifier?: AbilityScore;
+  primarySpellAbilityScoreModifier?: AbilityScore;
   relationships: Relationship[];
+  proficiencyBonus: number;
+  proficiencies: string[];
+  spellSlots: number;
   backstory: string;
   currentLocation: string;
   skills: Skill[];
@@ -53,7 +67,7 @@ export type Character = {
   level: number;
   experience: number;
   health: number;
-  stats: Record<string, unknown>;
+  stats: Record<string, number>;
   senses: Sense[];
   userId: string;
   user: User;
@@ -145,29 +159,29 @@ export type Class = {
   proficiencies: string[];
   savingThrowProficiencies: AbilityScore[];
   items: Item[];
-  proficiencyBonusByLevel: Record<string, unknown>;
-  numberOfRagesByLevel?: Record<string, unknown>;
-  abilitiesByLevel: Record<string, unknown>;
-  buffsByLevel: Record<string, unknown>;
+  proficiencyBonusByLevel: Record<number, string>;
+  numberOfRagesByLevel?: Record<number, number>;
+  abilitiesByLevel: Record<number, string[]>;
+  buffsByLevel: Record<number, string>;
   primaryAbilityScoreModifier?: AbilityScore;
   primarySpellAbilityScoreModifier?: AbilityScore;
   subClasses: Subclass[];
-  rageDamageByLevel?: Record<string, unknown>;
+  rageDamageByLevel?: Record<string, number>;
   spells: Spell[];
-  spellsByLevel: Record<string, unknown>;
-  spellSlotsByLevel: Record<string, unknown>;
-  skillsByLevel: Record<string, unknown>;
+  spellsByLevel: Record<number, string[]>;
+  spellSlotsByLevel: Record<number, string>;
+  skillsByLevel: Record<number, string[]>;
   subClassAvailableAtLevel: number;
   unusableItems: string[];
   fightingStyles: FightingStyle[];
-  movementSpeedBonusByLevel: Record<string, unknown>;
+  movementSpeedBonusByLevel: Record<number, string>;
   exhaustionLevel: number;
-  kiPointsByLevel: Record<string, unknown>;
-  sorceryPointsByLevel: Record<string, unknown>;
-  sneakAttackByLevel?: Record<string, unknown>;
-  invocationsKnownByLevel: Record<string, unknown>;
-  cantripsKnownByLevel: Record<string, unknown>;
-  spellsKnownByLevel: Record<string, unknown>;
+  kiPointsByLevel: Record<number, number>;
+  sorceryPointsByLevel: Record<number, number>;
+  sneakAttackByLevel?: Record<number, number>;
+  invocationsKnownByLevel: Record<number, number>;
+  cantripsKnownByLevel: Record<number, number>;
+  spellsKnownByLevel: Record<number, number>;
   characters: Character[];
   npcs: Npc[];
 };
@@ -263,8 +277,8 @@ export type Item = {
 export type Race = {
   id: number;
   name: string;
-  abilityScoreIncreases: Record<string, unknown>;
-  statIncreases: Record<string, unknown>;
+  abilityScoreIncreases: Record<string, number>;
+  statIncreases: Record<string, number>;
   adultAge: number;
   maxAge: number;
   alignment: string;
@@ -289,8 +303,8 @@ export type Subrace = {
   name: string;
   parentRaceId: number;
   parentRace: Race;
-  abilityScoreIncreases: Record<string, unknown>;
-  statIncreases?: Record<string, unknown>;
+  abilityScoreIncreases: Record<string, number>;
+  statIncreases?: Record<string, number>;
   adultAge: number;
   maxAge: number;
   alignment: string;
@@ -480,6 +494,55 @@ export enum DamageType {
   VARIES = 'VARIES'
 }
 
+export enum Alignment {
+  LAWFUL_GOOD = 'Lawful Good',
+  NEUTRAL_GOOD = 'Neutral Good',
+  CHAOTIC_GOOD = 'Chaotic Good',
+  LAWFUL_NEUTRAL = 'Lawful Neutral',
+  TRUE_NEUTRAL = 'True Neutral',
+  CHAOTIC_NEUTRAL = 'Chaotic Neutral',
+  LAWFUL_EVIL = 'Lawful Evil',
+  NEUTRAL_EVIL = 'Neutral Evil',
+  CHAOTIC_EVIL = 'Chaotic Evil'
+}
+
+export enum Ideal {
+  RESPECT = 'Respect',
+  FAIRNESS = 'Fairness',
+  GREED = 'Greed',
+  FREEDOM = 'Freedom',
+  CHARITY = 'Charity',
+  KNOWLEDGE = 'Knowledge'
+}
+
+export enum Bond {
+  FAMILY = 'Family',
+  HONOR = 'Honor',
+  REVENGE = 'Revenge',
+  FRIENDSHIP = 'Friendship',
+  DUTY = 'Duty',
+  REDEMPTION = 'Redemption'
+}
+
+export enum Flaw {
+  ARROGANCE = 'Arrogance',
+  GREED = 'Greed',
+  IMPULSIVENESS = 'Impulsiveness',
+  COWARDICE = 'Cowardice',
+  PARANOIA = 'Paranoia',
+  ADDICTION = 'Addiction'
+}
+
+export enum Fear {
+  DARKNESS = 'Darkness',
+  HEIGHTS = 'Heights',
+  FAILURE = 'Failure',
+  SOLITUDE = 'Solitude',
+  WATER = 'Water',
+  MAGIC = 'Magic',
+  LOSING_PEOPLE = 'Losing people'
+}
+
 export interface NewCharacter
   extends Omit<Character, 'id' | 'race' | 'class' | 'user'> {
   dwarfToolProficiency?: string;
@@ -598,5 +661,24 @@ export interface NewCharacter
   wizardSpellIdFour?: number;
   wizardSpellIdFive?: number;
   wizardSpellIdSix?: number;
+  knowledgeDomainSkillProficiencyOne?: string;
+  knowledgeDomainSkillProficiencyTwo?: string;
+  knowledgeDomainLanguageIdOne?: number;
+  knowledgeDomainLanguageIdTwo?: number;
+  natureDomainSkillProficiency?: string;
+  natureDomainSpellIdOne?: number;
+  draconicBloodlineAdvantage?: string;
+  characterBackground?: string;
+  characterAlignment?: string;
+  characterIdealOne?: string;
+  characterIdealTwo?: string;
+  characterBondOne?: string;
+  characterBondTwo?: string;
+  characterFlawOne?: string;
+  characterFlawTwo?: string;
+  characterFearOne?: string;
+  characterFearTwo?: string;
+  characterBackstory?: string;
+  characterAppearance?: string;
   [key: string]: unknown;
 }

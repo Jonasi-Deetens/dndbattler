@@ -1,11 +1,29 @@
-import React from 'react';
+import { useFormikContext } from 'formik';
+import React, { useEffect } from 'react';
+import { NewCharacter, DamageType } from '../../../types/DBTypes';
+import DamageTypeSelectField from '../../../components/inputs/DamageTypeSelectField';
 
 const DraconicBloodlineForm: React.FC = () => {
+  const { setFieldValue, values } = useFormikContext<NewCharacter>();
+
+  useEffect(() => {
+    if (!values.draconicBloodlineAdvantage) {
+      setFieldValue('draconicBloodlineAdvantage', DamageType.FIRE); // default value if needed
+    }
+  }, [setFieldValue, values.draconicBloodlineAdvantage]);
+
   return (
     <div>
-      <h2 className="border p-2">DRACONIC BLOODLINE</h2>
+      <h2 className="border p-2">Draconic Bloodline</h2>
 
-      <p className="p-2 w-fit m-auto">No options to select.</p>
+      <DamageTypeSelectField
+        name="draconicBloodlineAdvantage"
+        filter={() => true}
+        label="Select a damage type for advantage."
+        onChange={(value: DamageType) =>
+          setFieldValue('draconicBloodlineAdvantage', value)
+        }
+      />
     </div>
   );
 };

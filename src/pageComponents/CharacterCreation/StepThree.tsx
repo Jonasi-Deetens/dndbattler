@@ -1,18 +1,20 @@
 import { ErrorMessage, Field, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import useSubclasses from '../../hooks/useSubclasses';
-import { NewCharacter } from '../../types/DBTypes';
 import useClasses from '../../hooks/useClasses';
+import { NewCharacter } from '../../types/DBTypes';
 
 const StepThree: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { classes } = useClasses();
   const { subclasses } = useSubclasses();
-  const [hasSubclasses, setHasSubclasses] = useState<boolean>(true);
+  const [hasSubclasses, setHasSubclasses] = useState<boolean>(false);
+  const [subclassAtLevelOne, setSubclassAtLevelOne] = useState<boolean>(false);
 
   useEffect(() => {
-    if (classes && classes.length > 0 && !values.classId)
+    if (classes && classes.length > 0 && !values.classId) {
       setFieldValue('classId', classes[0].id);
+    }
   }, [classes, values.classId, setFieldValue]);
 
   useEffect(() => {
@@ -27,7 +29,14 @@ const StepThree: React.FC = () => {
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newClassId = parseInt(e.target.value);
+    const selectedClass = classes.find(
+      charClass => charClass.id === newClassId
+    );
+    setSubclassAtLevelOne(
+      selectedClass ? selectedClass.subClassAvailableAtLevel === 1 : false
+    );
     setFieldValue('classId', newClassId);
+
     const matchingSubclasses = subclasses.filter(
       subclass => subclass.parentClassId === newClassId
     );
@@ -39,7 +48,7 @@ const StepThree: React.FC = () => {
     }
   };
 
-  const handSubclassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSubclassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFieldValue('subclassId', parseInt(e.target.value));
   };
 
@@ -61,25 +70,23 @@ const StepThree: React.FC = () => {
           ))}
       </Field>
       <ErrorMessage name="classId" component="div" className="error" />
-      {hasSubclasses && (
+      {hasSubclasses && subclassAtLevelOne && (
         <>
           <Field
             as="select"
             name="subclassId"
             aria-label="Subclass"
             className="p-1 text-gray-500"
-            onChange={handSubclassChange}
+            onChange={handleSubclassChange}
           >
             {subclasses &&
-              subclasses.map(option => {
-                if (option.parentClassId === values.classId) {
-                  return (
-                    <option key={option.id} value={option.id}>
-                      {option.name}
-                    </option>
-                  );
-                }
-              })}
+              subclasses
+                .filter(option => option.parentClassId === values.classId)
+                .map(option => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
           </Field>
           <ErrorMessage name="subclassId" component="div" className="error" />
         </>

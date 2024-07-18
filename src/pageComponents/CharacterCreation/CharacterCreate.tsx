@@ -9,15 +9,11 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
+import StepFive from './StepFive';
 
 const useValidationSchema = () => {
   return yup.object().shape({
-    name: yup.string().required('Please choose a name.'),
-    background: yup.string().optional(),
-    alignment: yup.string().optional(),
-    classId: yup.number().required('Please select a class.'),
-    raceId: yup.number().required('Please select a race.'),
-    subraceId: yup.number().optional()
+    name: yup.string().required('Please choose a name.')
   });
 };
 
@@ -55,6 +51,18 @@ const CharacterCreate: React.FC = () => {
       initialValues: {
         name: '',
         currentLocation: '',
+        exhaustionLevel: 0,
+        proficiencies: [],
+        proficiencyBonus: 0,
+        numberOfRages: 0,
+        rageDamage: 0,
+        kiPoints: 0,
+        sorceryPoints: 0,
+        sneakAttack: 0,
+        invocationsKnown: 0,
+        cantripsKnown: 0,
+        spellsKnown: 0,
+        spellSlots: 0,
         ideals: [],
         bonds: [],
         flaws: [],
@@ -105,7 +113,7 @@ const CharacterCreate: React.FC = () => {
       },
       validationSchema: valSchema
     }),
-    [onSubmit, valSchema]
+    [onSubmit, valSchema, user?.id]
   );
 
   return (
@@ -114,7 +122,7 @@ const CharacterCreate: React.FC = () => {
         <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
           <h2 className="mb-4 text-2xl">Character Creation</h2>
           <div className="flex flex-col md:flex-row gap-x-4 w-full">
-            <div className="flex flex-col items-center m-auto gap-y-5 w-full md:w-1/2 p-5">
+            <div className="flex flex-col items-center m-auto gap-y-5 w-full p-5">
               <Field
                 type="text"
                 name="name"
@@ -130,30 +138,34 @@ const CharacterCreate: React.FC = () => {
               {step === 2 && <StepTwo />}
               {step === 3 && <StepThree />}
               {step === 4 && <StepFour />}
+              {step === 5 && <StepFive />}
 
-              {step !== 1 && (
-                <button
-                  type="button"
-                  onClick={() => setStep(step - 1)}
-                  disabled={isLoading}
-                >
-                  Previous
-                </button>
-              )}
-              {step === 5 ? (
-                <button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Creating...' : 'Create'}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setStep(step + 1)}
-                  disabled={isLoading}
-                >
-                  Next
-                </button>
-              )}
+              <div className="flex gap-x-2">
+                {step !== 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setStep(step - 1)}
+                    disabled={isLoading}
+                  >
+                    Previous
+                  </button>
+                )}
+                {step === 5 ? (
+                  <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Creating...' : 'Create'}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setStep(step + 1)}
+                    disabled={isLoading}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
               <button
+                type="button"
                 className="bg-transparent"
                 onClick={() => {
                   navigate('/characterSelect');
