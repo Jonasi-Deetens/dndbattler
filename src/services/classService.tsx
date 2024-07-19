@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Class, Spell } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/classes"; // Adjust as necessary
+const API_URL = "http://localhost:3055/api/classes"; // Adjust as necessary
 
 // Fetch all classes
 export const getAllClasses = async (): Promise<Class[]> => {

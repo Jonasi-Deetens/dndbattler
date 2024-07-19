@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Race } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/races";
+const API_URL = "http://localhost:3055/api/races";
 
 // Fetch all races
 export const getAllRaces = async (): Promise<Race[]> => {

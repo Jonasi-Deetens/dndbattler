@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Character, NewCharacter } from '../types/DBTypes';
-import { addCharacter, getAllCharacters } from '../services/characterService';
-import useAuth from './useAuth';
+import { useEffect, useState } from "react";
+import { Character, NewCharacter } from "../types/DBTypes";
+import { addCharacter, getAllCharacters } from "../services/characterService";
+import useAuth from "./useAuth";
 
 const useCharacters = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -16,7 +16,7 @@ const useCharacters = () => {
           const data = await getAllCharacters(user?.id);
           setCharacters(data.allCharacters);
         } catch (error) {
-          setError('Failed to fetch characters');
+          setError("Failed to fetch characters");
         } finally {
           setLoading(false);
         }
@@ -27,11 +27,12 @@ const useCharacters = () => {
   }, [user]);
 
   const handleAddCharacter = async (characterData: NewCharacter) => {
+    console.log("handle Adding");
     try {
       const newCharacter = await addCharacter(characterData);
       setCharacters([...characters, newCharacter]);
     } catch (error) {
-      setError('Failed to add character');
+      setError("Failed to add character");
     }
   };
 

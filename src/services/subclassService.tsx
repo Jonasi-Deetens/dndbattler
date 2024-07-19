@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Subclass } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/subclasses"; // Adjust as necessary
+const API_URL = "http://localhost:3055/api/subclasses"; // Adjust as necessary
 
 // Fetch all subclasses
 export const getAllSubclasses = async (): Promise<Subclass[]> => {

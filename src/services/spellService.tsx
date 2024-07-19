@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Spell } from "../types/DBTypes";
 
-const API_URL = "http://localhost:3001/api/spells"; // Adjust as necessary
+const API_URL = "http://localhost:3055/api/spells"; // Adjust as necessary
 
 // Fetch all spells
 export const getAllSpells = async (): Promise<Spell[]> => {
