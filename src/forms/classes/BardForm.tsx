@@ -1,10 +1,10 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, SkillChecks, Spell, Item } from '../../types/DBTypes';
-import useClasses from '../../hooks/useClasses';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import SpellSelectField from '../../components/inputs/SpellSelectField';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, SkillChecks, Spell, Item } from "../../types/DBTypes";
+import useClasses from "../../hooks/useClasses";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import SpellSelectField from "../../components/inputs/SpellSelectField";
 
 const skillChecks = Object.values(SkillChecks);
 
@@ -12,36 +12,36 @@ const BardForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { getAllSpellsFromClass } = useClasses();
 
-  const itemChoicesOne = ['Rapier', 'Longsword', 'Simple Weapon'];
+  const itemChoicesOne = ["Rapier", "Longsword", "Simple Weapon"];
   const itemChoicesTwo = ["Diplomat's Pack", "Entertainer's Pack"];
-  const itemChoicesThree = ['Musical Instrument'];
+  const itemChoicesThree = ["Musical Instrument"];
 
   useEffect(() => {
     const fetchSpellsByClass = async () => {
       try {
-        const spellsData = await getAllSpellsFromClass({ className: 'Bard' });
+        const spellsData = await getAllSpellsFromClass({ className: "Bard" });
         if (spellsData) {
-          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
+          const cantrips = spellsData.filter((spell) => spell.spellLevel === 0);
           const levelOneSpells = spellsData.filter(
-            spell => spell.spellLevel === 1
+            (spell) => spell.spellLevel === 1
           );
 
           if (cantrips.length > 1) {
             if (!values.bardBonusCantripIdOne)
-              setFieldValue('bardBonusCantripIdOne', cantrips[0].id);
+              setFieldValue("bardBonusCantripIdOne", cantrips[0].id);
             if (!values.bardBonusCantripIdTwo)
-              setFieldValue('bardBonusCantripIdTwo', cantrips[1].id);
+              setFieldValue("bardBonusCantripIdTwo", cantrips[1].id);
           }
 
           if (levelOneSpells.length > 3) {
             if (!values.bardBonusSpellIdOne)
-              setFieldValue('bardBonusSpellIdOne', levelOneSpells[0].id);
+              setFieldValue("bardBonusSpellIdOne", levelOneSpells[0].id);
             if (!values.bardBonusSpellIdTwo)
-              setFieldValue('bardBonusSpellIdTwo', levelOneSpells[1].id);
+              setFieldValue("bardBonusSpellIdTwo", levelOneSpells[1].id);
             if (!values.bardBonusSpellIdThree)
-              setFieldValue('bardBonusSpellIdThree', levelOneSpells[2].id);
+              setFieldValue("bardBonusSpellIdThree", levelOneSpells[2].id);
             if (!values.bardBonusSpellIdFour)
-              setFieldValue('bardBonusSpellIdFour', levelOneSpells[3].id);
+              setFieldValue("bardBonusSpellIdFour", levelOneSpells[3].id);
           }
         }
       } catch (error) {
@@ -51,18 +51,24 @@ const BardForm: React.FC = () => {
     fetchSpellsByClass();
 
     if (!values.bardBonusSkillProficiencyOne)
-      setFieldValue('bardBonusSkillProficiencyOne', skillChecks[0]);
+      setFieldValue("bardBonusSkillProficiencyOne", skillChecks[0]);
     if (!values.bardBonusSkillProficiencyTwo)
-      setFieldValue('bardBonusSkillProficiencyTwo', skillChecks[1]);
+      setFieldValue("bardBonusSkillProficiencyTwo", skillChecks[1]);
     if (!values.bardBonusSkillProficiencyThree)
-      setFieldValue('bardBonusSkillProficiencyThree', skillChecks[2]);
+      setFieldValue("bardBonusSkillProficiencyThree", skillChecks[2]);
 
     if (!values.bardBonusMusicalProficiencyOne)
-      setFieldValue('bardBonusMusicalProficiencyOne', 'Bagpipes');
+      setFieldValue("bardBonusMusicalProficiencyOne", "Bagpipes");
     if (!values.bardBonusMusicalProficiencyTwo)
-      setFieldValue('bardBonusMusicalProficiencyTwo', 'Dulcimer');
+      setFieldValue("bardBonusMusicalProficiencyTwo", "Dulcimer");
     if (!values.bardBonusMusicalProficiencyThree)
-      setFieldValue('bardBonusMusicalProficiencyThree', 'Drum');
+      setFieldValue("bardBonusMusicalProficiencyThree", "Drum");
+    if (!values.bardEquipmentOne)
+      setFieldValue("bardEquipmentOne", itemChoicesOne[0]);
+    if (!values.bardEquipmentTwo)
+      setFieldValue("bardEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.bardEquipmentThree)
+      setFieldValue("bardEquipmentThree", itemChoicesThree[0]);
   }, []);
 
   return (
@@ -77,7 +83,7 @@ const BardForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('bardBonusSkillProficiencyOne', value)
+          setFieldValue("bardBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -88,7 +94,7 @@ const BardForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('bardBonusSkillProficiencyTwo', value)
+          setFieldValue("bardBonusSkillProficiencyTwo", value)
         }
       />
       <SkillCheckSelectField
@@ -99,7 +105,7 @@ const BardForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('bardBonusSkillProficiencyThree', value)
+          setFieldValue("bardBonusSkillProficiencyThree", value)
         }
       />
 
@@ -113,7 +119,7 @@ const BardForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('bardEquipmentOne', value.name)
+          setFieldValue("bardEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -126,7 +132,7 @@ const BardForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('bardEquipmentTwo', value.name)
+          setFieldValue("bardEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -139,7 +145,7 @@ const BardForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('bardEquipmentThree', value.name)
+          setFieldValue("bardEquipmentThree", value.name)
         }
       />
 
@@ -153,7 +159,7 @@ const BardForm: React.FC = () => {
         }
         label="Select musical proficiency."
         onChange={(value: Item) =>
-          setFieldValue('bardBonusMusicalProficiencyOne', value.name)
+          setFieldValue("bardBonusMusicalProficiencyOne", value.name)
         }
       />
       <ItemSelectField
@@ -166,7 +172,7 @@ const BardForm: React.FC = () => {
         }
         label="Select musical proficiency."
         onChange={(value: Item) =>
-          setFieldValue('bardBonusMusicalProficiencyTwo', value.name)
+          setFieldValue("bardBonusMusicalProficiencyTwo", value.name)
         }
       />
       <ItemSelectField
@@ -179,7 +185,7 @@ const BardForm: React.FC = () => {
         }
         label="Select musical proficiency."
         onChange={(value: Item) =>
-          setFieldValue('bardBonusMusicalProficiencyThree', value.name)
+          setFieldValue("bardBonusMusicalProficiencyThree", value.name)
         }
       />
 
@@ -191,7 +197,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusCantripIdOne', value.id)
+          setFieldValue("bardBonusCantripIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -202,7 +208,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusCantripIdTwo', value.id)
+          setFieldValue("bardBonusCantripIdTwo", value.id)
         }
       />
 
@@ -217,7 +223,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard spells."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusSpellIdOne', value.id)
+          setFieldValue("bardBonusSpellIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -231,7 +237,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard spells."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusSpellIdTwo', value.id)
+          setFieldValue("bardBonusSpellIdTwo", value.id)
         }
       />
       <SpellSelectField
@@ -245,7 +251,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard spells."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusSpellIdThree', value.id)
+          setFieldValue("bardBonusSpellIdThree", value.id)
         }
       />
       <SpellSelectField
@@ -259,7 +265,7 @@ const BardForm: React.FC = () => {
         }
         label="Select 1 of the following bard spells."
         onChange={(value: Spell) =>
-          setFieldValue('bardBonusSpellIdFour', value.id)
+          setFieldValue("bardBonusSpellIdFour", value.id)
         }
         noDivider={true}
       />

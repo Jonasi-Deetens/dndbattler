@@ -1,9 +1,9 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { NewCharacter, Race, Spell } from '../../types/DBTypes';
-import useClasses from '../../hooks/useClasses';
-import useLanguages from '../../hooks/useLanguages';
-import useRaces from '../../hooks/useRaces';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React, { useEffect, useState } from "react";
+import { NewCharacter, Race, Spell } from "../../types/DBTypes";
+import useClasses from "../../hooks/useClasses";
+import useLanguages from "../../hooks/useLanguages";
+import useRaces from "../../hooks/useRaces";
 
 const HighElfForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
@@ -16,8 +16,15 @@ const HighElfForm: React.FC = () => {
   useEffect(() => {
     const fetchSpellsByClass = async () => {
       try {
-        const spellsData = await getAllSpellsFromClass({ className: 'Wizard' });
-        if (spellsData) setSpells(spellsData);
+        const spellsData = await getAllSpellsFromClass({ className: "Wizard" });
+        if (spellsData) {
+          setSpells(spellsData);
+          if (!values.highElfBonusCantripId)
+            setFieldValue(
+              "highElfBonusCantripId",
+              spellsData.filter((spell) => spell.spellLevel === 0)[0].id
+            );
+        }
       } catch (error) {
         console.error(error);
       }
@@ -26,14 +33,26 @@ const HighElfForm: React.FC = () => {
 
     const fetchRace = async () => {
       try {
-        const race = await getRaceByName({ name: 'Elf' });
-        if (race) setRace(race);
+        const race = await getRaceByName({ name: "Elf" });
+        if (race) {
+          setRace(race);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchRace();
   }, []);
+
+  useEffect(() => {
+    if (languages && race && !values.highElfBonusLanguageId)
+      setFieldValue(
+        "highElfBonusLanguageId",
+        languages.filter((language) =>
+          race.languages.every((lang) => lang.name !== language.name)
+        )[0].id
+      );
+  }, [languages, race, values, setFieldValue]);
 
   return (
     <div>
@@ -48,14 +67,14 @@ const HighElfForm: React.FC = () => {
         aria-label="HighElfBonusCantrip"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('highElfBonusCantripId', e.target.value);
+          setFieldValue("highElfBonusCantripId", e.target.value);
         }}
         value={values.highElfBonusCantripId}
       >
         {spells &&
           spells
-            .filter(spell => spell.spellLevel === 0)
-            .map(option => {
+            .filter((spell) => spell.spellLevel === 0)
+            .map((option) => {
               return (
                 <option key={option.id} value={option.id}>
                   {option.name}
@@ -76,17 +95,17 @@ const HighElfForm: React.FC = () => {
         aria-label="HighElfBonusLanguage"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('highElfBonusLanguageId', e.target.value);
+          setFieldValue("highElfBonusLanguageId", e.target.value);
         }}
         value={values.highElfBonusLanguageId}
       >
         {languages &&
           race &&
           languages
-            .filter(language =>
-              race.languages.every(lang => lang.name !== language.name)
+            .filter((language) =>
+              race.languages.every((lang) => lang.name !== language.name)
             )
-            .map(option => {
+            .map((option) => {
               return (
                 <option key={option.id} value={option.id}>
                   {option.name}

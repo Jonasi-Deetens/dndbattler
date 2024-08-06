@@ -1,37 +1,39 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React, { useEffect } from "react";
 import {
   NewCharacter,
   Alignment,
   Ideal,
   Bond,
   Flaw,
-  Fear
-} from '../types/DBTypes';
-import AlignmentSelectField from '../components/inputs/AlignmentSelectField';
-import IdealSelectField from '../components/inputs/IdealSelectField';
-import BondSelectField from '../components/inputs/BondSelectField';
-import FlawSelectField from '../components/inputs/FlawSelectField';
-import FearSelectField from '../components/inputs/FearSelectField';
+  Fear,
+} from "../types/DBTypes";
+import AlignmentSelectField from "../components/inputs/AlignmentSelectField";
+import IdealSelectField from "../components/inputs/IdealSelectField";
+import BondSelectField from "../components/inputs/BondSelectField";
+import FlawSelectField from "../components/inputs/FlawSelectField";
+import FearSelectField from "../components/inputs/FearSelectField";
 
 const BackgroundForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
 
   useEffect(() => {
+    if (!values.characterAlignment)
+      setFieldValue("characterAlignment", Alignment.LAWFUL_GOOD);
     if (!values.characterIdealOne)
-      setFieldValue('characterIdealOne', Ideal.FAIRNESS);
+      setFieldValue("characterIdealOne", Ideal.FAIRNESS);
     if (!values.characterIdealTwo)
-      setFieldValue('characterIdealTwo', Ideal.RESPECT);
+      setFieldValue("characterIdealTwo", Ideal.RESPECT);
     if (!values.characterBondOne)
-      setFieldValue('characterBondOne', Bond.FAMILY);
-    if (!values.characterBondTwo) setFieldValue('characterBondTwo', Bond.HONOR);
+      setFieldValue("characterBondOne", Bond.FAMILY);
+    if (!values.characterBondTwo) setFieldValue("characterBondTwo", Bond.HONOR);
     if (!values.characterFlawOne)
-      setFieldValue('characterFlawOne', Flaw.COWARDICE);
-    if (!values.characterFlawTwo) setFieldValue('characterFlawTwo', Flaw.GREED);
+      setFieldValue("characterFlawOne", Flaw.COWARDICE);
+    if (!values.characterFlawTwo) setFieldValue("characterFlawTwo", Flaw.GREED);
     if (!values.characterFearOne)
-      setFieldValue('characterFearOne', Fear.FAILURE);
+      setFieldValue("characterFearOne", Fear.FAILURE);
     if (!values.characterFearTwo)
-      setFieldValue('characterFearTwo', Fear.LOSING_PEOPLE);
+      setFieldValue("characterFearTwo", Fear.LOSING_PEOPLE);
   }, []);
 
   return (
@@ -54,56 +56,56 @@ const BackgroundForm: React.FC = () => {
         name="characterAlignment"
         label="Select your alignment"
         onChange={(value: Alignment) =>
-          setFieldValue('characterAlignment', value)
+          setFieldValue("characterAlignment", value)
         }
       />
       <IdealSelectField
         name="characterIdealOne"
         filter={(option: Ideal) => option !== values.characterIdealTwo}
         label="Select your first ideal"
-        onChange={(value: Ideal) => setFieldValue('characterIdealOne', value)}
+        onChange={(value: Ideal) => setFieldValue("characterIdealOne", value)}
       />
       <IdealSelectField
         name="characterIdealTwo"
         filter={(option: Ideal) => option !== values.characterIdealOne}
         label="Select your second ideal"
-        onChange={(value: Ideal) => setFieldValue('characterIdealTwo', value)}
+        onChange={(value: Ideal) => setFieldValue("characterIdealTwo", value)}
       />
       <BondSelectField
         name="characterBondOne"
         filter={(option: Bond) => option !== values.characterBondTwo}
         label="Select your first bond"
-        onChange={(value: Bond) => setFieldValue('characterBondOne', value)}
+        onChange={(value: Bond) => setFieldValue("characterBondOne", value)}
       />
       <BondSelectField
         name="characterBondTwo"
         filter={(option: Bond) => option !== values.characterBondOne}
         label="Select your second bond"
-        onChange={(value: Bond) => setFieldValue('characterBondTwo', value)}
+        onChange={(value: Bond) => setFieldValue("characterBondTwo", value)}
       />
       <FlawSelectField
         name="characterFlawOne"
         filter={(option: Flaw) => option !== values.characterFlawTwo}
         label="Select your first flaw"
-        onChange={(value: Flaw) => setFieldValue('characterFlawOne', value)}
+        onChange={(value: Flaw) => setFieldValue("characterFlawOne", value)}
       />
       <FlawSelectField
         name="characterFlawTwo"
         filter={(option: Flaw) => option !== values.characterFlawOne}
         label="Select your second flaw"
-        onChange={(value: Flaw) => setFieldValue('characterFlawTwo', value)}
+        onChange={(value: Flaw) => setFieldValue("characterFlawTwo", value)}
       />
       <FearSelectField
         name="characterFearOne"
         filter={(option: Fear) => option !== values.characterFearTwo}
         label="Select your first fear"
-        onChange={(value: Fear) => setFieldValue('characterFearOne', value)}
+        onChange={(value: Fear) => setFieldValue("characterFearOne", value)}
       />
       <FearSelectField
         name="characterFearTwo"
         filter={(option: Fear) => option !== values.characterFearOne}
         label="Select your second fear"
-        onChange={(value: Fear) => setFieldValue('characterFearTwo', value)}
+        onChange={(value: Fear) => setFieldValue("characterFearTwo", value)}
         noDivider={true}
       />
       <label className="border-b p-2 w-fit m-auto">Backstory</label>

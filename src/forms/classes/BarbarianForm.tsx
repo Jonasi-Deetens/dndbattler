@@ -1,36 +1,40 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, SkillChecks, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
 
 const barbarianSkillChoices = [
-  'Animal Handling',
-  'Athletics',
-  'Intimidation',
-  'Nature',
-  'Perception',
-  'Survival'
+  "Animal Handling",
+  "Athletics",
+  "Intimidation",
+  "Nature",
+  "Perception",
+  "Survival",
 ];
 
 const BarbarianForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
 
-  const itemChoicesOne = ['Greataxe', 'Martial Weapon'];
-  const itemChoicesTwo = ['Handaxe', 'Simple Weapon'];
+  const itemChoicesOne = ["Greataxe", "Martial Weapon"];
+  const itemChoicesTwo = ["Handaxe", "Simple Weapon"];
 
   useEffect(() => {
     if (!values.barbarianBonusSkillProficiencyOne)
       setFieldValue(
-        'barbarianBonusSkillProficiencyOne',
-        barbarianSkillChoices[1]
+        "barbarianBonusSkillProficiencyOne",
+        barbarianSkillChoices[0]
       );
     if (!values.barbarianBonusSkillProficiencyTwo)
       setFieldValue(
-        'barbarianBonusSkillProficiencyTwo',
-        barbarianSkillChoices[3]
+        "barbarianBonusSkillProficiencyTwo",
+        barbarianSkillChoices[1]
       );
-  }, [setFieldValue]);
+    if (!values.barbarianEquipmentOne)
+      setFieldValue("barbarianEquipmentOne", itemChoicesOne[0]);
+    if (!values.barbarianEquipmentTwo)
+      setFieldValue("barbarianEquipmentTwo", itemChoicesTwo[0]);
+  }, []);
 
   return (
     <div>
@@ -44,7 +48,7 @@ const BarbarianForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('barbarianBonusSkillProficiencyOne', value)
+          setFieldValue("barbarianBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -55,21 +59,20 @@ const BarbarianForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('barbarianBonusSkillProficiencyTwo', value)
+          setFieldValue("barbarianBonusSkillProficiencyTwo", value)
         }
       />
-
       <ItemSelectField
         name="barbarianEquipmentOne"
         filter={(option: Item) =>
           option.name !== values.barbarianEquipmentTwo &&
           (itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)) &&
-          option.rangeType === 'Melee'
+          option.rangeType === "Melee"
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('barbarianEquipmentOne', value.name)
+          setFieldValue("barbarianEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -81,7 +84,7 @@ const BarbarianForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('barbarianEquipmentTwo', value.name)
+          setFieldValue("barbarianEquipmentTwo", value.name)
         }
         noDivider={true}
       />

@@ -229,7 +229,6 @@ export const highElfDataNotNull = (formValues: NewCharacter) => {
 // Function to check non-null values for Character
 export const characterDataNotNull = (formValues: NewCharacter) => {
   return (
-    formValues.characterBackground &&
     formValues.characterAlignment &&
     formValues.characterIdealOne &&
     formValues.characterIdealTwo &&
@@ -238,8 +237,6 @@ export const characterDataNotNull = (formValues: NewCharacter) => {
     formValues.characterFlawOne &&
     formValues.characterFlawTwo &&
     formValues.characterFearOne &&
-    formValues.characterFearTwo &&
-    formValues.characterBackstory &&
-    formValues.characterAppearance
+    formValues.characterFearTwo
   );
 };

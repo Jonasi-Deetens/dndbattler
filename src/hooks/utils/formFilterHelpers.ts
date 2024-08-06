@@ -195,9 +195,9 @@ export const addItemsByName = (
   formValues: NewCharacter,
   items: Item[]
 ) => {
-  for (const name in names) {
+  names.forEach((name) => {
     addItemByName(name, formValues, items);
-  }
+  });
 };
 
 export const addLanguageById = (
@@ -216,9 +216,9 @@ export const addLanguagesById = (
   formValues: NewCharacter,
   languages: Language[]
 ) => {
-  for (const id in ids) {
-    addLanguageById(parseInt(id), formValues, languages);
-  }
+  ids.forEach((id) => {
+    addLanguageById(id, formValues, languages);
+  });
 };
 
 export const addSpellById = (
@@ -237,9 +237,9 @@ export const addSpellsById = (
   formValues: NewCharacter,
   spells: Spell[]
 ) => {
-  for (const id in ids) {
-    addSpellById(parseInt(id), formValues, spells);
-  }
+  ids.forEach((id) => {
+    addSpellById(id, formValues, spells);
+  });
 };
 
 export const addAbilityByName = (
@@ -258,9 +258,11 @@ export const addAbilitiesByName = (
   formValues: NewCharacter,
   abilities: Ability[]
 ) => {
-  for (const name in names) {
+  console.log(names);
+  names.forEach((name) => {
+    console.log(name);
     addAbilityByName(name, formValues, abilities);
-  }
+  });
 };
 
 export const addSkillByName = (
@@ -270,7 +272,7 @@ export const addSkillByName = (
 ) => {
   if (skills) {
     const skill = skills?.find((skill) => skill.name === name);
-    if (skill) addUniqueAbilities([skill], formValues);
+    if (skill) addUniqueSkills([skill], formValues);
   }
 };
 
@@ -279,9 +281,10 @@ export const addSkillsByName = (
   formValues: NewCharacter,
   skills: Skill[]
 ) => {
-  for (const name in names) {
+  console.log(names);
+  names.forEach((name) => {
     addSkillByName(name, formValues, skills);
-  }
+  });
 };
 
 export const addUniqueSpellByName = (
@@ -300,13 +303,15 @@ export const addUniqueSpellsByName = (
   formValues: NewCharacter,
   spells: Spell[]
 ) => {
-  for (const name in names) {
-    const isSpellInForm = formValues.spells.some(
-      (spell) => spell.name === name
-    );
+  if (names) {
+    names.forEach((name) => {
+      const isSpellInForm = formValues.spells.some(
+        (spell) => spell.name === name
+      );
 
-    if (!isSpellInForm) {
-      addUniqueSpellByName(name, formValues, spells);
-    }
+      if (!isSpellInForm) {
+        addUniqueSpellByName(name, formValues, spells);
+      }
+    });
   }
 };
