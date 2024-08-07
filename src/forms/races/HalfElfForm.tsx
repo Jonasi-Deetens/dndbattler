@@ -1,10 +1,10 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { NewCharacter, Race } from '../../types/DBTypes';
-import useLanguages from '../../hooks/useLanguages';
-import useRaces from '../../hooks/useRaces';
-import { AbilityScore } from '../../types/DBTypes';
-import { SkillChecks } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React, { useEffect, useState } from "react";
+import { NewCharacter, Race } from "../../types/DBTypes";
+import useLanguages from "../../hooks/useLanguages";
+import useRaces from "../../hooks/useRaces";
+import { AbilityScore } from "../../types/DBTypes";
+import { SkillChecks } from "../../types/DBTypes";
 
 const abilityScores = Object.values(AbilityScore);
 const skillChecks = Object.values(SkillChecks);
@@ -18,18 +18,34 @@ const HalfElfForm: React.FC = () => {
   useEffect(() => {
     const fetchRace = async () => {
       try {
-        const race = await getRaceByName({ name: 'Half Elf' });
+        const race = await getRaceByName({ name: "Half Elf" });
         if (race) setRace(race);
       } catch (error) {
         console.error(error);
       }
     };
 
-    values.halfElfBonusSkillProficiencyOne = skillChecks[0];
-    values.halfElfBonusSkillProficiencyTwo = skillChecks[1];
-
     fetchRace();
+
+    if (!values.halfElfBonusAbilityScoreOne)
+      setFieldValue("halfElfBonusAbilityScoreOne", abilityScores[0]);
+    if (!values.halfElfBonusAbilityScoreTwo)
+      setFieldValue("halfElfBonusAbilityScoreTwo", abilityScores[1]);
+    if (!values.halfElfBonusSkillProficiencyOne)
+      setFieldValue("halfElfBonusSkillProficiencyOne", skillChecks[0]);
+    if (!values.halfElfBonusSkillProficiencyTwo)
+      setFieldValue("halfElfBonusSkillProficiencyTwo", skillChecks[1]);
   }, []);
+
+  useEffect(() => {
+    if (languages && race && !values.halfElfBonusLanguageId)
+      setFieldValue(
+        "halfElfBonusLanguageId",
+        languages.filter((language) =>
+          race.languages.every((lang) => lang.name !== language.name)
+        )[0].id
+      );
+  }, [languages, race, values, setFieldValue]);
 
   return (
     <div>
@@ -42,11 +58,11 @@ const HalfElfForm: React.FC = () => {
         aria-label="HalfElfBonusAbilityScoreOne"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('halfElfBonusAbilityScoreOne', e.target.value);
+          setFieldValue("halfElfBonusAbilityScoreOne", e.target.value);
         }}
         value={values.halfElfBonusAbilityScoreOne}
       >
-        {abilityScores.map(score => (
+        {abilityScores.map((score) => (
           <option key={score} value={score}>
             {score}
           </option>
@@ -65,11 +81,11 @@ const HalfElfForm: React.FC = () => {
         aria-label="HalfElfBonusAbilityScoreTwo"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('halfElfBonusAbilityScoreTwo', e.target.value);
+          setFieldValue("halfElfBonusAbilityScoreTwo", e.target.value);
         }}
         value={values.halfElfBonusAbilityScoreTwo}
       >
-        {abilityScores.map(score => (
+        {abilityScores.map((score) => (
           <option key={score} value={score}>
             {score}
           </option>
@@ -88,13 +104,13 @@ const HalfElfForm: React.FC = () => {
         aria-label="HalfElfBonusSkillProficiencyOne"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('halfElfBonusSkillProficiencyOne', e.target.value);
+          setFieldValue("halfElfBonusSkillProficiencyOne", e.target.value);
         }}
         value={values.halfElfBonusSkillProficiencyOne}
       >
         {skillChecks
-          .filter(score => score !== values.halfElfBonusSkillProficiencyTwo)
-          .map(skill => (
+          .filter((score) => score !== values.halfElfBonusSkillProficiencyTwo)
+          .map((skill) => (
             <option key={skill} value={skill}>
               {skill}
             </option>
@@ -113,13 +129,13 @@ const HalfElfForm: React.FC = () => {
         aria-label="HalfElfBonusSkillProficiencyTwo"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('halfElfBonusSkillProficiencyTwo', e.target.value);
+          setFieldValue("halfElfBonusSkillProficiencyTwo", e.target.value);
         }}
         value={values.halfElfBonusSkillProficiencyTwo}
       >
         {skillChecks
-          .filter(score => score !== values.halfElfBonusSkillProficiencyOne)
-          .map(skill => (
+          .filter((score) => score !== values.halfElfBonusSkillProficiencyOne)
+          .map((skill) => (
             <option key={skill} value={skill}>
               {skill}
             </option>
@@ -138,17 +154,17 @@ const HalfElfForm: React.FC = () => {
         aria-label="HalfElfBonusLanguage"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('halfElfBonusLanguageId', e.target.value);
+          setFieldValue("halfElfBonusLanguageId", e.target.value);
         }}
         value={values.halfElfBonusLanguageId}
       >
         {languages &&
           race &&
           languages
-            .filter(language =>
-              race.languages.every(lang => lang.name !== language.name)
+            .filter((language) =>
+              race.languages.every((lang) => lang.name !== language.name)
             )
-            .map(option => {
+            .map((option) => {
               return (
                 <option key={option.id} value={option.id}>
                   {option.name}

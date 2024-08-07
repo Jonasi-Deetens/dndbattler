@@ -1,30 +1,36 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, SkillChecks, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
 
 const monkSkillChoices = [
-  'Acrobatics',
-  'Athletics',
-  'History',
-  'Insight',
-  'Religion',
-  'Stealth'
+  "Acrobatics",
+  "Athletics",
+  "History",
+  "Insight",
+  "Religion",
+  "Stealth",
 ];
 
 const MonkForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
 
-  const itemChoicesOne = ['Shortsword', 'Simple Weapon'];
+  const itemChoicesOne = ["Shortsword", "Simple Weapon"];
   const itemChoicesTwo = ["Dungeoneer's Pack", "Explorer's Pack"];
-  const proficiencyChoices = ['Tool', 'Musical Instrument'];
+  const proficiencyChoices = ["Tool", "Musical Instrument"];
 
   useEffect(() => {
     if (!values.monkSkillProficiencyOne)
-      setFieldValue('monkSkillProficiencyOne', monkSkillChoices[0]);
+      setFieldValue("monkSkillProficiencyOne", monkSkillChoices[0]);
     if (!values.monkSkillProficiencyTwo)
-      setFieldValue('monkSkillProficiencyTwo', monkSkillChoices[1]);
+      setFieldValue("monkSkillProficiencyTwo", monkSkillChoices[1]);
+    if (!values.monkEquipmentOne)
+      setFieldValue("monkEquipmentOne", itemChoicesOne[0]);
+    if (!values.monkEquipmentTwo)
+      setFieldValue("monkEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.monkProficiency)
+      setFieldValue("monkProficiency", monkSkillChoices[1]);
   }, []);
 
   return (
@@ -39,7 +45,7 @@ const MonkForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('monkSkillProficiencyOne', value)
+          setFieldValue("monkSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -50,7 +56,7 @@ const MonkForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('monkSkillProficiencyTwo', value)
+          setFieldValue("monkSkillProficiencyTwo", value)
         }
       />
 
@@ -62,7 +68,7 @@ const MonkForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('monkEquipmentOne', value.name)
+          setFieldValue("monkEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -70,7 +76,7 @@ const MonkForm: React.FC = () => {
         filter={(option: Item) => itemChoicesTwo.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('monkEquipmentTwo', value.name)
+          setFieldValue("monkEquipmentTwo", value.name)
         }
       />
 
@@ -81,7 +87,7 @@ const MonkForm: React.FC = () => {
           proficiencyChoices.includes(option.type)
         }
         label="Select item proficiency."
-        onChange={(value: Item) => setFieldValue('monkProficiency', value.name)}
+        onChange={(value: Item) => setFieldValue("monkProficiency", value.name)}
         noDivider={true}
       />
     </div>

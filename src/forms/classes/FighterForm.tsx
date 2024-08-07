@@ -1,40 +1,52 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
 import {
   NewCharacter,
   SkillChecks,
   Item,
-  FightingStyle
-} from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import FightingStyleSelectField from '../../components/inputs/FightingStyleSelectField';
+  FightingStyle,
+} from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import FightingStyleSelectField from "../../components/inputs/FightingStyleSelectField";
 
 const fighterSkillChoices = [
-  'Acrobatics',
-  'Animal Handling',
-  'Athletics',
-  'History',
-  'Insight',
-  'Intimidation',
-  'Perception',
-  'Survival'
+  "Acrobatics",
+  "Animal Handling",
+  "Athletics",
+  "History",
+  "Insight",
+  "Intimidation",
+  "Perception",
+  "Survival",
 ];
 
 const FighterForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
 
-  const itemChoicesOne = ['Chain Mail', 'Leather Armor'];
-  const itemChoicesTwo = ['Martial Weapon'];
-  const itemChoicesThree = ['Shield', 'Martial Weapon'];
-  const itemChoicesFour = ['Crossbow, Light', 'Handaxe'];
+  const itemChoicesOne = ["Chain Mail", "Leather Armor"];
+  const itemChoicesTwo = ["Martial Weapon"];
+  const itemChoicesThree = ["Shield", "Martial Weapon"];
+  const itemChoicesFour = ["Crossbow, Light", "Handaxe"];
   const itemChoicesFive = ["Dungeoneer's Pack", "Explorer's Pack"];
 
   useEffect(() => {
     if (!values.fighterBonusSkillProficiencyOne)
-      setFieldValue('fighterBonusSkillProficiencyOne', fighterSkillChoices[0]);
+      setFieldValue("fighterBonusSkillProficiencyOne", fighterSkillChoices[0]);
     if (!values.fighterBonusSkillProficiencyTwo)
-      setFieldValue('fighterBonusSkillProficiencyTwo', fighterSkillChoices[1]);
+      setFieldValue("fighterBonusSkillProficiencyTwo", fighterSkillChoices[1]);
+    if (!values.fighterEquipmentOne)
+      setFieldValue("fighterEquipmentOne", itemChoicesOne[0]);
+    if (!values.fighterEquipmentTwo)
+      setFieldValue("fighterEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.fighterEquipmentThree)
+      setFieldValue("fighterEquipmentThree", itemChoicesThree[0]);
+    if (!values.fighterEquipmentFour)
+      setFieldValue("fighterEquipmentFour", itemChoicesFour[0]);
+    if (!values.fighterEquipmentFive)
+      setFieldValue("fighterEquipmentFive", itemChoicesFive[0]);
+    if (!values.fighterFightingStyle)
+      setFieldValue("fighterFightingStyle", FightingStyle.ARCHERY);
   }, []);
 
   return (
@@ -49,7 +61,7 @@ const FighterForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('fighterBonusSkillProficiencyOne', value)
+          setFieldValue("fighterBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -60,7 +72,7 @@ const FighterForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('fighterBonusSkillProficiencyTwo', value)
+          setFieldValue("fighterBonusSkillProficiencyTwo", value)
         }
       />
 
@@ -69,7 +81,7 @@ const FighterForm: React.FC = () => {
         filter={(option: Item) => itemChoicesOne.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('fighterEquipmentOne', value.name)
+          setFieldValue("fighterEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -80,7 +92,7 @@ const FighterForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('fighterEquipmentTwo', value.name)
+          setFieldValue("fighterEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -91,7 +103,7 @@ const FighterForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('fighterEquipmentThree', value.name)
+          setFieldValue("fighterEquipmentThree", value.name)
         }
       />
       <ItemSelectField
@@ -99,7 +111,7 @@ const FighterForm: React.FC = () => {
         filter={(option: Item) => itemChoicesFour.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('fighterEquipmentFour', value.name)
+          setFieldValue("fighterEquipmentFour", value.name)
         }
       />
       <ItemSelectField
@@ -107,7 +119,7 @@ const FighterForm: React.FC = () => {
         filter={(option: Item) => itemChoicesFive.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('fighterEquipmentFive', value.name)
+          setFieldValue("fighterEquipmentFive", value.name)
         }
       />
 
@@ -116,7 +128,7 @@ const FighterForm: React.FC = () => {
         filter={() => true}
         label="Select Fighting Style."
         onChange={(value: FightingStyle) =>
-          setFieldValue('fighterFightingStyle', value)
+          setFieldValue("fighterFightingStyle", value)
         }
         noDivider={true}
       />

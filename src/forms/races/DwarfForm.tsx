@@ -1,10 +1,15 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { NewCharacter } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter } from "../../types/DBTypes";
 
 const DwarfForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const toolOptions = ["Smith's Tools", "Brewer's Supplies", "Mason's Tools"];
+
+  useEffect(() => {
+    if (!values.dwarfToolProficiency)
+      setFieldValue("dwarfToolProficiency", toolOptions[0]);
+  }, []);
 
   return (
     <div>
@@ -20,12 +25,12 @@ const DwarfForm: React.FC = () => {
         aria-label="DwarfToolProficiency"
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setFieldValue('dwarfToolProficiency', e.target.value);
+          setFieldValue("dwarfToolProficiency", e.target.value);
         }}
         value={values.dwarfToolProficiency}
       >
         {toolOptions &&
-          toolOptions.map(option => {
+          toolOptions.map((option) => {
             return (
               <option key={option} value={option}>
                 {option}

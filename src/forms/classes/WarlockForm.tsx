@@ -1,54 +1,54 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, Spell, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import SpellSelectField from '../../components/inputs/SpellSelectField';
-import useClasses from '../../hooks/useClasses';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import SpellSelectField from "../../components/inputs/SpellSelectField";
+import useClasses from "../../hooks/useClasses";
 
 const warlockSkillChoices = [
-  'Arcana',
-  'Deception',
-  'History',
-  'Intimidation',
-  'Investigation',
-  'Nature',
-  'Religion'
+  "Arcana",
+  "Deception",
+  "History",
+  "Intimidation",
+  "Investigation",
+  "Nature",
+  "Religion",
 ];
 
 const WarlockForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { getAllSpellsFromClass } = useClasses();
 
-  const itemChoicesOne = ['Crossbow, Light', 'Simple Weapon'];
-  const itemChoicesTwo = ['Component Pouch', 'Arcane Focus'];
+  const itemChoicesOne = ["Crossbow, Light", "Simple Weapon"];
+  const itemChoicesTwo = ["Component Pouch", "Arcane Focus"];
   const itemChoicesThree = ["Dungeoneer's Pack", "Scholar's Pack"];
 
   useEffect(() => {
     const fetchSpellsByClass = async () => {
       try {
         const spellsData = await getAllSpellsFromClass({
-          className: 'Warlock'
+          className: "Warlock",
         });
         if (spellsData) {
-          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
+          const cantrips = spellsData.filter((spell) => spell.spellLevel === 0);
           const levelOneSpells = spellsData.filter(
-            spell => spell.spellLevel === 1
+            (spell) => spell.spellLevel === 1
           );
 
           if (cantrips.length > 1) {
             if (!values.warlockCantripIdOne)
               if (!values.warlockCantripIdOne)
-                setFieldValue('warlockCantripIdOne', cantrips[0].id);
+                setFieldValue("warlockCantripIdOne", cantrips[0].id);
             if (!values.warlockCantripIdTwo)
-              setFieldValue('warlockCantripIdTwo', cantrips[1].id);
+              setFieldValue("warlockCantripIdTwo", cantrips[1].id);
           }
 
           if (levelOneSpells.length > 1) {
             if (!values.warlockSpellIdOne)
-              setFieldValue('warlockSpellIdOne', levelOneSpells[0].id);
+              setFieldValue("warlockSpellIdOne", levelOneSpells[0].id);
             if (!values.warlockSpellIdTwo)
-              setFieldValue('warlockSpellIdTwo', levelOneSpells[1].id);
+              setFieldValue("warlockSpellIdTwo", levelOneSpells[1].id);
           }
         }
       } catch (error) {
@@ -58,9 +58,15 @@ const WarlockForm: React.FC = () => {
     fetchSpellsByClass();
 
     if (!values.warlockSkillProficiencyOne)
-      setFieldValue('warlockSkillProficiencyOne', warlockSkillChoices[0]);
+      setFieldValue("warlockSkillProficiencyOne", warlockSkillChoices[0]);
     if (!values.warlockSkillProficiencyTwo)
-      setFieldValue('warlockSkillProficiencyTwo', warlockSkillChoices[1]);
+      setFieldValue("warlockSkillProficiencyTwo", warlockSkillChoices[1]);
+    if (!values.warlockEquipmentOne)
+      setFieldValue("warlockEquipmentOne", itemChoicesOne[0]);
+    if (!values.warlockEquipmentTwo)
+      setFieldValue("warlockEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.warlockEquipmentThree)
+      setFieldValue("warlockEquipmentThree", itemChoicesThree[0]);
   }, []);
 
   return (
@@ -75,7 +81,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('warlockSkillProficiencyOne', value)
+          setFieldValue("warlockSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -86,7 +92,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('warlockSkillProficiencyTwo', value)
+          setFieldValue("warlockSkillProficiencyTwo", value)
         }
       />
 
@@ -98,7 +104,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('warlockEquipmentOne', value.name)
+          setFieldValue("warlockEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -106,7 +112,7 @@ const WarlockForm: React.FC = () => {
         filter={(option: Item) => itemChoicesTwo.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('warlockEquipmentTwo', value.name)
+          setFieldValue("warlockEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -114,7 +120,7 @@ const WarlockForm: React.FC = () => {
         filter={(option: Item) => itemChoicesThree.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('warlockEquipmentThree', value.name)
+          setFieldValue("warlockEquipmentThree", value.name)
         }
       />
 
@@ -126,7 +132,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select 1 of the following warlock cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('warlockCantripIdOne', value.id)
+          setFieldValue("warlockCantripIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -137,7 +143,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select 1 of the following warlock cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('warlockCantripIdTwo', value.id)
+          setFieldValue("warlockCantripIdTwo", value.id)
         }
       />
 
@@ -149,7 +155,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select 1 of the following warlock spells."
         onChange={(value: Spell) =>
-          setFieldValue('warlockSpellIdOne', value.id)
+          setFieldValue("warlockSpellIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -160,7 +166,7 @@ const WarlockForm: React.FC = () => {
         }
         label="Select 1 of the following warlock spells."
         onChange={(value: Spell) =>
-          setFieldValue('warlockSpellIdTwo', value.id)
+          setFieldValue("warlockSpellIdTwo", value.id)
         }
         noDivider={true}
       />

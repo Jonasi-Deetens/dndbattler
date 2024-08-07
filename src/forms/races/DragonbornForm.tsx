@@ -1,27 +1,33 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { NewCharacter, Spell } from '../../types/DBTypes';
-import useSpells from '../../hooks/useSpells';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React, { useEffect, useState } from "react";
+import { NewCharacter, Spell } from "../../types/DBTypes";
+import useSpells from "../../hooks/useSpells";
 
 const DragonbornForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { getSpellsByList } = useSpells();
   const [spells, setSpells] = useState<Spell[]>();
   const spellList = [
-    'Breath Weapon (Acid)',
-    'Breath Weapon (Cold)',
-    'Breath Weapon (Fire)',
-    'Breath Weapon (Lightning)',
-    'Breath Weapon (Poison)'
+    "Breath Weapon (Acid)",
+    "Breath Weapon (Cold)",
+    "Breath Weapon (Fire)",
+    "Breath Weapon (Lightning)",
+    "Breath Weapon (Poison)",
   ];
 
   useEffect(() => {
     const fetchSpellsByList = async () => {
       try {
         const spellsData = await getSpellsByList({
-          spellList: spellList
+          spellList: spellList,
         });
-        if (spellsData) setSpells(spellsData);
+        if (spellsData) {
+          setSpells(spellsData);
+          if (!values.dragonbornBreathWeaponId)
+            setFieldValue("dragonbornBreathWeaponId", spellsData[0].id);
+          if (!values.dragonbornResistanceType)
+            setFieldValue("dragonbornResistanceType", spellsData[0].damageType);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -30,13 +36,13 @@ const DragonbornForm: React.FC = () => {
   }, []);
 
   const handleSpellChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFieldValue('dragonbornBreathWeaponId', e.target.value);
+    setFieldValue("dragonbornBreathWeaponId", e.target.value);
 
     if (spells) {
       const spell = spells?.find(
-        spell => spell.id === parseInt(e.target.value)
+        (spell) => spell.id === parseInt(e.target.value)
       );
-      setFieldValue('dragonbornResistanceType', spell?.damageType);
+      setFieldValue("dragonbornResistanceType", spell?.damageType);
     }
   };
 
@@ -57,8 +63,8 @@ const DragonbornForm: React.FC = () => {
       >
         {spells &&
           spells
-            .filter(spell => spell.spellLevel === 0)
-            .map(option => {
+            .filter((spell) => spell.spellLevel === 0)
+            .map((option) => {
               return (
                 <option key={option.id} value={option.id}>
                   {option.name}

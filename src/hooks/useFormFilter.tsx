@@ -180,18 +180,24 @@ const useFormFilter = () => {
     if (charClass.items) addItems(charClass.items, formValues);
     addUniqueSavingThrows(charClass.savingThrowProficiencies, formValues);
     addUniqueProficiencies(charClass.proficiencies, formValues);
-    if (charClass.spellsByLevel)
+    if (JSON.parse(charClass.spellsByLevel)[1])
       addUniqueSpellsByName(
         JSON.parse(charClass.spellsByLevel)[1],
         formValues,
         spells
       );
-    addAbilitiesByName(
-      JSON.parse(charClass.abilitiesByLevel)[1],
-      formValues,
-      abilities
-    );
-    addSkillsByName(JSON.parse(charClass.skillsByLevel)[1], formValues, skills);
+    if (JSON.parse(charClass.abilitiesByLevel)[1])
+      addAbilitiesByName(
+        JSON.parse(charClass.abilitiesByLevel)[1],
+        formValues,
+        abilities
+      );
+    if (JSON.parse(charClass.skillsByLevel)[1])
+      addSkillsByName(
+        JSON.parse(charClass.skillsByLevel)[1],
+        formValues,
+        skills
+      );
     formValues.primaryAbilityScoreModifier =
       charClass.primarySpellAbilityScoreModifier;
     formValues.primarySpellAbilityScoreModifier =
@@ -429,8 +435,8 @@ const useFormFilter = () => {
       case "Sorcerer":
         if (charClass.sorceryPointsByLevel)
           formValues.sorceryPoints = JSON.parse(
-            charClass.sorceryPointsByLevel[1]
-          );
+            charClass.sorceryPointsByLevel
+          )[1];
         if (sorcererDataNotNull(formData)) {
           addUniqueProficiencies(
             [
@@ -463,8 +469,8 @@ const useFormFilter = () => {
       case "Warlock":
         if (charClass.invocationsKnownByLevel)
           formValues.invocationsKnown = JSON.parse(
-            charClass.invocationsKnownByLevel[1]
-          );
+            charClass.invocationsKnownByLevel
+          )[1];
         if (warlockDataNotNull(formData)) {
           addUniqueProficiencies(
             [
@@ -533,30 +539,36 @@ const useFormFilter = () => {
     formData: NewCharacter,
     formValues: NewCharacter
   ) => {
-    formValues.spellSlots = subclass.spellslotsBySpellLevelByLevel
-      ? JSON.parse(subclass.spellslotsBySpellLevelByLevel)[1]
-      : [];
+    if (subclass.spellslotsBySpellLevelByLevel)
+      formValues.spellSlots = JSON.parse(
+        subclass.spellslotsBySpellLevelByLevel
+      )[1];
     addUniqueSavingThrows(subclass.savingThrowProficiencies, formValues);
     addUniqueProficiencies(subclass.proficiencies, formValues);
     formValues.primarySpellAbilityScoreModifier =
       subclass.primarySpellAbilityScoreModifier;
-    formValues.cantripsKnown = subclass.cantripsKnownByLevel
-      ? JSON.parse(subclass.cantripsKnownByLevel)[1]
-      : 0;
-    formValues.spellsKnown = subclass.spellsKnownByLevel
-      ? JSON.parse(subclass.spellsKnownByLevel)[1]
-      : 0;
-    addUniqueSpellsByName(
-      JSON.parse(subclass.spellsByLevel)[1],
-      formValues,
-      spells
-    );
-    addAbilitiesByName(
-      JSON.parse(subclass.abilitiesByLevel)[1],
-      formValues,
-      abilities
-    );
-    addSkillsByName(JSON.parse(subclass.skillsByLevel)[1], formValues, skills);
+    if (subclass.cantripsKnownByLevel)
+      formValues.cantripsKnown = JSON.parse(subclass.cantripsKnownByLevel)[1];
+    if (subclass.spellsKnownByLevel)
+      formValues.spellsKnown = JSON.parse(subclass.spellsKnownByLevel)[1];
+    if (JSON.parse(subclass.spellsByLevel)[1])
+      addUniqueSpellsByName(
+        JSON.parse(subclass.spellsByLevel)[1],
+        formValues,
+        spells
+      );
+    if (JSON.parse(subclass.abilitiesByLevel)[1])
+      addAbilitiesByName(
+        JSON.parse(subclass.abilitiesByLevel)[1],
+        formValues,
+        abilities
+      );
+    if (JSON.parse(subclass.skillsByLevel)[1])
+      addSkillsByName(
+        JSON.parse(subclass.skillsByLevel)[1],
+        formValues,
+        skills
+      );
     switch (subclass.name) {
       case "Knowledge Domain":
         if (knowledgeDomainDataNotNull(formData)) {

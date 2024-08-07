@@ -1,56 +1,56 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, Spell, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import SpellSelectField from '../../components/inputs/SpellSelectField';
-import useClasses from '../../hooks/useClasses';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import SpellSelectField from "../../components/inputs/SpellSelectField";
+import useClasses from "../../hooks/useClasses";
 
 const sorcererSkillChoices = [
-  'Arcana',
-  'Deception',
-  'Insight',
-  'Intimidation',
-  'Persuasion',
-  'Religion'
+  "Arcana",
+  "Deception",
+  "Insight",
+  "Intimidation",
+  "Persuasion",
+  "Religion",
 ];
 
 const SorcererForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { getAllSpellsFromClass } = useClasses();
 
-  const itemChoicesOne = ['Crossbow, Light', 'Simple Weapon'];
-  const itemChoicesTwo = ['Component Pouch', 'Arcane Focus'];
+  const itemChoicesOne = ["Crossbow, Light", "Simple Weapon"];
+  const itemChoicesTwo = ["Component Pouch", "Arcane Focus"];
   const itemChoicesThree = ["Dungeoneer's Pack", "Explorer's Pack"];
 
   useEffect(() => {
     const fetchSpellsByClass = async () => {
       try {
         const spellsData = await getAllSpellsFromClass({
-          className: 'Sorcerer'
+          className: "Sorcerer",
         });
         if (spellsData) {
-          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
+          const cantrips = spellsData.filter((spell) => spell.spellLevel === 0);
           const levelOneSpells = spellsData.filter(
-            spell => spell.spellLevel === 1
+            (spell) => spell.spellLevel === 1
           );
 
           if (cantrips.length > 3) {
             if (!values.sorcererCantripIdOne)
-              setFieldValue('sorcererCantripIdOne', cantrips[0].id);
+              setFieldValue("sorcererCantripIdOne", cantrips[0].id);
             if (!values.sorcererCantripIdTwo)
-              setFieldValue('sorcererCantripIdTwo', cantrips[1].id);
+              setFieldValue("sorcererCantripIdTwo", cantrips[1].id);
             if (!values.sorcererCantripIdThree)
-              setFieldValue('sorcererCantripIdThree', cantrips[2].id);
+              setFieldValue("sorcererCantripIdThree", cantrips[2].id);
             if (!values.sorcererCantripIdFour)
-              setFieldValue('sorcererCantripIdFour', cantrips[3].id);
+              setFieldValue("sorcererCantripIdFour", cantrips[3].id);
           }
 
           if (levelOneSpells.length > 1) {
             if (!values.sorcererSpellIdOne)
-              setFieldValue('sorcererSpellIdOne', levelOneSpells[0].id);
+              setFieldValue("sorcererSpellIdOne", levelOneSpells[0].id);
             if (!values.sorcererSpellIdTwo)
-              setFieldValue('sorcererSpellIdTwo', levelOneSpells[1].id);
+              setFieldValue("sorcererSpellIdTwo", levelOneSpells[1].id);
           }
         }
       } catch (error) {
@@ -60,9 +60,15 @@ const SorcererForm: React.FC = () => {
     fetchSpellsByClass();
 
     if (!values.sorcererSkillProficiencyOne)
-      setFieldValue('sorcererSkillProficiencyOne', sorcererSkillChoices[0]);
+      setFieldValue("sorcererSkillProficiencyOne", sorcererSkillChoices[0]);
     if (!values.sorcererSkillProficiencyTwo)
-      setFieldValue('sorcererSkillProficiencyTwo', sorcererSkillChoices[1]);
+      setFieldValue("sorcererSkillProficiencyTwo", sorcererSkillChoices[1]);
+    if (!values.sorcererEquipmentOne)
+      setFieldValue("sorcererEquipmentOne", itemChoicesOne[0]);
+    if (!values.sorcererEquipmentTwo)
+      setFieldValue("sorcererEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.sorcererEquipmentThree)
+      setFieldValue("sorcererEquipmentThree", itemChoicesThree[0]);
   }, []);
 
   return (
@@ -77,7 +83,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('sorcererSkillProficiencyOne', value)
+          setFieldValue("sorcererSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -88,7 +94,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('sorcererSkillProficiencyTwo', value)
+          setFieldValue("sorcererSkillProficiencyTwo", value)
         }
       />
 
@@ -100,7 +106,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('sorcererEquipmentOne', value.name)
+          setFieldValue("sorcererEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -108,7 +114,7 @@ const SorcererForm: React.FC = () => {
         filter={(option: Item) => itemChoicesTwo.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('sorcererEquipmentTwo', value.name)
+          setFieldValue("sorcererEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -116,7 +122,7 @@ const SorcererForm: React.FC = () => {
         filter={(option: Item) => itemChoicesThree.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('sorcererEquipmentThree', value.name)
+          setFieldValue("sorcererEquipmentThree", value.name)
         }
       />
 
@@ -131,7 +137,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererCantripIdOne', value.id)
+          setFieldValue("sorcererCantripIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -145,7 +151,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererCantripIdTwo', value.id)
+          setFieldValue("sorcererCantripIdTwo", value.id)
         }
       />
       <SpellSelectField
@@ -159,7 +165,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererCantripIdThree', value.id)
+          setFieldValue("sorcererCantripIdThree", value.id)
         }
       />
       <SpellSelectField
@@ -173,7 +179,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererCantripIdFour', value.id)
+          setFieldValue("sorcererCantripIdFour", value.id)
         }
       />
 
@@ -185,7 +191,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer spells."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererSpellIdOne', value.id)
+          setFieldValue("sorcererSpellIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -196,7 +202,7 @@ const SorcererForm: React.FC = () => {
         }
         label="Select 1 of the following sorcerer spells."
         onChange={(value: Spell) =>
-          setFieldValue('sorcererSpellIdTwo', value.id)
+          setFieldValue("sorcererSpellIdTwo", value.id)
         }
         noDivider={true}
       />

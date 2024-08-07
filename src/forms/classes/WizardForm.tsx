@@ -1,60 +1,60 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, Spell, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import SpellSelectField from '../../components/inputs/SpellSelectField';
-import useClasses from '../../hooks/useClasses';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import SpellSelectField from "../../components/inputs/SpellSelectField";
+import useClasses from "../../hooks/useClasses";
 
 const wizardSkillChoices = [
-  'Arcana',
-  'History',
-  'Insight',
-  'Investigation',
-  'Medicine',
-  'Religion'
+  "Arcana",
+  "History",
+  "Insight",
+  "Investigation",
+  "Medicine",
+  "Religion",
 ];
 
 const WizardForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { getAllSpellsFromClass } = useClasses();
 
-  const itemChoicesOne = ['Quarterstaff', 'Dagger'];
-  const itemChoicesTwo = ['Component Pouch', 'Arcane Focus'];
+  const itemChoicesOne = ["Quarterstaff", "Dagger"];
+  const itemChoicesTwo = ["Component Pouch", "Arcane Focus"];
   const itemChoicesThree = ["Explorer's Pack", "Scholar's Pack"];
 
   useEffect(() => {
     const fetchSpellsByClass = async () => {
       try {
-        const spellsData = await getAllSpellsFromClass({ className: 'Wizard' });
+        const spellsData = await getAllSpellsFromClass({ className: "Wizard" });
         if (spellsData) {
-          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
+          const cantrips = spellsData.filter((spell) => spell.spellLevel === 0);
           const levelOneSpells = spellsData.filter(
-            spell => spell.spellLevel === 1
+            (spell) => spell.spellLevel === 1
           );
 
           if (cantrips.length > 2) {
             if (!values.wizardCantripIdOne)
-              setFieldValue('wizardCantripIdOne', cantrips[0].id);
+              setFieldValue("wizardCantripIdOne", cantrips[0].id);
             if (!values.wizardCantripIdTwo)
-              setFieldValue('wizardCantripIdTwo', cantrips[1].id);
+              setFieldValue("wizardCantripIdTwo", cantrips[1].id);
             if (!values.wizardCantripIdThree)
-              setFieldValue('wizardCantripIdThree', cantrips[2].id);
+              setFieldValue("wizardCantripIdThree", cantrips[2].id);
           }
 
           if (levelOneSpells.length > 5) {
             if (!values.wizardSpellIdOne)
-              setFieldValue('wizardSpellIdOne', levelOneSpells[0].id);
+              setFieldValue("wizardSpellIdOne", levelOneSpells[0].id);
             if (!values.wizardSpellIdTwo)
-              setFieldValue('wizardSpellIdTwo', levelOneSpells[1].id);
+              setFieldValue("wizardSpellIdTwo", levelOneSpells[1].id);
             if (!values.wizardSpellIdThree)
-              setFieldValue('wizardSpellIdThree', levelOneSpells[2].id);
+              setFieldValue("wizardSpellIdThree", levelOneSpells[2].id);
             if (!values.wizardSpellIdFour)
-              setFieldValue('wizardSpellIdFour', levelOneSpells[3].id);
+              setFieldValue("wizardSpellIdFour", levelOneSpells[3].id);
             if (!values.wizardSpellIdFive)
-              setFieldValue('wizardSpellIdFive', levelOneSpells[4].id);
+              setFieldValue("wizardSpellIdFive", levelOneSpells[4].id);
             if (!values.wizardSpellIdSix)
-              setFieldValue('wizardSpellIdSix', levelOneSpells[5].id);
+              setFieldValue("wizardSpellIdSix", levelOneSpells[5].id);
           }
         }
       } catch (error) {
@@ -64,9 +64,15 @@ const WizardForm: React.FC = () => {
     fetchSpellsByClass();
 
     if (!values.wizardSkillProficiencyOne)
-      setFieldValue('wizardSkillProficiencyOne', wizardSkillChoices[0]);
+      setFieldValue("wizardSkillProficiencyOne", wizardSkillChoices[0]);
     if (!values.wizardSkillProficiencyTwo)
-      setFieldValue('wizardSkillProficiencyTwo', wizardSkillChoices[1]);
+      setFieldValue("wizardSkillProficiencyTwo", wizardSkillChoices[1]);
+    if (!values.wizardEquipmentOne)
+      setFieldValue("wizardEquipmentOne", itemChoicesOne[0]);
+    if (!values.wizardEquipmentTwo)
+      setFieldValue("wizardEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.wizardEquipmentThree)
+      setFieldValue("wizardEquipmentThree", itemChoicesThree[0]);
   }, []);
 
   return (
@@ -81,7 +87,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('wizardSkillProficiencyOne', value)
+          setFieldValue("wizardSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -92,7 +98,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('wizardSkillProficiencyTwo', value)
+          setFieldValue("wizardSkillProficiencyTwo", value)
         }
       />
 
@@ -101,7 +107,7 @@ const WizardForm: React.FC = () => {
         filter={(option: Item) => itemChoicesOne.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('wizardEquipmentOne', value.name)
+          setFieldValue("wizardEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -109,7 +115,7 @@ const WizardForm: React.FC = () => {
         filter={(option: Item) => itemChoicesTwo.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('wizardEquipmentTwo', value.name)
+          setFieldValue("wizardEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -117,7 +123,7 @@ const WizardForm: React.FC = () => {
         filter={(option: Item) => itemChoicesThree.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('wizardEquipmentThree', value.name)
+          setFieldValue("wizardEquipmentThree", value.name)
         }
       />
 
@@ -131,7 +137,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('wizardCantripIdOne', value.id)
+          setFieldValue("wizardCantripIdOne", value.id)
         }
       />
       <SpellSelectField
@@ -144,7 +150,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('wizardCantripIdTwo', value.id)
+          setFieldValue("wizardCantripIdTwo", value.id)
         }
       />
       <SpellSelectField
@@ -157,7 +163,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard cantrips."
         onChange={(value: Spell) =>
-          setFieldValue('wizardCantripIdThree', value.id)
+          setFieldValue("wizardCantripIdThree", value.id)
         }
       />
 
@@ -173,7 +179,7 @@ const WizardForm: React.FC = () => {
           option.id !== values.wizardSpellIdSix
         }
         label="Select 1 of the following wizard spells."
-        onChange={(value: Spell) => setFieldValue('wizardSpellIdOne', value.id)}
+        onChange={(value: Spell) => setFieldValue("wizardSpellIdOne", value.id)}
       />
       <SpellSelectField
         name="wizardSpellIdTwo"
@@ -187,7 +193,7 @@ const WizardForm: React.FC = () => {
           option.id !== values.wizardSpellIdSix
         }
         label="Select 1 of the following wizard spells."
-        onChange={(value: Spell) => setFieldValue('wizardSpellIdTwo', value.id)}
+        onChange={(value: Spell) => setFieldValue("wizardSpellIdTwo", value.id)}
       />
       <SpellSelectField
         name="wizardSpellIdThree"
@@ -202,7 +208,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard spells."
         onChange={(value: Spell) =>
-          setFieldValue('wizardSpellIdThree', value.id)
+          setFieldValue("wizardSpellIdThree", value.id)
         }
       />
       <SpellSelectField
@@ -218,7 +224,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard spells."
         onChange={(value: Spell) =>
-          setFieldValue('wizardSpellIdFour', value.id)
+          setFieldValue("wizardSpellIdFour", value.id)
         }
       />
       <SpellSelectField
@@ -234,7 +240,7 @@ const WizardForm: React.FC = () => {
         }
         label="Select 1 of the following wizard spells."
         onChange={(value: Spell) =>
-          setFieldValue('wizardSpellIdFive', value.id)
+          setFieldValue("wizardSpellIdFive", value.id)
         }
       />
       <SpellSelectField
@@ -249,7 +255,7 @@ const WizardForm: React.FC = () => {
           option.id !== values.wizardSpellIdFive
         }
         label="Select 1 of the following wizard spells."
-        onChange={(value: Spell) => setFieldValue('wizardSpellIdSix', value.id)}
+        onChange={(value: Spell) => setFieldValue("wizardSpellIdSix", value.id)}
         noDivider={true}
       />
     </div>

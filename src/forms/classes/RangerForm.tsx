@@ -1,36 +1,49 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, Item, Language } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
-import LanguageSelectField from '../../components/inputs/LanguageSelectField';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, Item, Language } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
+import LanguageSelectField from "../../components/inputs/LanguageSelectField";
+import useLanguages from "../../hooks/useLanguages";
 
 const rangerSkillChoices = [
-  'Animal Handling',
-  'Athletics',
-  'Insight',
-  'Investigation',
-  'Nature',
-  'Perception',
-  'Stealth',
-  'Survival'
+  "Animal Handling",
+  "Athletics",
+  "Insight",
+  "Investigation",
+  "Nature",
+  "Perception",
+  "Stealth",
+  "Survival",
 ];
 
 const RangerForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
+  const { languages } = useLanguages();
 
-  const itemChoicesOne = ['Scale Mail', 'Leather Armor'];
-  const itemChoicesTwo = ['Shortsword', 'Simple Weapon'];
+  const itemChoicesOne = ["Scale Mail", "Leather Armor"];
+  const itemChoicesTwo = ["Shortsword", "Simple Weapon"];
   const itemChoicesThree = ["Dungeoneer's Pack", "Explorer's Pack"];
 
   useEffect(() => {
     if (!values.rangerSkillProficiencyOne)
-      setFieldValue('rangerSkillProficiencyOne', rangerSkillChoices[0]);
+      setFieldValue("rangerSkillProficiencyOne", rangerSkillChoices[0]);
     if (!values.rangerSkillProficiencyTwo)
-      setFieldValue('rangerSkillProficiencyTwo', rangerSkillChoices[1]);
+      setFieldValue("rangerSkillProficiencyTwo", rangerSkillChoices[1]);
     if (!values.rangerSkillProficiencyThree)
-      setFieldValue('rangerSkillProficiencyThree', rangerSkillChoices[2]);
+      setFieldValue("rangerSkillProficiencyThree", rangerSkillChoices[2]);
+    if (!values.rangerEquipmentOne)
+      setFieldValue("rangerEquipmentOne", itemChoicesOne[0]);
+    if (!values.rangerEquipmentTwo)
+      setFieldValue("rangerEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.rangerEquipmentThree)
+      setFieldValue("rangerEquipmentThree", itemChoicesThree[0]);
   }, []);
+
+  useEffect(() => {
+    if (languages && !values.rangerBonusLanguageId)
+      setFieldValue("rangerBonusLanguageId", languages[0].id);
+  }, [languages, values, setFieldValue]);
 
   return (
     <div>
@@ -45,7 +58,7 @@ const RangerForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('rangerSkillProficiencyOne', value)
+          setFieldValue("rangerSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -57,7 +70,7 @@ const RangerForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('rangerSkillProficiencyTwo', value)
+          setFieldValue("rangerSkillProficiencyTwo", value)
         }
       />
       <SkillCheckSelectField
@@ -69,7 +82,7 @@ const RangerForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: string) =>
-          setFieldValue('rangerSkillProficiencyThree', value)
+          setFieldValue("rangerSkillProficiencyThree", value)
         }
       />
 
@@ -78,18 +91,18 @@ const RangerForm: React.FC = () => {
         filter={(option: Item) => itemChoicesOne.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('rangerEquipmentOne', value.name)
+          setFieldValue("rangerEquipmentOne", value.name)
         }
       />
       <ItemSelectField
         name="rangerEquipmentTwo"
         filter={(option: Item) =>
           itemChoicesTwo.includes(option.name) ||
-          (itemChoicesTwo.includes(option.type) && option.rangeType === 'Melee')
+          (itemChoicesTwo.includes(option.type) && option.rangeType === "Melee")
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('rangerEquipmentTwo', value.name)
+          setFieldValue("rangerEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -97,7 +110,7 @@ const RangerForm: React.FC = () => {
         filter={(option: Item) => itemChoicesThree.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('rangerEquipmentThree', value.name)
+          setFieldValue("rangerEquipmentThree", value.name)
         }
       />
 
@@ -106,7 +119,7 @@ const RangerForm: React.FC = () => {
         filter={() => true}
         label="Select a language."
         onChange={(value: Language) =>
-          setFieldValue('rangerBonusLanguageId', value.id)
+          setFieldValue("rangerBonusLanguageId", value.id)
         }
         noDivider={true}
       />

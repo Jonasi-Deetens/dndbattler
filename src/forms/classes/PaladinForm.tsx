@@ -1,31 +1,39 @@
-import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
-import { NewCharacter, SkillChecks, Item } from '../../types/DBTypes';
-import SkillCheckSelectField from '../../components/inputs/SkillCheckSelectField';
-import ItemSelectField from '../../components/inputs/ItemSelectField';
+import { useFormikContext } from "formik";
+import React, { useEffect } from "react";
+import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
+import ItemSelectField from "../../components/inputs/ItemSelectField";
 
 const paladinSkillChoices = [
-  'Athletics',
-  'Insight',
-  'Intimidation',
-  'Medicine',
-  'Persuasion',
-  'Religion'
+  "Athletics",
+  "Insight",
+  "Intimidation",
+  "Medicine",
+  "Persuasion",
+  "Religion",
 ];
 
 const PaladinForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
 
-  const itemChoicesOne = ['Martial Weapon'];
-  const itemChoicesTwo = ['Martial Weapon', 'Shield'];
-  const itemChoicesThree = ['Javelin', 'Simple Weapon'];
+  const itemChoicesOne = ["Martial Weapon"];
+  const itemChoicesTwo = ["Martial Weapon", "Shield"];
+  const itemChoicesThree = ["Javelin", "Simple Weapon"];
   const itemChoicesFour = ["Priest's Pack", "Explorer's Pack"];
 
   useEffect(() => {
     if (!values.paladinBonusSkillProficiencyOne)
-      setFieldValue('paladinBonusSkillProficiencyOne', paladinSkillChoices[0]);
+      setFieldValue("paladinBonusSkillProficiencyOne", paladinSkillChoices[0]);
     if (!values.paladinBonusSkillProficiencyTwo)
-      setFieldValue('paladinBonusSkillProficiencyTwo', paladinSkillChoices[1]);
+      setFieldValue("paladinBonusSkillProficiencyTwo", paladinSkillChoices[1]);
+    if (!values.paladinEquipmentOne)
+      setFieldValue("paladinEquipmentOne", itemChoicesOne[0]);
+    if (!values.paladinEquipmentTwo)
+      setFieldValue("paladinEquipmentTwo", itemChoicesTwo[0]);
+    if (!values.paladinEquipmentThree)
+      setFieldValue("paladinEquipmentThree", itemChoicesThree[0]);
+    if (!values.paladinEquipmentFour)
+      setFieldValue("paladinEquipmentFour", itemChoicesFour[0]);
   }, []);
 
   return (
@@ -40,7 +48,7 @@ const PaladinForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('paladinBonusSkillProficiencyOne', value)
+          setFieldValue("paladinBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
@@ -51,7 +59,7 @@ const PaladinForm: React.FC = () => {
         }
         label="Select skill proficiency."
         onChange={(value: SkillChecks) =>
-          setFieldValue('paladinBonusSkillProficiencyTwo', value)
+          setFieldValue("paladinBonusSkillProficiencyTwo", value)
         }
       />
 
@@ -63,7 +71,7 @@ const PaladinForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('paladinEquipmentOne', value.name)
+          setFieldValue("paladinEquipmentOne", value.name)
         }
       />
       <ItemSelectField
@@ -74,7 +82,7 @@ const PaladinForm: React.FC = () => {
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('paladinEquipmentTwo', value.name)
+          setFieldValue("paladinEquipmentTwo", value.name)
         }
       />
       <ItemSelectField
@@ -82,11 +90,11 @@ const PaladinForm: React.FC = () => {
         filter={(option: Item) =>
           itemChoicesThree.includes(option.name) ||
           (itemChoicesThree.includes(option.type) &&
-            option.rangeType === 'Melee')
+            option.rangeType === "Melee")
         }
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('paladinEquipmentThree', value.name)
+          setFieldValue("paladinEquipmentThree", value.name)
         }
       />
       <ItemSelectField
@@ -94,7 +102,7 @@ const PaladinForm: React.FC = () => {
         filter={(option: Item) => itemChoicesFour.includes(option.name)}
         label="Select equipment."
         onChange={(value: Item) =>
-          setFieldValue('paladinEquipmentFour', value.name)
+          setFieldValue("paladinEquipmentFour", value.name)
         }
         noDivider={true}
       />
