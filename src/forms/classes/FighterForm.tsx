@@ -2,7 +2,7 @@ import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
 import {
   NewCharacter,
-  SkillChecks,
+  SkillCheck,
   Item,
   FightingStyle,
 } from "../../types/DBTypes";
@@ -55,23 +55,23 @@ const FighterForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="fighterBonusSkillProficiencyOne"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.fighterBonusSkillProficiencyTwo &&
           fighterSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("fighterBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="fighterBonusSkillProficiencyTwo"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.fighterBonusSkillProficiencyOne &&
           fighterSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("fighterBonusSkillProficiencyTwo", value)
         }
       />

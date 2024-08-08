@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, Item } from "../../types/DBTypes";
+import { NewCharacter, Item, SkillCheck } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 
@@ -54,7 +54,7 @@ const RogueForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="rogueSkillProficiencyOne"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rogueSkillProficiencyTwo &&
           option !== values.rogueSkillProficiencyThree &&
           option !== values.rogueSkillProficiencyFour &&
@@ -62,13 +62,13 @@ const RogueForm: React.FC = () => {
           rogueSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rogueSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="rogueSkillProficiencyTwo"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rogueSkillProficiencyOne &&
           option !== values.rogueSkillProficiencyThree &&
           option !== values.rogueSkillProficiencyFour &&
@@ -76,13 +76,13 @@ const RogueForm: React.FC = () => {
           rogueSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rogueSkillProficiencyTwo", value)
         }
       />
       <SkillCheckSelectField
         name="rogueSkillProficiencyThree"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rogueSkillProficiencyOne &&
           option !== values.rogueSkillProficiencyTwo &&
           option !== values.rogueSkillProficiencyFour &&
@@ -90,13 +90,13 @@ const RogueForm: React.FC = () => {
           rogueSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rogueSkillProficiencyThree", value)
         }
       />
       <SkillCheckSelectField
         name="rogueSkillProficiencyFour"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rogueSkillProficiencyOne &&
           option !== values.rogueSkillProficiencyTwo &&
           option !== values.rogueSkillProficiencyThree &&
@@ -104,13 +104,13 @@ const RogueForm: React.FC = () => {
           rogueSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rogueSkillProficiencyFour", value)
         }
       />
       <SkillCheckSelectField
         name="rogueSkillProficiencyFive"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rogueSkillProficiencyOne &&
           option !== values.rogueSkillProficiencyTwo &&
           option !== values.rogueSkillProficiencyThree &&
@@ -118,7 +118,7 @@ const RogueForm: React.FC = () => {
           rogueSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rogueSkillProficiencyFive", value)
         }
       />

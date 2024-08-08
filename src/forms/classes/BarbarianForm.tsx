@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import { NewCharacter, SkillCheck, Item } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 
@@ -42,23 +42,23 @@ const BarbarianForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="barbarianBonusSkillProficiencyOne"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.barbarianBonusSkillProficiencyTwo &&
           barbarianSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("barbarianBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="barbarianBonusSkillProficiencyTwo"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.barbarianBonusSkillProficiencyOne &&
           barbarianSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("barbarianBonusSkillProficiencyTwo", value)
         }
       />

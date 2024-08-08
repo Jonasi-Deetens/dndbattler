@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { NewCharacter, DamageType } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React from "react";
+import { NewCharacter, DamageType } from "../../types/DBTypes";
 
 const damageTypes = Object.values(DamageType);
 
@@ -9,7 +9,7 @@ const DamageTypeSelectField = ({
   filter,
   label,
   onChange,
-  noDivider = false
+  noDivider = false,
 }: {
   name: string;
   filter: (option: DamageType) => boolean;
@@ -32,7 +32,7 @@ const DamageTypeSelectField = ({
         }}
         value={values[name]}
       >
-        {damageTypes.filter(filter).map(option => (
+        {damageTypes.filter(filter).map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { FightingStyle, NewCharacter } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React from "react";
+import { FightingStyle, NewCharacter } from "../../types/DBTypes";
 
 const fightingStyles = Object.values(FightingStyle);
 
@@ -9,7 +9,7 @@ const FightingStyleSelectField = ({
   filter,
   label,
   onChange,
-  noDivider = false
+  noDivider = false,
 }: {
   name: string;
   filter: (option: FightingStyle) => boolean;
@@ -32,7 +32,7 @@ const FightingStyleSelectField = ({
         }}
         value={values[name]}
       >
-        {fightingStyles.filter(filter).map(option => (
+        {fightingStyles.filter(filter).map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

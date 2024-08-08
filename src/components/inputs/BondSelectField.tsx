@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { NewCharacter, Bond } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React from "react";
+import { NewCharacter, Bond } from "../../types/DBTypes";
 
 const bonds = Object.values(Bond);
 
@@ -9,7 +9,7 @@ const BondSelectField = ({
   filter,
   label,
   onChange,
-  noDivider = false
+  noDivider = false,
 }: {
   name: string;
   filter: (option: Bond) => boolean;
@@ -32,7 +32,7 @@ const BondSelectField = ({
         }}
         value={values[name]}
       >
-        {bonds.filter(filter).map(option => (
+        {bonds.filter(filter).map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

@@ -1,20 +1,20 @@
-import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
-import * as yup from 'yup';
-import useCharacters from '../../hooks/useCharacters';
-import { Language, NewCharacter } from '../../types/DBTypes';
-import useAuth from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import StepOne from './StepOne';
-import StepTwo from './StepTwo';
-import StepThree from './StepThree';
-import StepFour from './StepFour';
-import StepFive from './StepFive';
-import useFormFilter from '../../hooks/useFormFilter';
+import { ErrorMessage, Field, Form, Formik, FormikConfig } from "formik";
+import React, { useCallback, useMemo, useState } from "react";
+import * as yup from "yup";
+import useCharacters from "../../hooks/useCharacters";
+import { Language, NewCharacter } from "../../types/DBTypes";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
+import StepThree from "./StepThree";
+import StepFour from "./StepFour";
+import StepFive from "./StepFive";
+import useFormFilter from "../../hooks/useFormFilter";
 
 const useValidationSchema = () => {
   return yup.object().shape({
-    name: yup.string().required('Please choose a name.')
+    name: yup.string().required("Please choose a name."),
   });
 };
 
@@ -27,18 +27,18 @@ const CharacterCreate: React.FC = () => {
   const { user } = useAuth();
   const [step, setStep] = useState<number>(1);
 
-  const onSubmit: FormikConfig<NewCharacter>['onSubmit'] = useCallback(
-    async values => {
+  const onSubmit: FormikConfig<NewCharacter>["onSubmit"] = useCallback(
+    async (values) => {
       setIsLoading(true);
       try {
         values = await getFormDataByClassAndRace(values);
         await handleAddCharacter(values);
-        navigate('/characterSelect');
+        navigate("/characterSelect");
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
         } else {
-          setError('An unknown error occurred.');
+          setError("An unknown error occurred.");
         }
       }
       setIsLoading(false);
@@ -52,9 +52,9 @@ const CharacterCreate: React.FC = () => {
     () => ({
       onSubmit,
       initialValues: {
-        name: '',
+        name: "",
         fightingStyles: [],
-        currentLocation: '',
+        currentLocation: "",
         exhaustionLevel: 0,
         proficiencies: [],
         proficiencyBonus: 0,
@@ -84,45 +84,45 @@ const CharacterCreate: React.FC = () => {
         abilities: [],
         memberships: [],
         personalityTraits: [],
-        appearance: '',
+        appearance: "",
         items: [],
         spells: [],
         senses: [],
         age: 0,
-        background: '',
+        background: "",
         speed: 30,
-        alignment: 'Neutral',
-        primaryGoal: '',
+        alignment: "Neutral",
+        primaryGoal: "",
         secondaryGoals: [],
         relationships: [],
-        backstory: '',
-        size: 'Medium',
-        level: 1,
-        experience: 0,
-        health: 8,
-        languages: [{ id: 1, name: 'common' } as Language],
+        backstory: "",
+        size: "Medium",
+        languages: [{ id: 1, name: "common" } as Language],
         stats: {
           ac: 12,
           hp: 8,
-          str: 1,
-          dex: 1,
-          con: 1,
-          int: 1,
-          wis: 1,
-          cha: 1
+          maxHp: 8,
+          level: 1,
+          experience: 0,
+          strength: 1,
+          dexterity: 1,
+          constitution: 1,
+          intelligence: 1,
+          wisdom: 1,
+          charisma: 1,
         },
         raceId: 0,
-        userId: user?.id || '',
-        classId: 0
+        userId: user?.id || "",
+        classId: 0,
       },
-      validationSchema: valSchema
+      validationSchema: valSchema,
     }),
     [onSubmit, valSchema, user?.id]
   );
 
   return (
     <div className="bg-character-create h-screen w-full flex flex-col justify-center">
-      <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
+      <Formik<NewCharacter> {...formik} key={"character-create-formik"}>
         <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
           <h2 className="mb-4 text-2xl">Character Creation</h2>
           <div className="flex flex-col md:flex-row gap-x-4 w-full">
@@ -156,7 +156,7 @@ const CharacterCreate: React.FC = () => {
                 )}
                 {step === 5 ? (
                   <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Creating...' : 'Create'}
+                    {isLoading ? "Creating..." : "Create"}
                   </button>
                 ) : (
                   <button
@@ -172,7 +172,7 @@ const CharacterCreate: React.FC = () => {
                 type="button"
                 className="bg-transparent"
                 onClick={() => {
-                  navigate('/characterSelect');
+                  navigate("/characterSelect");
                 }}
               >
                 &lt; back

@@ -4,6 +4,7 @@ import useRaces from "./useRaces";
 import useSubclasses from "./useSubclasses";
 import useSubraces from "./useSubraces";
 import {
+  CharacterStats,
   Class,
   FightingStyle,
   NewCharacter,
@@ -125,20 +126,20 @@ const useFormFilter = () => {
           relationships: [],
           backstory: "",
           size: "Medium",
-          level: 1,
-          experience: 0,
-          health: 8,
           proficiencyBonus: 0,
           languages: [languages && languages[0]],
           stats: {
-            AC: 12,
-            HP: 8,
-            STR: 1,
-            DEX: 1,
-            CON: 1,
-            INT: 1,
-            WIS: 1,
-            CHA: 1,
+            ac: 12,
+            hp: 8,
+            maxHp: 8,
+            level: 1,
+            experience: 0,
+            strength: 1,
+            dexterity: 1,
+            constitution: 1,
+            intelligence: 1,
+            wisdom: 1,
+            charisma: 1,
           },
           raceId: formData.raceId,
           userId: formData.userId,
@@ -207,8 +208,9 @@ const useFormFilter = () => {
         JSON.parse(charClass.movementSpeedBonusByLevel)[1]
       );
     formValues.exhaustionLevel = charClass.exhaustionLevel;
-    formValues.cantripsKnown = JSON.parse(charClass.cantripsKnownByLevel)[1];
-    formValues.spellsKnown = JSON.parse(charClass.spellsKnownByLevel)[1];
+    formValues.cantripsKnown =
+      JSON.parse(charClass.cantripsKnownByLevel)[1] || 0;
+    formValues.spellsKnown = JSON.parse(charClass.spellsKnownByLevel)[1] || 0;
 
     switch (charClass.name) {
       case "Barbarian":
@@ -620,6 +622,7 @@ const useFormFilter = () => {
     applyStatIncreases(race.statIncreases, formValues);
     formValues.size = race.size;
     formValues.speed = race.speed;
+    console.log(race);
     if (race.languages) addUniqueLanguages(race.languages, formValues);
     addUniqueProficiencies(race.proficiencies, formValues);
     addUniqueResistances(race.resistances, formValues);
@@ -647,8 +650,12 @@ const useFormFilter = () => {
             languages
           );
         }
-        formValues.stats[formData.halfElfBonusAbilityScoreOne as string] += 1;
-        formValues.stats[formData.halfElfBonusAbilityScoreTwo as string] += 1;
+        formValues.stats[
+          formData.halfElfBonusAbilityScoreOne as keyof CharacterStats
+        ] += 1;
+        formValues.stats[
+          formData.halfElfBonusAbilityScoreTwo as keyof CharacterStats
+        ] += 1;
 
         addUniqueProficiencies(
           [
@@ -710,14 +717,14 @@ const useFormFilter = () => {
     if (characterDataNotNull(formData)) {
       formValues.background = formData.characterBackground!;
       formValues.alignment = formData.characterAlignment!;
-      formValues.ideals.push(formData.characterIdealOne!);
-      formValues.ideals.push(formData.characterIdealTwo!);
-      formValues.bonds.push(formData.characterBondOne!);
-      formValues.bonds.push(formData.characterBondTwo!);
-      formValues.flaws.push(formData.characterFlawOne!);
-      formValues.flaws.push(formData.characterFlawTwo!);
-      formValues.fears.push(formData.characterFearOne!);
-      formValues.fears.push(formData.characterFearTwo!);
+      formValues.ideals.push(formData.characterIdealOne!.toLocaleUpperCase());
+      formValues.ideals.push(formData.characterIdealTwo!.toLocaleUpperCase());
+      formValues.bonds.push(formData.characterBondOne!.toLocaleUpperCase());
+      formValues.bonds.push(formData.characterBondTwo!.toLocaleUpperCase());
+      formValues.flaws.push(formData.characterFlawOne!.toLocaleUpperCase());
+      formValues.flaws.push(formData.characterFlawTwo!.toLocaleUpperCase());
+      formValues.fears.push(formData.characterFearOne!.toLocaleUpperCase());
+      formValues.fears.push(formData.characterFearTwo!.toLocaleUpperCase());
       formValues.backstory = formData.characterBackstory!;
       formValues.appearance = formData.characterAppearance!;
     }

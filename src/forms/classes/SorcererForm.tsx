@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import { NewCharacter, Spell, Item, SkillCheck } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 import SpellSelectField from "../../components/inputs/SpellSelectField";
@@ -77,23 +77,23 @@ const SorcererForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="sorcererSkillProficiencyOne"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.sorcererSkillProficiencyTwo &&
           sorcererSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("sorcererSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="sorcererSkillProficiencyTwo"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.sorcererSkillProficiencyOne &&
           sorcererSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("sorcererSkillProficiencyTwo", value)
         }
       />

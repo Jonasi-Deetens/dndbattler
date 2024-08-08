@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import { NewCharacter, Spell, Item, SkillCheck } from "../../types/DBTypes";
 import useClasses from "../../hooks/useClasses";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
@@ -65,23 +65,23 @@ const ClericForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="clericSkillProficiencyOne"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.clericSkillProficiencyTwo &&
           clericSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("clericSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="clericSkillProficiencyTwo"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.clericSkillProficiencyOne &&
           clericSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("clericSkillProficiencyTwo", value)
         }
       />

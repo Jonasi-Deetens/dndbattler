@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import { NewCharacter, SkillCheck, Item } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 
@@ -42,23 +42,23 @@ const PaladinForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="paladinBonusSkillProficiencyOne"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.paladinBonusSkillProficiencyTwo &&
           paladinSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("paladinBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="paladinBonusSkillProficiencyTwo"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.paladinBonusSkillProficiencyOne &&
           paladinSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("paladinBonusSkillProficiencyTwo", value)
         }
       />

@@ -1,20 +1,20 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { NewCharacter, SkillChecks } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React from "react";
+import { NewCharacter, SkillCheck } from "../../types/DBTypes";
 
-const skillChecks = Object.values(SkillChecks);
+const skillChecks = Object.values(SkillCheck);
 
 const SkillCheckSelectField = ({
   name,
   filter,
   label,
   onChange,
-  noDivider = false
+  noDivider = false,
 }: {
   name: string;
-  filter: (option: SkillChecks) => boolean;
+  filter: (option: SkillCheck) => boolean;
   label: string;
-  onChange: (value: SkillChecks) => void;
+  onChange: (value: SkillCheck) => void;
   noDivider?: boolean;
 }) => {
   const { values } = useFormikContext<NewCharacter>();
@@ -28,11 +28,11 @@ const SkillCheckSelectField = ({
         aria-label={name}
         className="p-1 text-gray-500 mt-5"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          onChange(e.target.value as SkillChecks);
+          onChange(e.target.value as SkillCheck);
         }}
         value={values[name]}
       >
-        {skillChecks.filter(filter).map(option => (
+        {skillChecks.filter(filter).map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

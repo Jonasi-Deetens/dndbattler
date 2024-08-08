@@ -13,6 +13,20 @@ export type Campaign = {
   npcs: Npc[];
 };
 
+export interface CharacterStats {
+  ac: number;
+  hp: number;
+  maxHp: number;
+  level: number;
+  experience: number;
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+}
+
 export type Character = {
   id: number;
   name: string;
@@ -65,10 +79,7 @@ export type Character = {
   personalityTraits: string[];
   items: Item[];
   spells: Spell[];
-  level: number;
-  experience: number;
-  health: number;
-  stats: Record<string, number>;
+  stats: CharacterStats;
   senses: Sense[];
   userId: string;
   user: User;
@@ -407,7 +418,7 @@ export enum FightingStyle {
   TWO_WEAPON_FIGHTING = "Two Weapon Fighting",
 }
 
-export enum SkillChecks {
+export enum SkillCheck {
   Acrobatics = "Acrobatics",
   AnimalHandling = "Animal Handling",
   Arcana = "Arcana",
@@ -429,15 +440,15 @@ export enum SkillChecks {
 }
 
 export enum School {
-  ABJURATION = "ABJURATION",
-  CONJURATION = "CONJURATION",
-  DIVINATION = "DIVINATION",
-  ENCHANTMENT = "ENCHANTMENT",
-  EVOCATION = "EVOCATION",
-  ILLUSION = "ILLUSION",
-  NECROMANCY = "NECROMANCY",
-  TRANSMUTATION = "TRANSMUTATION",
-  TRANSFIGURATION = "TRANSFIGURATION",
+  ABJURATION = "Abjuration",
+  CONJURATION = "Conjuration",
+  DIVINATION = "Divination",
+  ENCHANTMENT = "Enchantment",
+  EVOCATION = "Evocation",
+  ILLUSION = "Illusion",
+  NECROMANCY = "Necromancy",
+  TRANSMUTATION = "Transmutation",
+  TRANSFIGURATION = "Transfiguration",
 }
 
 export enum Dice {
@@ -451,48 +462,48 @@ export enum Dice {
 }
 
 export enum AbilityScore {
-  STR = "STR",
-  DEX = "DEX",
-  CON = "CON",
-  INT = "INT",
-  WIS = "WIS",
-  CHA = "CHA",
+  STRENGTH = "Strength",
+  DEXTERITY = "Dexterity",
+  CONSTITUTION = "Constitution",
+  INTELLIGENCE = "Intelligence",
+  WISDOM = "Wisdom",
+  CHARISMA = "Charisma",
 }
 
 export enum EffectType {
-  BUFF = "BUFF",
-  DEBUFF = "DEBUFF",
-  HEALING = "HEALING",
-  DAMAGE = "DAMAGE",
-  CONTROL = "CONTROL",
-  SUMMONING = "SUMMONING",
-  UTILITY = "UTILITY",
-  PROTECTION = "PROTECTION",
-  MOVEMENT = "MOVEMENT",
-  DETECTION = "DETECTION",
-  TRANSFORMATION = "TRANSFORMATION",
-  TRANSPORTATION = "TRANSPORTATION",
-  RESTORATION = "RESTORATION",
-  INSTANT_DEATH = "INSTANT_DEATH",
-  COMMUNICATION = "COMMUNICATION",
-  ILLUSION = "ILLUSION",
+  BUFF = "Buff",
+  DEBUFF = "Debuff",
+  HEALING = "Healing",
+  DAMAGE = "Damage",
+  CONTROL = "Control",
+  SUMMONING = "Summoning",
+  UTILITY = "Utility",
+  PROTECTION = "Protection",
+  MOVEMENT = "Movement",
+  DETECTION = "Detection",
+  TRANSFORMATION = "Transformation",
+  TRANSPORTATION = "Transportation",
+  RESTORATION = "Restoration",
+  INSTANT_DEATH = "Instant Death",
+  COMMUNICATION = "Communication",
+  ILLUSION = "Illusion",
 }
 
 export enum DamageType {
-  ACID = "ACID",
-  BLUDGEONING = "BLUDGEONING",
-  COLD = "COLD",
-  FIRE = "FIRE",
-  FORCE = "FORCE",
-  LIGHTNING = "LIGHTNING",
-  NECROTIC = "NECROTIC",
-  PIERCING = "PIERCING",
-  POISON = "POISON",
-  PSYCHIC = "PSYCHIC",
-  RADIANT = "RADIANT",
-  SLASHING = "SLASHING",
-  THUNDER = "THUNDER",
-  VARIES = "VARIES",
+  ACID = "Acid",
+  BLUDGEONING = "Bludgeoning",
+  COLD = "Cold",
+  FIRE = "Fire",
+  FORCE = "Force",
+  LIGHTNING = "Lightning",
+  NECROTIC = "Necrotic",
+  PIERCING = "Piercing",
+  POISON = "Poison",
+  PSYCHIC = "Psychic",
+  RADIANT = "Radiant",
+  SLASHING = "Slashing",
+  THUNDER = "Thunder",
+  VARIES = "Varies",
 }
 
 export enum Alignment {

@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
-import React from 'react';
-import { NewCharacter, Ideal } from '../../types/DBTypes';
+import { ErrorMessage, Field, useFormikContext } from "formik";
+import React from "react";
+import { NewCharacter, Ideal } from "../../types/DBTypes";
 
 const ideals = Object.values(Ideal);
 
@@ -9,7 +9,7 @@ const IdealSelectField = ({
   filter,
   label,
   onChange,
-  noDivider = false
+  noDivider = false,
 }: {
   name: string;
   filter: (option: Ideal) => boolean;
@@ -32,7 +32,7 @@ const IdealSelectField = ({
         }}
         value={values[name]}
       >
-        {ideals.filter(filter).map(option => (
+        {ideals.filter(filter).map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

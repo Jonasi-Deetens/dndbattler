@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, Spell, Item } from "../../types/DBTypes";
+import { NewCharacter, Spell, Item, SkillCheck } from "../../types/DBTypes";
 import useClasses from "../../hooks/useClasses";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
@@ -70,23 +70,23 @@ const DruidForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="druidSkillProficiencyOne"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.druidSkillProficiencyTwo &&
           druidSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("druidSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="druidSkillProficiencyTwo"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.druidSkillProficiencyOne &&
           druidSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("druidSkillProficiencyTwo", value)
         }
       />

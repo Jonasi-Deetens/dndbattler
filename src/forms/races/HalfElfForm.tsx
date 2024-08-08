@@ -4,10 +4,10 @@ import { NewCharacter, Race } from "../../types/DBTypes";
 import useLanguages from "../../hooks/useLanguages";
 import useRaces from "../../hooks/useRaces";
 import { AbilityScore } from "../../types/DBTypes";
-import { SkillChecks } from "../../types/DBTypes";
+import { SkillCheck } from "../../types/DBTypes";
 
 const abilityScores = Object.values(AbilityScore);
-const skillChecks = Object.values(SkillChecks);
+const skillChecks = Object.values(SkillCheck);
 
 const HalfElfForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();

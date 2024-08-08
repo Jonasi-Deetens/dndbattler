@@ -1,12 +1,12 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks, Spell, Item } from "../../types/DBTypes";
+import { NewCharacter, SkillCheck, Spell, Item } from "../../types/DBTypes";
 import useClasses from "../../hooks/useClasses";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 import SpellSelectField from "../../components/inputs/SpellSelectField";
 
-const skillChecks = Object.values(SkillChecks);
+const skillChecks = Object.values(SkillCheck);
 
 const BardForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
@@ -77,34 +77,34 @@ const BardForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="bardBonusSkillProficiencyOne"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.bardBonusSkillProficiencyTwo &&
           option !== values.bardBonusSkillProficiencyThree
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("bardBonusSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="bardBonusSkillProficiencyTwo"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.bardBonusSkillProficiencyOne &&
           option !== values.bardBonusSkillProficiencyThree
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("bardBonusSkillProficiencyTwo", value)
         }
       />
       <SkillCheckSelectField
         name="bardBonusSkillProficiencyThree"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.bardBonusSkillProficiencyTwo &&
           option !== values.bardBonusSkillProficiencyOne
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("bardBonusSkillProficiencyThree", value)
         }
       />

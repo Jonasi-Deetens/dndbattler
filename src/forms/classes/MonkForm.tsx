@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, SkillChecks, Item } from "../../types/DBTypes";
+import { NewCharacter, SkillCheck, Item } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 
@@ -39,23 +39,23 @@ const MonkForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="monkSkillProficiencyOne"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.monkSkillProficiencyTwo &&
           monkSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("monkSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="monkSkillProficiencyTwo"
-        filter={(option: SkillChecks) =>
+        filter={(option: SkillCheck) =>
           option !== values.monkSkillProficiencyOne &&
           monkSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: SkillChecks) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("monkSkillProficiencyTwo", value)
         }
       />

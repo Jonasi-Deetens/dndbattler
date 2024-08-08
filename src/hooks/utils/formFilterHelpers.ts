@@ -1,6 +1,7 @@
 import {
   Ability,
   AbilityScore,
+  CharacterStats,
   Item,
   Language,
   NewCharacter,
@@ -19,8 +20,9 @@ export const applyAbilityScoreIncreases = (
 ) => {
   for (const key in abilityScoreIncreases) {
     if (abilityScoreIncreases[key]) {
-      formValues.stats[key] =
-        (formValues.stats[key] || 0) + (abilityScoreIncreases[key] || 0);
+      formValues.stats[key as keyof CharacterStats] =
+        (formValues.stats[key as keyof CharacterStats] || 0) +
+        (abilityScoreIncreases[key] || 0);
     }
   }
 };
@@ -30,9 +32,10 @@ export const applyStatIncreases = (
   formValues: NewCharacter
 ) => {
   for (const key in statIncreases) {
-    if (statIncreases[key]) {
-      formValues.stats[key] =
-        (formValues.stats[key] || 0) + (statIncreases[key] || 0);
+    if (statIncreases[key as keyof CharacterStats]) {
+      formValues.stats[key as keyof CharacterStats] =
+        (formValues.stats[key as keyof CharacterStats] || 0) +
+        (statIncreases[key] || 0);
     }
   }
 };

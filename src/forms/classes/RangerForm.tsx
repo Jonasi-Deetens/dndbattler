@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
-import { NewCharacter, Item, Language } from "../../types/DBTypes";
+import { NewCharacter, Item, Language, SkillCheck } from "../../types/DBTypes";
 import SkillCheckSelectField from "../../components/inputs/SkillCheckSelectField";
 import ItemSelectField from "../../components/inputs/ItemSelectField";
 import LanguageSelectField from "../../components/inputs/LanguageSelectField";
@@ -51,37 +51,37 @@ const RangerForm: React.FC = () => {
 
       <SkillCheckSelectField
         name="rangerSkillProficiencyOne"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rangerSkillProficiencyTwo &&
           option !== values.rangerSkillProficiencyThree &&
           rangerSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rangerSkillProficiencyOne", value)
         }
       />
       <SkillCheckSelectField
         name="rangerSkillProficiencyTwo"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rangerSkillProficiencyOne &&
           option !== values.rangerSkillProficiencyThree &&
           rangerSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rangerSkillProficiencyTwo", value)
         }
       />
       <SkillCheckSelectField
         name="rangerSkillProficiencyThree"
-        filter={(option: string) =>
+        filter={(option: SkillCheck) =>
           option !== values.rangerSkillProficiencyOne &&
           option !== values.rangerSkillProficiencyTwo &&
           rangerSkillChoices.includes(option)
         }
         label="Select skill proficiency."
-        onChange={(value: string) =>
+        onChange={(value: SkillCheck) =>
           setFieldValue("rangerSkillProficiencyThree", value)
         }
       />
