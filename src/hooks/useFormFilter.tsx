@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import useClasses from "./useClasses";
-import useRaces from "./useRaces";
-import useSubclasses from "./useSubclasses";
-import useSubraces from "./useSubraces";
+import { useCallback } from 'react';
+import useClasses from './useClasses';
+import useRaces from './useRaces';
+import useSubclasses from './useSubclasses';
+import useSubraces from './useSubraces';
 import {
   CharacterStats,
   Class,
@@ -10,13 +10,13 @@ import {
   NewCharacter,
   Race,
   Subclass,
-  Subrace,
-} from "../types/DBTypes";
-import useSpells from "./useSpells";
-import useLanguages from "./useLanguages";
-import useAbilities from "./useAbilities";
-import useSkills from "./useSkills";
-import useItems from "./useItems";
+  Subrace
+} from '../types/DBTypes';
+import useSpells from './useSpells';
+import useLanguages from './useLanguages';
+import useAbilities from './useAbilities';
+import useSkills from './useSkills';
+import useItems from './useItems';
 import {
   addAbilitiesByName,
   addItems,
@@ -38,8 +38,8 @@ import {
   addUniqueSpells,
   addUniqueSpellsByName,
   applyAbilityScoreIncreases,
-  applyStatIncreases,
-} from "./utils/formFilterHelpers";
+  applyStatIncreases
+} from './utils/formFilterHelpers';
 import {
   barbarianDataNotNull,
   bardDataNotNull,
@@ -56,8 +56,8 @@ import {
   rogueDataNotNull,
   sorcererDataNotNull,
   warlockDataNotNull,
-  wizardDataNotNull,
-} from "./utils/formFilterValidationHelpers";
+  wizardDataNotNull
+} from './utils/formFilterValidationHelpers';
 
 const useFormFilter = () => {
   const { getClassById } = useClasses();
@@ -113,19 +113,20 @@ const useFormFilter = () => {
           abilities: [],
           memberships: [],
           personalityTraits: [],
-          appearance: "",
+          appearance: '',
           items: [],
           spells: [],
           senses: [],
           age: 0,
-          background: "",
+          background: '',
+          gender: 'male',
           speed: 30,
-          alignment: "Lawful Good",
-          primaryGoal: "",
+          alignment: 'Lawful Good',
+          primaryGoal: '',
           secondaryGoals: [],
           relationships: [],
-          backstory: "",
-          size: "Medium",
+          backstory: '',
+          size: 'Medium',
           proficiencyBonus: 0,
           languages: [languages && languages[0]],
           stats: {
@@ -139,13 +140,13 @@ const useFormFilter = () => {
             constitution: 1,
             intelligence: 1,
             wisdom: 1,
-            charisma: 1,
+            charisma: 1
           },
           raceId: formData.raceId,
           userId: formData.userId,
           classId: formData.classId,
           subclassId: formData.subclassId,
-          proficiencies: [],
+          proficiencies: []
         };
 
         classData
@@ -213,8 +214,8 @@ const useFormFilter = () => {
     formValues.spellsKnown = JSON.parse(charClass.spellsKnownByLevel)[1] || 0;
 
     switch (charClass.name) {
-      case "Barbarian":
-        console.log("Barbarian");
+      case 'Barbarian':
+        console.log('Barbarian');
         if (charClass.numberOfRagesByLevel)
           formValues.numberOfRages = JSON.parse(
             charClass.numberOfRagesByLevel
@@ -222,44 +223,44 @@ const useFormFilter = () => {
         if (charClass.rageDamageByLevel)
           formValues.rageDamage = JSON.parse(charClass.rageDamageByLevel)[1];
         if (barbarianDataNotNull(formData)) {
-          console.log("Barbarian data");
+          console.log('Barbarian data');
           addUniqueProficiencies(
             [
               formData.barbarianBonusSkillProficiencyOne!,
-              formData.barbarianBonusSkillProficiencyTwo!,
+              formData.barbarianBonusSkillProficiencyTwo!
             ],
             formValues
           );
           const chosenItems = [
             formData.barbarianEquipmentOne!,
-            formData.barbarianEquipmentTwo!,
+            formData.barbarianEquipmentTwo!
           ];
-          if (formData.barbarianEquipmentTwo === "Handaxe")
-            chosenItems.push("Handaxe");
+          if (formData.barbarianEquipmentTwo === 'Handaxe')
+            chosenItems.push('Handaxe');
           addItemsByName(chosenItems, formValues, items);
         }
         return { formValues };
-      case "Bard":
+      case 'Bard':
         if (bardDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.bardBonusSkillProficiencyOne!,
               formData.bardBonusSkillProficiencyTwo!,
-              formData.bardBonusSkillProficiencyThree!,
+              formData.bardBonusSkillProficiencyThree!
             ],
             formValues
           );
           const chosenItems = [
             formData.bardEquipmentOne!,
             formData.bardEquipmentTwo!,
-            formData.bardEquipmentThree!,
+            formData.bardEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
           addUniqueProficiencies(
             [
               formData.bardBonusMusicalProficiencyOne!,
               formData.bardBonusMusicalProficiencyTwo!,
-              formData.bardBonusMusicalProficiencyThree!,
+              formData.bardBonusMusicalProficiencyThree!
             ],
             formValues
           );
@@ -270,19 +271,19 @@ const useFormFilter = () => {
               formData.bardBonusSpellIdOne!,
               formData.bardBonusSpellIdTwo!,
               formData.bardBonusSpellIdThree!,
-              formData.bardBonusSpellIdFour!,
+              formData.bardBonusSpellIdFour!
             ],
             formValues,
             spells
           );
         }
         return { formValues };
-      case "Cleric":
+      case 'Cleric':
         if (clericDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.clericSkillProficiencyOne!,
-              formData.clericSkillProficiencyTwo!,
+              formData.clericSkillProficiencyTwo!
             ],
             formValues
           );
@@ -290,32 +291,32 @@ const useFormFilter = () => {
             formData.clericEquipmentOne!,
             formData.clericEquipmentTwo!,
             formData.clericEquipmentThree!,
-            formData.clericEquipmentFour!,
+            formData.clericEquipmentFour!
           ];
           addItemsByName(chosenItems, formValues, items);
           addSpellsById(
             [
               formData.clericCantripIdOne!,
               formData.clericCantripIdTwo!,
-              formData.clericCantripIdThree!,
+              formData.clericCantripIdThree!
             ],
             formValues,
             spells
           );
         }
         return { formValues };
-      case "Druid":
+      case 'Druid':
         if (druidDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.druidSkillProficiencyOne!,
-              formData.druidSkillProficiencyTwo!,
+              formData.druidSkillProficiencyTwo!
             ],
             formValues
           );
           const chosenItems = [
             formData.druidEquipmentOne!,
-            formData.druidEquipmentTwo!,
+            formData.druidEquipmentTwo!
           ];
           addItemsByName(chosenItems, formValues, items);
           addSpellsById(
@@ -323,19 +324,19 @@ const useFormFilter = () => {
               formData.druidCantripIdOne!,
               formData.druidCantripIdTwo!,
               formData.druidSpellIdOne!,
-              formData.druidSpellIdTwo!,
+              formData.druidSpellIdTwo!
             ],
             formValues,
             spells
           );
         }
         return { formValues };
-      case "Fighter":
+      case 'Fighter':
         if (fighterDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.fighterBonusSkillProficiencyOne!,
-              formData.fighterBonusSkillProficiencyTwo!,
+              formData.fighterBonusSkillProficiencyTwo!
             ],
             formValues
           );
@@ -344,7 +345,7 @@ const useFormFilter = () => {
             formData.fighterEquipmentTwo!,
             formData.fighterEquipmentThree!,
             formData.fighterEquipmentFour!,
-            formData.fighterEquipmentFive!,
+            formData.fighterEquipmentFive!
           ];
           addItemsByName(chosenItems, formValues, items);
           formValues.fightingStyles.push(
@@ -352,7 +353,7 @@ const useFormFilter = () => {
           );
         }
         return { formValues };
-      case "Monk":
+      case 'Monk':
         if (charClass.kiPointsByLevel)
           formValues.kiPoints = JSON.parse(charClass.kiPointsByLevel)[1];
         if (monkDataNotNull(formData)) {
@@ -360,23 +361,23 @@ const useFormFilter = () => {
             [
               formData.monkSkillProficiencyOne!,
               formData.monkSkillProficiencyTwo!,
-              formData.monkProficiency!,
+              formData.monkProficiency!
             ],
             formValues
           );
           const chosenItems = [
             formData.monkEquipmentOne!,
-            formData.monkEquipmentTwo!,
+            formData.monkEquipmentTwo!
           ];
           addItemsByName(chosenItems, formValues, items);
         }
         return { formValues };
-      case "Paladin":
+      case 'Paladin':
         if (paladinDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.paladinBonusSkillProficiencyOne!,
-              formData.paladinBonusSkillProficiencyTwo!,
+              formData.paladinBonusSkillProficiencyTwo!
             ],
             formValues
           );
@@ -384,25 +385,25 @@ const useFormFilter = () => {
             formData.paladinEquipmentOne!,
             formData.paladinEquipmentTwo!,
             formData.paladinEquipmentThree!,
-            formData.paladinEquipmentFour!,
+            formData.paladinEquipmentFour!
           ];
           addItemsByName(chosenItems, formValues, items);
         }
         return { formValues };
-      case "Ranger":
+      case 'Ranger':
         if (rangerDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.rangerSkillProficiencyOne!,
               formData.rangerSkillProficiencyTwo!,
-              formData.rangerSkillProficiencyThree!,
+              formData.rangerSkillProficiencyThree!
             ],
             formValues
           );
           const chosenItems = [
             formData.rangerEquipmentOne!,
             formData.rangerEquipmentTwo!,
-            formData.rangerEquipmentThree!,
+            formData.rangerEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
           addLanguageById(
@@ -412,7 +413,7 @@ const useFormFilter = () => {
           );
         }
         return { formValues };
-      case "Rogue":
+      case 'Rogue':
         if (charClass.sneakAttackByLevel)
           formValues.sneakAttack = JSON.parse(charClass.sneakAttackByLevel)[1];
         if (rogueDataNotNull(formData)) {
@@ -422,19 +423,19 @@ const useFormFilter = () => {
               formData.rogueSkillProficiencyTwo!,
               formData.rogueSkillProficiencyThree!,
               formData.rogueSkillProficiencyFour!,
-              formData.rogueSkillProficiencyFive!,
+              formData.rogueSkillProficiencyFive!
             ],
             formValues
           );
           const chosenItems = [
             formData.rogueEquipmentOne!,
             formData.rogueEquipmentTwo!,
-            formData.rogueEquipmentThree!,
+            formData.rogueEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
         }
         return { formValues };
-      case "Sorcerer":
+      case 'Sorcerer':
         if (charClass.sorceryPointsByLevel)
           formValues.sorceryPoints = JSON.parse(
             charClass.sorceryPointsByLevel
@@ -443,14 +444,14 @@ const useFormFilter = () => {
           addUniqueProficiencies(
             [
               formData.sorcererSkillProficiencyOne!,
-              formData.sorcererSkillProficiencyTwo!,
+              formData.sorcererSkillProficiencyTwo!
             ],
             formValues
           );
           const chosenItems = [
             formData.sorcererEquipmentOne!,
             formData.sorcererEquipmentTwo!,
-            formData.sorcererEquipmentThree!,
+            formData.sorcererEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
           addSpellsById(
@@ -461,14 +462,14 @@ const useFormFilter = () => {
               formData.sorcererCantripIdFour!,
               formData.sorcererCantripIdFive!,
               formData.sorcererSpellIdOne!,
-              formData.sorcererSpellIdTwo!,
+              formData.sorcererSpellIdTwo!
             ],
             formValues,
             spells
           );
         }
         return { formValues };
-      case "Warlock":
+      case 'Warlock':
         if (charClass.invocationsKnownByLevel)
           formValues.invocationsKnown = JSON.parse(
             charClass.invocationsKnownByLevel
@@ -477,14 +478,14 @@ const useFormFilter = () => {
           addUniqueProficiencies(
             [
               formData.warlockSkillProficiencyOne!,
-              formData.warlockSkillProficiencyTwo!,
+              formData.warlockSkillProficiencyTwo!
             ],
             formValues
           );
           const chosenItems = [
             formData.warlockEquipmentOne!,
             formData.warlockEquipmentTwo!,
-            formData.warlockEquipmentThree!,
+            formData.warlockEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
           addSpellsById(
@@ -492,26 +493,26 @@ const useFormFilter = () => {
               formData.warlockCantripIdOne!,
               formData.warlockCantripIdTwo!,
               formData.warlockSpellIdOne!,
-              formData.warlockSpellIdTwo!,
+              formData.warlockSpellIdTwo!
             ],
             formValues,
             spells
           );
         }
         return { formValues };
-      case "Wizard":
+      case 'Wizard':
         if (wizardDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.wizardSkillProficiencyOne!,
-              formData.wizardSkillProficiencyTwo!,
+              formData.wizardSkillProficiencyTwo!
             ],
             formValues
           );
           const chosenItems = [
             formData.wizardEquipmentOne!,
             formData.wizardEquipmentTwo!,
-            formData.wizardEquipmentThree!,
+            formData.wizardEquipmentThree!
           ];
           addItemsByName(chosenItems, formValues, items);
           addSpellsById(
@@ -524,7 +525,7 @@ const useFormFilter = () => {
               formData.wizardSpellIdThree!,
               formData.wizardSpellIdFour!,
               formData.wizardSpellIdFive!,
-              formData.wizardSpellIdSix!,
+              formData.wizardSpellIdSix!
             ],
             formValues,
             spells
@@ -572,26 +573,26 @@ const useFormFilter = () => {
         skills
       );
     switch (subclass.name) {
-      case "Knowledge Domain":
+      case 'Knowledge Domain':
         if (knowledgeDomainDataNotNull(formData)) {
           addUniqueProficiencies(
             [
               formData.knowledgeDomainSkillProficiencyOne!,
-              formData.knowledgeDomainSkillProficiencyTwo!,
+              formData.knowledgeDomainSkillProficiencyTwo!
             ],
             formValues
           );
           addLanguagesById(
             [
               formData.knowledgeDomainLanguageIdOne!,
-              formData.knowledgeDomainLanguageIdTwo!,
+              formData.knowledgeDomainLanguageIdTwo!
             ],
             formValues,
             languages
           );
         }
         return { formValues };
-      case "Nature Domain":
+      case 'Nature Domain':
         if (natureDomainDataNotNull(formData)) {
           addUniqueProficiencies(
             [formData.natureDomainSkillProficiency!],
@@ -600,7 +601,7 @@ const useFormFilter = () => {
           addSpellById(formData.natureDomainSpellIdOne!, formValues, spells);
         }
         return { formValues };
-      case "Draconic Bloodline":
+      case 'Draconic Bloodline':
         if (draconicBloodlineDataNotNull(formData)) {
           addUniqueAdvantages(
             [formData.draconicBloodlineAdvantage!],
@@ -633,16 +634,16 @@ const useFormFilter = () => {
     if (race.skills) addUniqueSkills(race.skills, formValues);
 
     switch (race.name) {
-      case "Dwarf":
-        formValues.proficiencies.push(formData.dwarfToolProficiency || "");
+      case 'Dwarf':
+        formValues.proficiencies.push(formData.dwarfToolProficiency || '');
         return { formValues };
-      case "Dragonborn":
+      case 'Dragonborn':
         if (formData.dragonbornBreathWeaponId) {
           addSpellById(formData.dragonbornBreathWeaponId, formValues, spells);
         }
-        formValues.resistances.push(formData.dragonbornResistanceType || "");
+        formValues.resistances.push(formData.dragonbornResistanceType || '');
         return { formValues };
-      case "Half-Elf":
+      case 'Half-Elf':
         if (formData.halfElfBonusLanguageId) {
           addLanguageById(
             formData.halfElfBonusLanguageId,
@@ -660,12 +661,12 @@ const useFormFilter = () => {
         addUniqueProficiencies(
           [
             formData.halfElfBonusSkillProficiencyOne!,
-            formData.halfElfBonusSkillProficiencyTwo!,
+            formData.halfElfBonusSkillProficiencyTwo!
           ],
           formValues
         );
         return { formValues };
-      case "Human":
+      case 'Human':
         if (formData.humanBonusLanguageId) {
           addLanguageById(formData.humanBonusLanguageId, formValues, languages);
         }
@@ -695,7 +696,7 @@ const useFormFilter = () => {
     if (subrace.skills) addUniqueSkills(subrace.skills, formValues);
 
     switch (subrace.name) {
-      case "High Elf":
+      case 'High Elf':
         if (formData.highElfBonusLanguageId && formData.highElfBonusCantripId) {
           addLanguageById(
             formData.highElfBonusLanguageId,
@@ -727,11 +728,12 @@ const useFormFilter = () => {
       formValues.fears.push(formData.characterFearTwo!.toLocaleUpperCase());
       formValues.backstory = formData.characterBackstory!;
       formValues.appearance = formData.characterAppearance!;
+      formValues.gender = formData.gender;
     }
   };
 
   return {
-    getFormDataByClassAndRace,
+    getFormDataByClassAndRace
   };
 };
 
