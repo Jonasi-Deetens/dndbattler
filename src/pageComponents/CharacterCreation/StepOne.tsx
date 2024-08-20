@@ -77,23 +77,25 @@ const StepOne: React.FC = () => {
       <div className="flex flex-wrap w-full justify-center gap-4">
         {races &&
           races.map(race => (
-            <button
-              key={race.id}
-              type="button"
-              onClick={() => handleRaceSelect(race.id)}
-              className={`border p-2 flex flex-col items-center rounded-md ${
-                values.raceId === race.id
-                  ? 'border-blue-500'
-                  : 'border-gray-300'
-              }`}
-            >
-              <img
-                src={raceImages[race.id][values.gender as 'male' | 'female']}
-                alt={race.name}
-                className="h-24 w-24 object-cover"
-              />
+            <div className="flex flex-col">
+              <button
+                key={race.id}
+                type="button"
+                onClick={() => handleRaceSelect(race.id)}
+                className="bg-transparent border-0"
+              >
+                <img
+                  src={raceImages[race.id][values.gender as 'male' | 'female']}
+                  alt={race.name}
+                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-lg hover:scale-110 rounded-md ${
+                    values.raceId === race.id
+                      ? 'border-4 border-red-400 scale-110'
+                      : 'border-0'
+                  }`}
+                />
+              </button>
               <span>{race.name}</span>
-            </button>
+            </div>
           ))}
       </div>
       {hasSubraces && (
@@ -104,27 +106,29 @@ const StepOne: React.FC = () => {
               subraces
                 .filter(subrace => subrace.parentRaceId === values.raceId)
                 .map(subrace => (
-                  <button
-                    key={subrace.id}
-                    type="button"
-                    onClick={() => handleSubraceSelect(subrace.id)}
-                    className={`border p-2 flex flex-col items-center rounded-md ${
-                      values.subraceId === subrace.id
-                        ? 'border-blue-500'
-                        : 'border-gray-300'
-                    }`}
-                  >
-                    <img
-                      src={
-                        subraceImages[subrace.id][
-                          values.gender as 'male' | 'female'
-                        ]
-                      }
-                      alt={subrace.name}
-                      className="h-24 w-24 object-cover"
-                    />
+                  <div className="flex flex-col">
+                    <button
+                      key={subrace.id}
+                      type="button"
+                      onClick={() => handleSubraceSelect(subrace.id)}
+                      className="bg-transparent border-0"
+                    >
+                      <img
+                        src={
+                          subraceImages[subrace.id][
+                            values.gender as 'male' | 'female'
+                          ]
+                        }
+                        alt={subrace.name}
+                        className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-lg hover:scale-110 rounded-md ${
+                          values.subraceId === subrace.id
+                            ? 'border-4 border-red-400 scale-110'
+                            : 'border-0'
+                        }`}
+                      />
+                    </button>
                     <span>{subrace.name}</span>
-                  </button>
+                  </div>
                 ))}
           </div>
         </div>

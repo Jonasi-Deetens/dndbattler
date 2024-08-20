@@ -1,14 +1,14 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React from "react";
-import { NewCharacter, Item } from "../../types/DBTypes";
-import useItems from "../../hooks/useItems";
+import { ErrorMessage, Field, useFormikContext } from 'formik';
+import React from 'react';
+import { NewCharacter, Item } from '../../types/DBTypes';
+import useItems from '../../hooks/useItems';
 
 const ItemSelectField = ({
   name,
   filter,
   label,
   onChange,
-  noDivider = false,
+  noDivider = false
 }: {
   name: string;
   filter: (option: Item) => boolean;
@@ -25,11 +25,9 @@ const ItemSelectField = ({
         as="select"
         name={name}
         aria-label={name}
-        className="p-1 text-gray-500 mt-5"
+        className="p-1 text-gray-500 mt-5 w-full"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          const selectedItem = items.find(
-            (item) => item.name === e.target.value
-          );
+          const selectedItem = items.find(item => item.name === e.target.value);
           if (selectedItem) {
             onChange(selectedItem);
           }
@@ -37,7 +35,7 @@ const ItemSelectField = ({
         value={values[name]}
       >
         {items &&
-          items.filter(filter).map((option) => (
+          items.filter(filter).map(option => (
             <option key={option.name} value={option.name}>
               {option.name}
             </option>

@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik';
+import { Form, Formik, FormikConfig } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import useCharacters from '../../hooks/useCharacters';
@@ -11,6 +11,7 @@ import StepThree from './StepThree';
 import StepFour from './StepFour';
 import StepFive from './StepFive';
 import useFormFilter from '../../hooks/useFormFilter';
+import CharacterSummary from './CharacterSummary';
 
 const useValidationSchema = () => {
   return yup.object().shape({
@@ -124,26 +125,23 @@ const CharacterCreate: React.FC = () => {
   return (
     <div className="bg-character-create h-screen w-full flex flex-col justify-center">
       <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
-        <Form className="m-auto w-11/12 md:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
+        <Form className="m-auto w-11/12 lg:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
           <h2 className="mb-4 text-2xl">Character Creation</h2>
-          <div className="flex flex-col md:flex-row gap-x-4 w-full">
+          <div className="flex flex-col lg:flex-row gap-x-4 w-full">
             <div className="flex flex-col items-center m-auto gap-y-5 w-full p-5">
-              <Field
-                type="text"
-                name="name"
-                placeholder="Name"
-                aria-label="Name"
-                autoComplete="name"
-                className="p-1 text-gray-500"
-              />
-              <ErrorMessage name="name" component="div" className="error" />
-              <hr className="my-4 w-full" />
+              <div className="flex gap-x-5">
+                <div className="w-1/3 pt-16">
+                  <CharacterSummary />
+                </div>
 
-              {step === 1 && <StepOne />}
-              {step === 2 && <StepTwo />}
-              {step === 3 && <StepThree />}
-              {step === 4 && <StepFour />}
-              {step === 5 && <StepFive />}
+                <div className="w-2/3">
+                  {step === 1 && <StepOne />}
+                  {step === 2 && <StepTwo />}
+                  {step === 3 && <StepThree />}
+                  {step === 4 && <StepFour />}
+                  {step === 5 && <StepFive />}
+                </div>
+              </div>
 
               <div className="flex gap-x-2">
                 {step !== 1 && (

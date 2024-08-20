@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React from "react";
-import { Alignment, NewCharacter } from "../../types/DBTypes";
+import { ErrorMessage, Field, useFormikContext } from 'formik';
+import React from 'react';
+import { Alignment, NewCharacter } from '../../types/DBTypes';
 
 const alignments = Object.values(Alignment);
 
@@ -8,7 +8,7 @@ const AlignmentSelectField = ({
   name,
   label,
   onChange,
-  noDivider = false,
+  noDivider = false
 }: {
   name: string;
   label: string;
@@ -24,13 +24,13 @@ const AlignmentSelectField = ({
         as="select"
         name={name}
         aria-label={name}
-        className="p-1 text-gray-500 mt-5"
+        className="p-1 text-gray-500 mt-5 w-full"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           onChange(e.target.value as Alignment);
         }}
         value={values[name]}
       >
-        {alignments.map((option) => (
+        {alignments.map(option => (
           <option key={option} value={option}>
             {option}
           </option>

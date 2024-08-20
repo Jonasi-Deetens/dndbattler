@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, useFormikContext } from "formik";
-import React from "react";
-import { NewCharacter, Flaw } from "../../types/DBTypes";
+import { ErrorMessage, Field, useFormikContext } from 'formik';
+import React from 'react';
+import { NewCharacter, Flaw } from '../../types/DBTypes';
 
 const flaws = Object.values(Flaw);
 
@@ -9,7 +9,7 @@ const FlawSelectField = ({
   filter,
   label,
   onChange,
-  noDivider = false,
+  noDivider = false
 }: {
   name: string;
   filter: (option: Flaw) => boolean;
@@ -26,13 +26,13 @@ const FlawSelectField = ({
         as="select"
         name={name}
         aria-label={name}
-        className="p-1 text-gray-500 mt-5"
+        className="p-1 text-gray-500 mt-5 w-full"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           onChange(e.target.value as Flaw);
         }}
         value={values[name]}
       >
-        {flaws.filter(filter).map((option) => (
+        {flaws.filter(filter).map(option => (
           <option key={option} value={option}>
             {option}
           </option>

@@ -290,6 +290,7 @@ export type Item = {
 export type Race = {
   id: number;
   name: string;
+  description: string;
   abilityScoreIncreases: Record<string, number>;
   statIncreases: Record<string, number>;
   adultAge: number;
@@ -314,6 +315,7 @@ export type Race = {
 export type Subrace = {
   id: number;
   name: string;
+  description: string;
   parentRaceId: number;
   parentRace: Race;
   abilityScoreIncreases: Record<string, number>;

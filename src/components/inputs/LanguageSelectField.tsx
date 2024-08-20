@@ -26,7 +26,7 @@ const LanguageSelectField = ({
         as="select"
         name={name}
         aria-label={name}
-        className="p-1 text-gray-500 mt-5"
+        className="p-1 text-gray-500 mt-5 w-full"
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           const selectedLanguage = languages.find(
             language => language.id === parseInt(e.target.value)

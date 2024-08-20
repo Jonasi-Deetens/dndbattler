@@ -115,7 +115,20 @@ const useRaceImages = () => {
     }
   };
 
-  return { raceImages, subraceImages };
+  const getImageByRaceAndGender = ({
+    raceId,
+    gender,
+    subraceId
+  }: {
+    raceId: number;
+    subraceId?: number;
+    gender: string;
+  }) => {
+    if (subraceId) return subraceImages[subraceId][gender as 'male' | 'female'];
+    else return raceImages[raceId][gender as 'male' | 'female'];
+  };
+
+  return { raceImages, subraceImages, getImageByRaceAndGender };
 };
 
 export default useRaceImages;
