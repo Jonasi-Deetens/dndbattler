@@ -123,9 +123,9 @@ const CharacterCreate: React.FC = () => {
   );
 
   return (
-    <div className="bg-character-create h-screen w-full flex flex-col justify-center">
+    <div className="bg-character-create max-h-screen py-5 w-full flex flex-col justify-center">
       <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
-        <Form className="m-auto w-11/12 lg:w-1/2 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
+        <Form className="m-auto w-11/12 lg:w-3/5 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
           <h2 className="mb-4 text-2xl">Character Creation</h2>
           <div className="flex flex-col lg:flex-row gap-x-4 w-full">
             <div className="flex flex-col items-center m-auto gap-y-5 w-full p-5">
