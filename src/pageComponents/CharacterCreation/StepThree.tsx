@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import useSubclasses from '../../hooks/useSubclasses';
 import useClasses from '../../hooks/useClasses';
@@ -9,7 +9,7 @@ const StepThree: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
   const { classes } = useClasses();
   const { subclasses } = useSubclasses();
-  const { classImages } = useClassImages();
+  const { classImages, subclassImages } = useClassImages();
   const [hasSubclasses, setHasSubclasses] = useState<boolean>(false);
   const [subclassAtLevelOne, setSubclassAtLevelOne] = useState<boolean>(false);
 
@@ -52,15 +52,18 @@ const StepThree: React.FC = () => {
       subclass => subclass.parentClassId === newClassId
     );
     setHasSubclasses(matchingSubclasses.length > 0);
-    if (matchingSubclasses.length > 0 && subclassAtLevelOne) {
+    if (
+      matchingSubclasses.length > 0 &&
+      selectedClass?.subClassAvailableAtLevel === 1
+    ) {
       setFieldValue('subclassId', matchingSubclasses[0].id);
     } else {
       setFieldValue('subclassId', undefined);
     }
   };
 
-  const handleSubclassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFieldValue('subclassId', parseInt(e.target.value));
+  const handleSubclassSelect = (newSubclassId: number) => {
+    setFieldValue('subclassId', newSubclassId);
   };
 
   return (
@@ -79,7 +82,7 @@ const StepThree: React.FC = () => {
                 <img
                   src={classImages[charClass.id]}
                   alt={charClass.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-lg hover:scale-110 rounded-md ${
+                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
                     values.classId === charClass.id
                       ? 'border-4 border-red-400 scale-110'
                       : 'border-0'
@@ -93,23 +96,32 @@ const StepThree: React.FC = () => {
       {hasSubclasses && subclassAtLevelOne && (
         <>
           <h2 className="border p-2">Select your subclass</h2>
-          <Field
-            as="select"
-            name="subclassId"
-            aria-label="Subclass"
-            className="p-1 text-gray-500"
-            onChange={handleSubclassChange}
-          >
+          <div className="flex flex-wrap w-full justify-center gap-4">
             {subclasses &&
               subclasses
                 .filter(option => option.parentClassId === values.classId)
-                .map(option => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
+                .map(subclass => (
+                  <div className="flex flex-col">
+                    <button
+                      key={subclass.id}
+                      type="button"
+                      onClick={() => handleSubclassSelect(subclass.id)}
+                      className="bg-transparent border-0"
+                    >
+                      <img
+                        src={subclassImages[subclass.id]}
+                        alt={subclass.name}
+                        className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
+                          values.subclassId === subclass.id
+                            ? 'border-4 border-red-400 scale-110'
+                            : 'border-0'
+                        }`}
+                      />
+                    </button>
+                    <span>{subclass.name}</span>
+                  </div>
                 ))}
-          </Field>
-          <ErrorMessage name="subclassId" component="div" className="error" />
+          </div>
         </>
       )}
     </div>

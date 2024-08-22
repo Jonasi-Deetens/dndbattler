@@ -1,11 +1,11 @@
-import { useFormikContext } from "formik";
-import React, { useEffect } from "react";
-import { NewCharacter, SkillCheck, Language } from "../../../types/DBTypes";
-import SkillCheckSelectField from "../../../components/inputs/SkillCheckSelectField";
-import LanguageSelectField from "../../../components/inputs/LanguageSelectField";
-import useLanguages from "../../../hooks/useLanguages";
+import { useFormikContext } from 'formik';
+import React, { useEffect } from 'react';
+import { NewCharacter, SkillCheck, Language } from '../../../types/DBTypes';
+import SkillCheckSelectField from '../../../components/inputs/SkillCheckSelectField';
+import LanguageSelectField from '../../../components/inputs/LanguageSelectField';
+import useLanguages from '../../../hooks/useLanguages';
 
-const knowledgeDomainSkillChoices = ["Arcana", "History", "Nature", "Religion"];
+const knowledgeDomainSkillChoices = ['Arcana', 'History', 'Nature', 'Religion'];
 
 const KnowledgeDomainForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
@@ -14,20 +14,20 @@ const KnowledgeDomainForm: React.FC = () => {
   useEffect(() => {
     if (!values.knowledgeDomainSkillProficiencyOne)
       setFieldValue(
-        "knowledgeDomainSkillProficiencyOne",
+        'knowledgeDomainSkillProficiencyOne',
         knowledgeDomainSkillChoices[0]
       );
     if (!values.knowledgeDomainSkillProficiencyTwo)
       setFieldValue(
-        "knowledgeDomainSkillProficiencyTwo",
+        'knowledgeDomainSkillProficiencyTwo',
         knowledgeDomainSkillChoices[1]
       );
 
     if (languages) {
       if (!values.knowledgeDomainLanguageIdOne)
-        setFieldValue("knowledgeDomainLanguageIdOne", languages[0]?.id);
+        setFieldValue('knowledgeDomainLanguageIdOne', languages[0]?.id);
       if (!values.knowledgeDomainLanguageIdTwo)
-        setFieldValue("knowledgeDomainLanguageIdTwo", languages[1]?.id);
+        setFieldValue('knowledgeDomainLanguageIdTwo', languages[1]?.id);
     }
   }, [languages]);
 
@@ -35,50 +35,52 @@ const KnowledgeDomainForm: React.FC = () => {
     <div>
       <h2 className="border p-2">Knowledge Domain</h2>
 
-      <SkillCheckSelectField
-        name="knowledgeDomainSkillProficiencyOne"
-        filter={(option: SkillCheck) =>
-          option !== values.knowledgeDomainSkillProficiencyTwo &&
-          knowledgeDomainSkillChoices.includes(option)
-        }
-        label="Select skill proficiency."
-        onChange={(value: SkillCheck) =>
-          setFieldValue("knowledgeDomainSkillProficiencyOne", value)
-        }
-      />
-      <SkillCheckSelectField
-        name="knowledgeDomainSkillProficiencyTwo"
-        filter={(option: SkillCheck) =>
-          option !== values.knowledgeDomainSkillProficiencyOne &&
-          knowledgeDomainSkillChoices.includes(option)
-        }
-        label="Select skill proficiency."
-        onChange={(value: SkillCheck) =>
-          setFieldValue("knowledgeDomainSkillProficiencyTwo", value)
-        }
-      />
+      <div className="w-1/2 m-auto">
+        <SkillCheckSelectField
+          name="knowledgeDomainSkillProficiencyOne"
+          filter={(option: SkillCheck) =>
+            option !== values.knowledgeDomainSkillProficiencyTwo &&
+            knowledgeDomainSkillChoices.includes(option)
+          }
+          label="Select skill proficiency."
+          onChange={(value: SkillCheck) =>
+            setFieldValue('knowledgeDomainSkillProficiencyOne', value)
+          }
+        />
+        <SkillCheckSelectField
+          name="knowledgeDomainSkillProficiencyTwo"
+          filter={(option: SkillCheck) =>
+            option !== values.knowledgeDomainSkillProficiencyOne &&
+            knowledgeDomainSkillChoices.includes(option)
+          }
+          label="Select skill proficiency."
+          onChange={(value: SkillCheck) =>
+            setFieldValue('knowledgeDomainSkillProficiencyTwo', value)
+          }
+        />
 
-      <LanguageSelectField
-        name="knowledgeDomainLanguageIdOne"
-        label="Select language proficiency."
-        filter={(option: Language) =>
-          option.id !== values.knowledgeDomainLanguageIdTwo
-        }
-        onChange={(value: Language) =>
-          setFieldValue("knowledgeDomainLanguageIdOne", value.id)
-        }
-      />
-      <LanguageSelectField
-        name="knowledgeDomainLanguageIdTwo"
-        label="Select language proficiency."
-        filter={(option: Language) =>
-          option.id !== values.knowledgeDomainLanguageIdOne
-        }
-        onChange={(value: Language) =>
-          setFieldValue("knowledgeDomainLanguageIdTwo", value.id)
-        }
-        noDivider={true}
-      />
+        <LanguageSelectField
+          name="knowledgeDomainLanguageIdOne"
+          label="Select language proficiency."
+          filter={(option: Language) =>
+            option.id !== values.knowledgeDomainLanguageIdTwo
+          }
+          onChange={(value: Language) =>
+            setFieldValue('knowledgeDomainLanguageIdOne', value.id)
+          }
+        />
+        <LanguageSelectField
+          name="knowledgeDomainLanguageIdTwo"
+          label="Select language proficiency."
+          filter={(option: Language) =>
+            option.id !== values.knowledgeDomainLanguageIdOne
+          }
+          onChange={(value: Language) =>
+            setFieldValue('knowledgeDomainLanguageIdTwo', value.id)
+          }
+          noDivider={true}
+        />
+      </div>
     </div>
   );
 };

@@ -41,7 +41,8 @@ const RangerForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (languages && !values.rangerBonusLanguageId)
+    console.log(languages);
+    if (languages.length && !values.rangerBonusLanguageId)
       setFieldValue('rangerBonusLanguageId', languages[0].id);
   }, [languages, values, setFieldValue]);
 

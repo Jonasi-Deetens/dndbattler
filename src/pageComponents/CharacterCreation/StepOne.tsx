@@ -87,7 +87,7 @@ const StepOne: React.FC = () => {
                 <img
                   src={raceImages[race.id][values.gender as 'male' | 'female']}
                   alt={race.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-lg hover:scale-110 rounded-md ${
+                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
                     values.raceId === race.id
                       ? 'border-4 border-red-400 scale-110'
                       : 'border-0'
@@ -120,7 +120,7 @@ const StepOne: React.FC = () => {
                           ]
                         }
                         alt={subrace.name}
-                        className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-lg hover:scale-110 rounded-md ${
+                        className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
                           values.subraceId === subrace.id
                             ? 'border-4 border-red-400 scale-110'
                             : 'border-0'

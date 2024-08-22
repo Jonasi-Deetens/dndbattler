@@ -1,11 +1,11 @@
-import { useFormikContext } from "formik";
-import React, { useEffect, useState } from "react";
-import { NewCharacter, SkillCheck, Spell } from "../../../types/DBTypes";
-import SkillCheckSelectField from "../../../components/inputs/SkillCheckSelectField";
-import SpellSelectField from "../../../components/inputs/SpellSelectField";
-import useClasses from "../../../hooks/useClasses";
+import { useFormikContext } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { NewCharacter, SkillCheck, Spell } from '../../../types/DBTypes';
+import SkillCheckSelectField from '../../../components/inputs/SkillCheckSelectField';
+import SpellSelectField from '../../../components/inputs/SpellSelectField';
+import useClasses from '../../../hooks/useClasses';
 
-const natureDomainSkillChoices = ["Animal Handling", "Nature", "Survival"];
+const natureDomainSkillChoices = ['Animal Handling', 'Nature', 'Survival'];
 
 const NatureDomainForm: React.FC = () => {
   const { setFieldValue, values } = useFormikContext<NewCharacter>();
@@ -15,9 +15,9 @@ const NatureDomainForm: React.FC = () => {
   useEffect(() => {
     const fetchDruidCantrips = async () => {
       try {
-        const spellsData = await getAllSpellsFromClass({ className: "Druid" });
+        const spellsData = await getAllSpellsFromClass({ className: 'Druid' });
         if (spellsData) {
-          const cantrips = spellsData.filter((spell) => spell.spellLevel === 0);
+          const cantrips = spellsData.filter(spell => spell.spellLevel === 0);
           setDruidCantrips(cantrips);
         }
       } catch (error) {
@@ -29,38 +29,40 @@ const NatureDomainForm: React.FC = () => {
 
     if (!values.natureDomainSkillProficiency)
       setFieldValue(
-        "natureDomainSkillProficiency",
+        'natureDomainSkillProficiency',
         natureDomainSkillChoices[0]
       );
     if (!values.natureDomainSpellIdOne)
-      setFieldValue("natureDomainSpellIdOne", druidCantrips[0]?.id);
+      setFieldValue('natureDomainSpellIdOne', druidCantrips[0]?.id);
   }, []);
 
   return (
     <div>
       <h2 className="border p-2">Nature Domain</h2>
 
-      <SkillCheckSelectField
-        name="natureDomainSkillProficiency"
-        filter={(option: SkillCheck) =>
-          natureDomainSkillChoices.includes(option)
-        }
-        label="Select skill proficiency."
-        onChange={(value: SkillCheck) =>
-          setFieldValue("natureDomainSkillProficiency", value)
-        }
-      />
+      <div className="w-1/2 m-auto">
+        <SkillCheckSelectField
+          name="natureDomainSkillProficiency"
+          filter={(option: SkillCheck) =>
+            natureDomainSkillChoices.includes(option)
+          }
+          label="Select skill proficiency."
+          onChange={(value: SkillCheck) =>
+            setFieldValue('natureDomainSkillProficiency', value)
+          }
+        />
 
-      <SpellSelectField
-        name="natureDomainSpellIdOne"
-        spellClass="Druid"
-        filter={(option: Spell) => option.spellLevel === 0}
-        label="Select a druid cantrip."
-        onChange={(value: Spell) =>
-          setFieldValue("natureDomainSpellIdOne", value.id)
-        }
-        noDivider={true}
-      />
+        <SpellSelectField
+          name="natureDomainSpellIdOne"
+          spellClass="Druid"
+          filter={(option: Spell) => option.spellLevel === 0}
+          label="Select a druid cantrip."
+          onChange={(value: Spell) =>
+            setFieldValue('natureDomainSpellIdOne', value.id)
+          }
+          noDivider={true}
+        />
+      </div>
     </div>
   );
 };

@@ -125,62 +125,73 @@ const CharacterCreate: React.FC = () => {
   return (
     <div className="bg-character-create max-h-screen py-5 w-full flex flex-col justify-center">
       <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
-        <Form className="m-auto w-11/12 lg:w-3/5 bg-slate-700 p-10 rounded-lg shadow-lg overflow-auto">
-          <h2 className="mb-4 text-2xl">Character Creation</h2>
+        <Form className="m-auto w-11/12 lg:w-3/5 bg-slate-700 rounded-lg shadow-lg overflow-auto">
+          <h2 className="sticky z-50 top-0 bg-slate-700 py-5 underline shadow-red-600 border-b-2 drop-shadow-xl mb-4 text-2xl">
+            Character Creation
+          </h2>
           <div className="flex flex-col lg:flex-row gap-x-4 w-full">
             <div className="flex flex-col items-center m-auto gap-y-5 w-full p-5">
               <div className="flex gap-x-5">
-                <div className="w-1/3 pt-16">
+                <div className={`w-1/3 ${step === 1 ? 'pt-16' : ''}`}>
                   <CharacterSummary />
                 </div>
 
-                <div className="w-2/3">
+                <div className="w-2/3 max-h-full overflow-auto">
                   {step === 1 && <StepOne />}
                   {step === 2 && <StepTwo />}
                   {step === 3 && <StepThree />}
                   {step === 4 && <StepFour />}
                   {step === 5 && <StepFive />}
+                  <hr className="my-5" />
+                  <div className="w-full mb-0">
+                    <div className="flex justify-center gap-x-2 my-1">
+                      {step !== 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setStep(step - 1)}
+                          className="border-2 border-black"
+                          disabled={isLoading}
+                        >
+                          Previous
+                        </button>
+                      )}
+                      {step === 5 ? (
+                        <button
+                          type="submit"
+                          disabled={isLoading}
+                          className="border-2 border-black"
+                        >
+                          {isLoading ? 'Creating...' : 'Create'}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="border-2 border-black"
+                          onClick={() => setStep(step + 1)}
+                          disabled={isLoading}
+                        >
+                          Next
+                        </button>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      className="bg-transparent"
+                      onClick={() => {
+                        navigate('/characterSelect');
+                      }}
+                    >
+                      &lt; back
+                    </button>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex gap-x-2">
-                {step !== 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setStep(step - 1)}
-                    disabled={isLoading}
-                  >
-                    Previous
-                  </button>
-                )}
-                {step === 5 ? (
-                  <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Creating...' : 'Create'}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setStep(step + 1)}
-                    disabled={isLoading}
-                  >
-                    Next
-                  </button>
-                )}
-              </div>
-              <button
-                type="button"
-                className="bg-transparent"
-                onClick={() => {
-                  navigate('/characterSelect');
-                }}
-              >
-                &lt; back
-              </button>
-              {error && <div className="error">{error}</div>}
             </div>
           </div>
         </Form>
       </Formik>
+
+      {error && <div className="error">{error}</div>}
     </div>
   );
 };
