@@ -76,13 +76,15 @@ const SorcererForm: React.FC = () => {
       <h2 className="border p-2">SORCERER</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="sorcererSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.sorcererSkillProficiencyTwo &&
             sorcererSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('sorcererSkillProficiencyOne', value)
           }
@@ -93,19 +95,17 @@ const SorcererForm: React.FC = () => {
             option !== values.sorcererSkillProficiencyOne &&
             sorcererSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('sorcererSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="sorcererEquipmentOne"
           filter={(option: Item) =>
             itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('sorcererEquipmentOne', value.name)
           }
@@ -113,7 +113,6 @@ const SorcererForm: React.FC = () => {
         <ItemSelectField
           name="sorcererEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('sorcererEquipmentTwo', value.name)
           }
@@ -121,12 +120,11 @@ const SorcererForm: React.FC = () => {
         <ItemSelectField
           name="sorcererEquipmentThree"
           filter={(option: Item) => itemChoicesThree.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('sorcererEquipmentThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 4 sorcerer cantrips:</p>
         <SpellSelectField
           name="sorcererCantripIdOne"
           spellClass="Sorcerer"
@@ -136,7 +134,6 @@ const SorcererForm: React.FC = () => {
             option.id !== values.sorcererCantripIdThree &&
             option.id !== values.sorcererCantripIdFour
           }
-          label="Select 1 of the following sorcerer cantrips."
           onChange={(value: Spell) =>
             setFieldValue('sorcererCantripIdOne', value.id)
           }
@@ -150,7 +147,6 @@ const SorcererForm: React.FC = () => {
             option.id !== values.sorcererCantripIdThree &&
             option.id !== values.sorcererCantripIdFour
           }
-          label="Select 1 of the following sorcerer cantrips."
           onChange={(value: Spell) =>
             setFieldValue('sorcererCantripIdTwo', value.id)
           }
@@ -164,7 +160,6 @@ const SorcererForm: React.FC = () => {
             option.id !== values.sorcererCantripIdTwo &&
             option.id !== values.sorcererCantripIdFour
           }
-          label="Select 1 of the following sorcerer cantrips."
           onChange={(value: Spell) =>
             setFieldValue('sorcererCantripIdThree', value.id)
           }
@@ -178,19 +173,17 @@ const SorcererForm: React.FC = () => {
             option.id !== values.sorcererCantripIdTwo &&
             option.id !== values.sorcererCantripIdThree
           }
-          label="Select 1 of the following sorcerer cantrips."
           onChange={(value: Spell) =>
             setFieldValue('sorcererCantripIdFour', value.id)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 sorcerer spells:</p>
         <SpellSelectField
           name="sorcererSpellIdOne"
           spellClass="Sorcerer"
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.sorcererSpellIdTwo
           }
-          label="Select 1 of the following sorcerer spells."
           onChange={(value: Spell) =>
             setFieldValue('sorcererSpellIdOne', value.id)
           }
@@ -201,7 +194,6 @@ const SorcererForm: React.FC = () => {
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.sorcererSpellIdOne
           }
-          label="Select 1 of the following sorcerer spells."
           onChange={(value: Spell) =>
             setFieldValue('sorcererSpellIdTwo', value.id)
           }

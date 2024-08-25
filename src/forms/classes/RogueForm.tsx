@@ -53,6 +53,9 @@ const RogueForm: React.FC = () => {
       <h2 className="border p-2">Rogue</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 5 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="rogueSkillProficiencyOne"
           filter={(option: SkillCheck) =>
@@ -62,7 +65,6 @@ const RogueForm: React.FC = () => {
             option !== values.rogueSkillProficiencyFive &&
             rogueSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rogueSkillProficiencyOne', value)
           }
@@ -76,7 +78,6 @@ const RogueForm: React.FC = () => {
             option !== values.rogueSkillProficiencyFive &&
             rogueSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rogueSkillProficiencyTwo', value)
           }
@@ -90,7 +91,6 @@ const RogueForm: React.FC = () => {
             option !== values.rogueSkillProficiencyFive &&
             rogueSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rogueSkillProficiencyThree', value)
           }
@@ -104,7 +104,6 @@ const RogueForm: React.FC = () => {
             option !== values.rogueSkillProficiencyFive &&
             rogueSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rogueSkillProficiencyFour', value)
           }
@@ -118,16 +117,14 @@ const RogueForm: React.FC = () => {
             option !== values.rogueSkillProficiencyFour &&
             rogueSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rogueSkillProficiencyFive', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="rogueEquipmentOne"
           filter={(option: Item) => itemChoicesOne.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rogueEquipmentOne', value.name)
           }
@@ -135,7 +132,6 @@ const RogueForm: React.FC = () => {
         <ItemSelectField
           name="rogueEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rogueEquipmentTwo', value.name)
           }
@@ -143,7 +139,6 @@ const RogueForm: React.FC = () => {
         <ItemSelectField
           name="rogueEquipmentThree"
           filter={(option: Item) => itemChoicesThree.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rogueEquipmentThree', value.name)
           }

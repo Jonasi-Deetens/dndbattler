@@ -36,13 +36,15 @@ const KnowledgeDomainForm: React.FC = () => {
       <h2 className="border p-2">Knowledge Domain</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 extra skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="knowledgeDomainSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.knowledgeDomainSkillProficiencyTwo &&
             knowledgeDomainSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('knowledgeDomainSkillProficiencyOne', value)
           }
@@ -53,15 +55,13 @@ const KnowledgeDomainForm: React.FC = () => {
             option !== values.knowledgeDomainSkillProficiencyOne &&
             knowledgeDomainSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('knowledgeDomainSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 extra languages:</p>
         <LanguageSelectField
           name="knowledgeDomainLanguageIdOne"
-          label="Select language proficiency."
           filter={(option: Language) =>
             option.id !== values.knowledgeDomainLanguageIdTwo
           }
@@ -71,7 +71,6 @@ const KnowledgeDomainForm: React.FC = () => {
         />
         <LanguageSelectField
           name="knowledgeDomainLanguageIdTwo"
-          label="Select language proficiency."
           filter={(option: Language) =>
             option.id !== values.knowledgeDomainLanguageIdOne
           }

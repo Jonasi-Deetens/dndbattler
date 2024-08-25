@@ -17,10 +17,12 @@ const DraconicBloodlineForm: React.FC = () => {
       <h2 className="border p-2">Draconic Bloodline</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 1 damage advantage type:
+        </p>
         <DamageTypeSelectField
           name="draconicBloodlineAdvantage"
           filter={() => true}
-          label="Select a damage type for advantage."
           onChange={(value: DamageType) =>
             setFieldValue('draconicBloodlineAdvantage', value)
           }

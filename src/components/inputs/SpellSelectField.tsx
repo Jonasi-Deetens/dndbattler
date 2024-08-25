@@ -7,14 +7,12 @@ import useSpells from '../../hooks/useSpells';
 const SpellSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false,
+  noDivider = true,
   spellClass
 }: {
   name: string;
   filter: (option: Spell) => boolean;
-  label: string;
   onChange: (value: Spell) => void;
   noDivider?: boolean;
   spellClass?: string;
@@ -40,7 +38,6 @@ const SpellSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

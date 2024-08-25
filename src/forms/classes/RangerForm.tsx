@@ -51,6 +51,9 @@ const RangerForm: React.FC = () => {
       <h2 className="border p-2">Ranger</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 3 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="rangerSkillProficiencyOne"
           filter={(option: SkillCheck) =>
@@ -58,7 +61,6 @@ const RangerForm: React.FC = () => {
             option !== values.rangerSkillProficiencyThree &&
             rangerSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rangerSkillProficiencyOne', value)
           }
@@ -70,7 +72,6 @@ const RangerForm: React.FC = () => {
             option !== values.rangerSkillProficiencyThree &&
             rangerSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rangerSkillProficiencyTwo', value)
           }
@@ -82,16 +83,14 @@ const RangerForm: React.FC = () => {
             option !== values.rangerSkillProficiencyTwo &&
             rangerSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('rangerSkillProficiencyThree', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="rangerEquipmentOne"
           filter={(option: Item) => itemChoicesOne.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rangerEquipmentOne', value.name)
           }
@@ -103,7 +102,6 @@ const RangerForm: React.FC = () => {
             (itemChoicesTwo.includes(option.type) &&
               option.rangeType === 'Melee')
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rangerEquipmentTwo', value.name)
           }
@@ -111,16 +109,14 @@ const RangerForm: React.FC = () => {
         <ItemSelectField
           name="rangerEquipmentThree"
           filter={(option: Item) => itemChoicesThree.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('rangerEquipmentThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select a bonus language:</p>
         <LanguageSelectField
           name="rangerBonusLanguageId"
           filter={() => true}
-          label="Select a language."
           onChange={(value: Language) =>
             setFieldValue('rangerBonusLanguageId', value.id)
           }

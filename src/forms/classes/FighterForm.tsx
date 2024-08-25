@@ -54,13 +54,15 @@ const FighterForm: React.FC = () => {
       <h2 className="border p-2">Fighter</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="fighterBonusSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.fighterBonusSkillProficiencyTwo &&
             fighterSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('fighterBonusSkillProficiencyOne', value)
           }
@@ -71,16 +73,14 @@ const FighterForm: React.FC = () => {
             option !== values.fighterBonusSkillProficiencyOne &&
             fighterSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('fighterBonusSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 5 items:</p>
         <ItemSelectField
           name="fighterEquipmentOne"
           filter={(option: Item) => itemChoicesOne.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('fighterEquipmentOne', value.name)
           }
@@ -91,7 +91,6 @@ const FighterForm: React.FC = () => {
             itemChoicesTwo.includes(option.name) ||
             itemChoicesTwo.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('fighterEquipmentTwo', value.name)
           }
@@ -102,7 +101,6 @@ const FighterForm: React.FC = () => {
             itemChoicesThree.includes(option.name) ||
             itemChoicesThree.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('fighterEquipmentThree', value.name)
           }
@@ -110,7 +108,6 @@ const FighterForm: React.FC = () => {
         <ItemSelectField
           name="fighterEquipmentFour"
           filter={(option: Item) => itemChoicesFour.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('fighterEquipmentFour', value.name)
           }
@@ -118,16 +115,14 @@ const FighterForm: React.FC = () => {
         <ItemSelectField
           name="fighterEquipmentFive"
           filter={(option: Item) => itemChoicesFive.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('fighterEquipmentFive', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select a fighting style:</p>
         <FightingStyleSelectField
           name="fighterFightingStyle"
           filter={() => true}
-          label="Select Fighting Style."
           onChange={(value: FightingStyle) =>
             setFieldValue('fighterFightingStyle', value)
           }

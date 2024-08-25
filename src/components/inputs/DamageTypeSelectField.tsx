@@ -7,13 +7,11 @@ const damageTypes = Object.values(DamageType);
 const DamageTypeSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: DamageType) => boolean;
-  label: string;
   onChange: (value: DamageType) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const DamageTypeSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

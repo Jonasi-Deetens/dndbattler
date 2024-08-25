@@ -7,13 +7,11 @@ const ideals = Object.values(Ideal);
 const IdealSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: Ideal) => boolean;
-  label: string;
   onChange: (value: Ideal) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const IdealSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

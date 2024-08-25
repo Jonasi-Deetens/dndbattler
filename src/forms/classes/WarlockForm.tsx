@@ -74,13 +74,15 @@ const WarlockForm: React.FC = () => {
       <h2 className="border p-2">WARLOCK</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="warlockSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.warlockSkillProficiencyTwo &&
             warlockSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('warlockSkillProficiencyOne', value)
           }
@@ -91,19 +93,17 @@ const WarlockForm: React.FC = () => {
             option !== values.warlockSkillProficiencyOne &&
             warlockSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('warlockSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="warlockEquipmentOne"
           filter={(option: Item) =>
             itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('warlockEquipmentOne', value.name)
           }
@@ -111,7 +111,6 @@ const WarlockForm: React.FC = () => {
         <ItemSelectField
           name="warlockEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('warlockEquipmentTwo', value.name)
           }
@@ -119,19 +118,17 @@ const WarlockForm: React.FC = () => {
         <ItemSelectField
           name="warlockEquipmentThree"
           filter={(option: Item) => itemChoicesThree.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('warlockEquipmentThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 warlock cantrips:</p>
         <SpellSelectField
           name="warlockCantripIdOne"
           spellClass="Warlock"
           filter={(option: Spell) =>
             option.spellLevel === 0 && option.id !== values.warlockCantripIdTwo
           }
-          label="Select 1 of the following warlock cantrips."
           onChange={(value: Spell) =>
             setFieldValue('warlockCantripIdOne', value.id)
           }
@@ -142,19 +139,17 @@ const WarlockForm: React.FC = () => {
           filter={(option: Spell) =>
             option.spellLevel === 0 && option.id !== values.warlockCantripIdOne
           }
-          label="Select 1 of the following warlock cantrips."
           onChange={(value: Spell) =>
             setFieldValue('warlockCantripIdTwo', value.id)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 warlock spells:</p>
         <SpellSelectField
           name="warlockSpellIdOne"
           spellClass="Warlock"
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.warlockSpellIdTwo
           }
-          label="Select 1 of the following warlock spells."
           onChange={(value: Spell) =>
             setFieldValue('warlockSpellIdOne', value.id)
           }
@@ -165,11 +160,9 @@ const WarlockForm: React.FC = () => {
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.warlockSpellIdOne
           }
-          label="Select 1 of the following warlock spells."
           onChange={(value: Spell) =>
             setFieldValue('warlockSpellIdTwo', value.id)
           }
-          noDivider={true}
         />
       </div>
     </div>

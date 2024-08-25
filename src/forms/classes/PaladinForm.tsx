@@ -41,13 +41,15 @@ const PaladinForm: React.FC = () => {
       <h2 className="border p-2">Paladin</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="paladinBonusSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.paladinBonusSkillProficiencyTwo &&
             paladinSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('paladinBonusSkillProficiencyOne', value)
           }
@@ -58,19 +60,17 @@ const PaladinForm: React.FC = () => {
             option !== values.paladinBonusSkillProficiencyOne &&
             paladinSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('paladinBonusSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 4 items:</p>
         <ItemSelectField
           name="paladinEquipmentOne"
           filter={(option: Item) =>
             itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('paladinEquipmentOne', value.name)
           }
@@ -81,7 +81,6 @@ const PaladinForm: React.FC = () => {
             itemChoicesTwo.includes(option.name) ||
             itemChoicesTwo.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('paladinEquipmentTwo', value.name)
           }
@@ -93,7 +92,6 @@ const PaladinForm: React.FC = () => {
             (itemChoicesThree.includes(option.type) &&
               option.rangeType === 'Melee')
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('paladinEquipmentThree', value.name)
           }
@@ -101,7 +99,6 @@ const PaladinForm: React.FC = () => {
         <ItemSelectField
           name="paladinEquipmentFour"
           filter={(option: Item) => itemChoicesFour.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('paladinEquipmentFour', value.name)
           }

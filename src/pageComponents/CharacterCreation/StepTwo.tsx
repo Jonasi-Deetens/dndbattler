@@ -113,9 +113,8 @@ const StepTwo: React.FC = () => {
     ? subraceFormComponents[subrace.name]
     : null;
   return (
-    <div>
+    <div className="flex flex-col gap-y-5">
       {RaceFormComponent && <RaceFormComponent />}
-      <hr className="border-dashed border-t-2 w-1/2 m-auto my-5" />
       {SubraceFormComponent && <SubraceFormComponent />}
     </div>
   );

@@ -41,22 +41,25 @@ const NatureDomainForm: React.FC = () => {
       <h2 className="border p-2">Nature Domain</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 1 extra skill proficiency:
+        </p>
         <SkillCheckSelectField
           name="natureDomainSkillProficiency"
           filter={(option: SkillCheck) =>
             natureDomainSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('natureDomainSkillProficiency', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">
+          Select 1 extra druid cantrip:
+        </p>
         <SpellSelectField
           name="natureDomainSpellIdOne"
           spellClass="Druid"
           filter={(option: Spell) => option.spellLevel === 0}
-          label="Select a druid cantrip."
           onChange={(value: Spell) =>
             setFieldValue('natureDomainSpellIdOne', value.id)
           }

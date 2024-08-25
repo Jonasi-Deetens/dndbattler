@@ -13,32 +13,6 @@ const StepThree: React.FC = () => {
   const [hasSubclasses, setHasSubclasses] = useState<boolean>(false);
   const [subclassAtLevelOne, setSubclassAtLevelOne] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (classes && classes.length > 0 && !values.classId) {
-      setFieldValue('classId', classes[0].id);
-    }
-  }, [classes, values.classId, setFieldValue]);
-
-  useEffect(() => {
-    const matchingSubclasses = subclasses.filter(
-      subclass => subclass.parentClassId === values.classId
-    );
-    setHasSubclasses(matchingSubclasses.length > 0);
-    if (
-      matchingSubclasses.length > 0 &&
-      !values.subclassId &&
-      subclassAtLevelOne
-    ) {
-      setFieldValue('subclassId', matchingSubclasses[0].id);
-    }
-  }, [
-    subclasses,
-    values.classId,
-    values.subclassId,
-    setFieldValue,
-    subclassAtLevelOne
-  ]);
-
   const handleClassSelect = (newClassId: number) => {
     const selectedClass = classes.find(
       charClass => charClass.id === newClassId
@@ -66,6 +40,34 @@ const StepThree: React.FC = () => {
     setFieldValue('subclassId', newSubclassId);
   };
 
+  useEffect(() => {
+    if (classes && classes.length > 0 && !values.classId) {
+      setFieldValue('classId', classes[0].id);
+    } else if (values.subclassId) {
+      setSubclassAtLevelOne(true);
+    }
+  }, [classes, values.classId, setFieldValue]);
+
+  useEffect(() => {
+    const matchingSubclasses = subclasses.filter(
+      subclass => subclass.parentClassId === values.classId
+    );
+    setHasSubclasses(matchingSubclasses.length > 0);
+    if (
+      matchingSubclasses.length > 0 &&
+      !values.subclassId &&
+      subclassAtLevelOne
+    ) {
+      setFieldValue('subclassId', matchingSubclasses[0].id);
+    }
+  }, [
+    subclasses,
+    values.classId,
+    values.subclassId,
+    setFieldValue,
+    subclassAtLevelOne
+  ]);
+
   return (
     <div className="flex flex-col gap-y-5">
       <h2 className="border p-2">Select your class</h2>
@@ -82,7 +84,7 @@ const StepThree: React.FC = () => {
                 <img
                   src={classImages[charClass.id]}
                   alt={charClass.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
+                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
                     values.classId === charClass.id
                       ? 'border-4 border-red-400 scale-110'
                       : 'border-0'
@@ -111,7 +113,7 @@ const StepThree: React.FC = () => {
                       <img
                         src={subclassImages[subclass.id]}
                         alt={subclass.name}
-                        className={`h-24 w-24 object-cover flex flex-col items-center hover:shadow-red-100 hover:shadow-md hover:scale-110 rounded-md ${
+                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
                           values.subclassId === subclass.id
                             ? 'border-4 border-red-400 scale-110'
                             : 'border-0'

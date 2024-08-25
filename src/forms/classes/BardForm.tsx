@@ -76,13 +76,15 @@ const BardForm: React.FC = () => {
       <h2 className="border p-2">BARD</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 3 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="bardBonusSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.bardBonusSkillProficiencyTwo &&
             option !== values.bardBonusSkillProficiencyThree
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('bardBonusSkillProficiencyOne', value)
           }
@@ -93,7 +95,6 @@ const BardForm: React.FC = () => {
             option !== values.bardBonusSkillProficiencyOne &&
             option !== values.bardBonusSkillProficiencyThree
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('bardBonusSkillProficiencyTwo', value)
           }
@@ -104,12 +105,11 @@ const BardForm: React.FC = () => {
             option !== values.bardBonusSkillProficiencyTwo &&
             option !== values.bardBonusSkillProficiencyOne
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('bardBonusSkillProficiencyThree', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="bardEquipmentOne"
           filter={(option: Item) =>
@@ -118,7 +118,6 @@ const BardForm: React.FC = () => {
             (itemChoicesOne.includes(option.name) ||
               itemChoicesOne.includes(option.type))
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('bardEquipmentOne', value.name)
           }
@@ -131,7 +130,6 @@ const BardForm: React.FC = () => {
             (itemChoicesTwo.includes(option.name) ||
               itemChoicesTwo.includes(option.type))
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('bardEquipmentTwo', value.name)
           }
@@ -144,12 +142,13 @@ const BardForm: React.FC = () => {
             (itemChoicesThree.includes(option.name) ||
               itemChoicesThree.includes(option.type))
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('bardEquipmentThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">
+          Select 3 musical proficiencies:
+        </p>
         <ItemSelectField
           name="bardBonusMusicalProficiencyOne"
           filter={(option: Item) =>
@@ -158,7 +157,6 @@ const BardForm: React.FC = () => {
             (itemChoicesThree.includes(option.name) ||
               itemChoicesThree.includes(option.type))
           }
-          label="Select musical proficiency."
           onChange={(value: Item) =>
             setFieldValue('bardBonusMusicalProficiencyOne', value.name)
           }
@@ -171,7 +169,6 @@ const BardForm: React.FC = () => {
             (itemChoicesThree.includes(option.name) ||
               itemChoicesThree.includes(option.type))
           }
-          label="Select musical proficiency."
           onChange={(value: Item) =>
             setFieldValue('bardBonusMusicalProficiencyTwo', value.name)
           }
@@ -184,12 +181,11 @@ const BardForm: React.FC = () => {
             (itemChoicesThree.includes(option.name) ||
               itemChoicesThree.includes(option.type))
           }
-          label="Select musical proficiency."
           onChange={(value: Item) =>
             setFieldValue('bardBonusMusicalProficiencyThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 bard cantrips:</p>
         <SpellSelectField
           name="bardBonusCantripIdOne"
           spellClass="Bard"
@@ -197,7 +193,6 @@ const BardForm: React.FC = () => {
             option.spellLevel === 0 &&
             option.id !== values.bardBonusCantripIdTwo
           }
-          label="Select 1 of the following bard cantrips."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusCantripIdOne', value.id)
           }
@@ -209,12 +204,11 @@ const BardForm: React.FC = () => {
             option.spellLevel === 0 &&
             option.id !== values.bardBonusCantripIdOne
           }
-          label="Select 1 of the following bard cantrips."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusCantripIdTwo', value.id)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 4 bard spells:</p>
         <SpellSelectField
           name="bardBonusSpellIdOne"
           spellClass="Bard"
@@ -224,7 +218,6 @@ const BardForm: React.FC = () => {
             option.id !== values.bardBonusSpellIdThree &&
             option.id !== values.bardBonusSpellIdFour
           }
-          label="Select 1 of the following bard spells."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusSpellIdOne', value.id)
           }
@@ -238,7 +231,6 @@ const BardForm: React.FC = () => {
             option.id !== values.bardBonusSpellIdThree &&
             option.id !== values.bardBonusSpellIdFour
           }
-          label="Select 1 of the following bard spells."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusSpellIdTwo', value.id)
           }
@@ -252,7 +244,6 @@ const BardForm: React.FC = () => {
             option.id !== values.bardBonusSpellIdTwo &&
             option.id !== values.bardBonusSpellIdFour
           }
-          label="Select 1 of the following bard spells."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusSpellIdThree', value.id)
           }
@@ -266,7 +257,6 @@ const BardForm: React.FC = () => {
             option.id !== values.bardBonusSpellIdTwo &&
             option.id !== values.bardBonusSpellIdThree
           }
-          label="Select 1 of the following bard spells."
           onChange={(value: Spell) =>
             setFieldValue('bardBonusSpellIdFour', value.id)
           }

@@ -6,13 +6,11 @@ import useItems from '../../hooks/useItems';
 const ItemSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: Item) => boolean;
-  label: string;
   onChange: (value: Item) => void;
   noDivider?: boolean;
 }) => {
@@ -20,7 +18,6 @@ const ItemSelectField = ({
   const { values } = useFormikContext<NewCharacter>();
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

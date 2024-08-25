@@ -7,13 +7,11 @@ const flaws = Object.values(Flaw);
 const FlawSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: Flaw) => boolean;
-  label: string;
   onChange: (value: Flaw) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const FlawSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

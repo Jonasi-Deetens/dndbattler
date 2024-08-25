@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import {
   NewCharacter,
@@ -39,7 +39,9 @@ const BackgroundForm: React.FC = () => {
   return (
     <div className="flex flex-col gap-y-5">
       <div className="w-1/2 m-auto">
-        <label className="border-b p-2 w-fit m-auto">Background</label>
+        <p className="border-b p-2 w-fit m-auto">
+          Tell us about your characters background:
+        </p>
         <Field
           as="textarea"
           name="characterBackground"
@@ -47,68 +49,60 @@ const BackgroundForm: React.FC = () => {
           className="p-1 text-gray-500 mt-5 w-full"
           placeholder="E.g. Soldier from fortuna..."
         />
-        <ErrorMessage
-          name="characterBackground"
-          component="div"
-          className="error"
-        />
-        <hr className="border-dotted border-t-8 w-1/4 m-auto my-5" />
+        <p className="border-b p-2 w-fit m-auto">Choose your alignment:</p>
         <AlignmentSelectField
           name="characterAlignment"
-          label="Select your alignment"
           onChange={(value: Alignment) =>
             setFieldValue('characterAlignment', value)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 ideals:</p>
         <IdealSelectField
           name="characterIdealOne"
           filter={(option: Ideal) => option !== values.characterIdealTwo}
-          label="Select your first ideal"
           onChange={(value: Ideal) => setFieldValue('characterIdealOne', value)}
         />
         <IdealSelectField
           name="characterIdealTwo"
           filter={(option: Ideal) => option !== values.characterIdealOne}
-          label="Select your second ideal"
           onChange={(value: Ideal) => setFieldValue('characterIdealTwo', value)}
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 bonds:</p>
         <BondSelectField
           name="characterBondOne"
           filter={(option: Bond) => option !== values.characterBondTwo}
-          label="Select your first bond"
           onChange={(value: Bond) => setFieldValue('characterBondOne', value)}
         />
         <BondSelectField
           name="characterBondTwo"
           filter={(option: Bond) => option !== values.characterBondOne}
-          label="Select your second bond"
           onChange={(value: Bond) => setFieldValue('characterBondTwo', value)}
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 flaws:</p>
         <FlawSelectField
           name="characterFlawOne"
           filter={(option: Flaw) => option !== values.characterFlawTwo}
-          label="Select your first flaw"
           onChange={(value: Flaw) => setFieldValue('characterFlawOne', value)}
         />
         <FlawSelectField
           name="characterFlawTwo"
           filter={(option: Flaw) => option !== values.characterFlawOne}
-          label="Select your second flaw"
           onChange={(value: Flaw) => setFieldValue('characterFlawTwo', value)}
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 fears:</p>
         <FearSelectField
           name="characterFearOne"
           filter={(option: Fear) => option !== values.characterFearTwo}
-          label="Select your first fear"
           onChange={(value: Fear) => setFieldValue('characterFearOne', value)}
         />
         <FearSelectField
           name="characterFearTwo"
           filter={(option: Fear) => option !== values.characterFearOne}
-          label="Select your second fear"
           onChange={(value: Fear) => setFieldValue('characterFearTwo', value)}
         />
-        <label className="border-b p-2 w-fit m-auto">Backstory</label>
+        <p className="border-b p-2 w-fit m-auto">
+          Tell us about your characters backstory:
+        </p>
         <Field
           as="textarea"
           name="characterBackstory"
@@ -116,24 +110,15 @@ const BackgroundForm: React.FC = () => {
           className="p-1 text-gray-500 mt-5 w-full"
           placeholder="What's the story behind your character?"
         />
-        <ErrorMessage
-          name="characterBackstory"
-          component="div"
-          className="error"
-        />
-
-        <label className="border-b p-2 w-fit m-auto">Appearance</label>
+        <p className="border-b p-2 w-fit m-auto">
+          Tell us about your characters appearance:
+        </p>
         <Field
           as="textarea"
           name="characterAppearance"
           aria-label="Appearance"
           className="p-1 text-gray-500 mt-5 w-full"
           placeholder="E.g. Orc that looks like a unicorn, but green and ugly..."
-        />
-        <ErrorMessage
-          name="characterAppearance"
-          component="div"
-          className="error"
         />
       </div>
     </div>

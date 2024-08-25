@@ -161,11 +161,8 @@ const StepFour: React.FC = () => {
       ? subclassFormComponents[subclass.name]
       : null;
   return (
-    <div>
+    <div className="flex flex-col gap-y-5">
       {ClassFormComponent && <ClassFormComponent />}
-      {charClass?.subClassAvailableAtLevel === 1 && (
-        <hr className="border-dashed border-t-2 w-1/2 m-auto my-5" />
-      )}
       {SubclassFormComponent && <SubclassFormComponent />}
     </div>
   );

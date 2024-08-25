@@ -7,13 +7,11 @@ const skillChecks = Object.values(SkillCheck);
 const SkillCheckSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: SkillCheck) => boolean;
-  label: string;
   onChange: (value: SkillCheck) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const SkillCheckSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

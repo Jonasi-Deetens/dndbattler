@@ -64,13 +64,15 @@ const ClericForm: React.FC = () => {
       <h2 className="border p-2">CLERIC</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="clericSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.clericSkillProficiencyTwo &&
             clericSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('clericSkillProficiencyOne', value)
           }
@@ -81,15 +83,14 @@ const ClericForm: React.FC = () => {
             option !== values.clericSkillProficiencyOne &&
             clericSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('clericSkillProficiencyTwo', value)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 4 items:</p>
         <ItemSelectField
           name="clericEquipmentOne"
           filter={(option: Item) => itemChoicesOne.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('clericEquipmentOne', value.name)
           }
@@ -97,7 +98,6 @@ const ClericForm: React.FC = () => {
         <ItemSelectField
           name="clericEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('clericEquipmentTwo', value.name)
           }
@@ -108,7 +108,6 @@ const ClericForm: React.FC = () => {
             itemChoicesThree.includes(option.name) ||
             itemChoicesThree.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('clericEquipmentThree', value.name)
           }
@@ -116,11 +115,11 @@ const ClericForm: React.FC = () => {
         <ItemSelectField
           name="clericEquipmentFour"
           filter={(option: Item) => itemChoicesFour.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('clericEquipmentFour', value.name)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 3 cleric cantrips:</p>
         <SpellSelectField
           name="clericCantripIdOne"
           spellClass="Cleric"
@@ -129,7 +128,6 @@ const ClericForm: React.FC = () => {
             option.id !== values.clericCantripIdTwo &&
             option.id !== values.clericCantripIdThree
           }
-          label="Select 1 of the following cleric cantrips."
           onChange={(value: Spell) =>
             setFieldValue('clericCantripIdOne', value.id)
           }
@@ -142,7 +140,6 @@ const ClericForm: React.FC = () => {
             option.id !== values.clericCantripIdOne &&
             option.id !== values.clericCantripIdThree
           }
-          label="Select 1 of the following cleric cantrips."
           onChange={(value: Spell) =>
             setFieldValue('clericCantripIdTwo', value.id)
           }
@@ -155,7 +152,6 @@ const ClericForm: React.FC = () => {
             option.id !== values.clericCantripIdOne &&
             option.id !== values.clericCantripIdTwo
           }
-          label="Select 1 of the following cleric cantrips."
           onChange={(value: Spell) =>
             setFieldValue('clericCantripIdThree', value.id)
           }

@@ -80,13 +80,15 @@ const WizardForm: React.FC = () => {
       <h2 className="border p-2">WIZARD</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="wizardSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.wizardSkillProficiencyTwo &&
             wizardSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('wizardSkillProficiencyOne', value)
           }
@@ -97,16 +99,14 @@ const WizardForm: React.FC = () => {
             option !== values.wizardSkillProficiencyOne &&
             wizardSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('wizardSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 items:</p>
         <ItemSelectField
           name="wizardEquipmentOne"
           filter={(option: Item) => itemChoicesOne.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('wizardEquipmentOne', value.name)
           }
@@ -114,7 +114,6 @@ const WizardForm: React.FC = () => {
         <ItemSelectField
           name="wizardEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('wizardEquipmentTwo', value.name)
           }
@@ -122,12 +121,11 @@ const WizardForm: React.FC = () => {
         <ItemSelectField
           name="wizardEquipmentThree"
           filter={(option: Item) => itemChoicesThree.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('wizardEquipmentThree', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 3 wizard cantrips:</p>
         <SpellSelectField
           name="wizardCantripIdOne"
           spellClass="Wizard"
@@ -136,7 +134,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardCantripIdTwo &&
             option.id !== values.wizardCantripIdThree
           }
-          label="Select 1 of the following wizard cantrips."
           onChange={(value: Spell) =>
             setFieldValue('wizardCantripIdOne', value.id)
           }
@@ -149,7 +146,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardCantripIdOne &&
             option.id !== values.wizardCantripIdThree
           }
-          label="Select 1 of the following wizard cantrips."
           onChange={(value: Spell) =>
             setFieldValue('wizardCantripIdTwo', value.id)
           }
@@ -162,12 +158,11 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardCantripIdOne &&
             option.id !== values.wizardCantripIdTwo
           }
-          label="Select 1 of the following wizard cantrips."
           onChange={(value: Spell) =>
             setFieldValue('wizardCantripIdThree', value.id)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 6 wizard spells:</p>
         <SpellSelectField
           name="wizardSpellIdOne"
           spellClass="Wizard"
@@ -179,7 +174,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFive &&
             option.id !== values.wizardSpellIdSix
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdOne', value.id)
           }
@@ -195,7 +189,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFive &&
             option.id !== values.wizardSpellIdSix
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdTwo', value.id)
           }
@@ -211,7 +204,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFive &&
             option.id !== values.wizardSpellIdSix
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdThree', value.id)
           }
@@ -227,7 +219,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFive &&
             option.id !== values.wizardSpellIdSix
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdFour', value.id)
           }
@@ -243,7 +234,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFour &&
             option.id !== values.wizardSpellIdSix
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdFive', value.id)
           }
@@ -259,7 +249,6 @@ const WizardForm: React.FC = () => {
             option.id !== values.wizardSpellIdFour &&
             option.id !== values.wizardSpellIdFive
           }
-          label="Select 1 of the following wizard spells."
           onChange={(value: Spell) =>
             setFieldValue('wizardSpellIdSix', value.id)
           }

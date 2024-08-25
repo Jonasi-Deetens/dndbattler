@@ -69,13 +69,15 @@ const DruidForm: React.FC = () => {
       <h2 className="border p-2">DRUID</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="druidSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.druidSkillProficiencyTwo &&
             druidSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('druidSkillProficiencyOne', value)
           }
@@ -86,18 +88,17 @@ const DruidForm: React.FC = () => {
             option !== values.druidSkillProficiencyOne &&
             druidSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('druidSkillProficiencyTwo', value)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 items:</p>
         <ItemSelectField
           name="druidEquipmentOne"
           filter={(option: Item) =>
             itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('druidEquipmentOne', value.name)
           }
@@ -109,18 +110,17 @@ const DruidForm: React.FC = () => {
             (itemChoicesTwo.includes(option.type) &&
               option.rangeType === 'Melee')
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('druidEquipmentTwo', value.name)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 druid cantrips:</p>
         <SpellSelectField
           name="druidCantripIdOne"
           spellClass="Druid"
           filter={(option: Spell) =>
             option.spellLevel === 0 && option.id !== values.druidCantripIdTwo
           }
-          label="Select 1 of the following druid cantrips."
           onChange={(value: Spell) =>
             setFieldValue('druidCantripIdOne', value.id)
           }
@@ -131,18 +131,17 @@ const DruidForm: React.FC = () => {
           filter={(option: Spell) =>
             option.spellLevel === 0 && option.id !== values.druidCantripIdOne
           }
-          label="Select 1 of the following druid cantrips."
           onChange={(value: Spell) =>
             setFieldValue('druidCantripIdTwo', value.id)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 druid spells:</p>
         <SpellSelectField
           name="druidSpellIdOne"
           spellClass="Druid"
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.druidSpellIdTwo
           }
-          label="Select 1 of the following druid spells."
           onChange={(value: Spell) =>
             setFieldValue('druidSpellIdOne', value.id)
           }
@@ -153,7 +152,6 @@ const DruidForm: React.FC = () => {
           filter={(option: Spell) =>
             option.spellLevel === 1 && option.id !== values.druidSpellIdOne
           }
-          label="Select 1 of the following druid spells."
           onChange={(value: Spell) =>
             setFieldValue('druidSpellIdTwo', value.id)
           }

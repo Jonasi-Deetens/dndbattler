@@ -38,13 +38,15 @@ const MonkForm: React.FC = () => {
       <h2 className="border p-2">Monk</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="monkSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.monkSkillProficiencyTwo &&
             monkSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('monkSkillProficiencyOne', value)
           }
@@ -55,19 +57,17 @@ const MonkForm: React.FC = () => {
             option !== values.monkSkillProficiencyOne &&
             monkSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('monkSkillProficiencyTwo', value)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select 2 items:</p>
         <ItemSelectField
           name="monkEquipmentOne"
           filter={(option: Item) =>
             itemChoicesOne.includes(option.name) ||
             itemChoicesOne.includes(option.type)
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('monkEquipmentOne', value.name)
           }
@@ -75,19 +75,17 @@ const MonkForm: React.FC = () => {
         <ItemSelectField
           name="monkEquipmentTwo"
           filter={(option: Item) => itemChoicesTwo.includes(option.name)}
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('monkEquipmentTwo', value.name)
           }
         />
-
+        <p className="border-b p-2 w-fit m-auto">Select tool proficiency:</p>
         <ItemSelectField
           name="monkProficiency"
           filter={(option: Item) =>
             proficiencyChoices.includes(option.name) ||
             proficiencyChoices.includes(option.type)
           }
-          label="Select item proficiency."
           onChange={(value: Item) =>
             setFieldValue('monkProficiency', value.name)
           }

@@ -7,13 +7,11 @@ const fightingStyles = Object.values(FightingStyle);
 const FightingStyleSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: FightingStyle) => boolean;
-  label: string;
   onChange: (value: FightingStyle) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const FightingStyleSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

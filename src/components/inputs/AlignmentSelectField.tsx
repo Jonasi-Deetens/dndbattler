@@ -6,12 +6,10 @@ const alignments = Object.values(Alignment);
 
 const AlignmentSelectField = ({
   name,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
-  label: string;
   onChange: (value: Alignment) => void;
   noDivider?: boolean;
 }) => {
@@ -19,7 +17,6 @@ const AlignmentSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

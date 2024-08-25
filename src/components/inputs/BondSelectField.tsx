@@ -7,13 +7,11 @@ const bonds = Object.values(Bond);
 const BondSelectField = ({
   name,
   filter,
-  label,
   onChange,
-  noDivider = false
+  noDivider = true
 }: {
   name: string;
   filter: (option: Bond) => boolean;
-  label: string;
   onChange: (value: Bond) => void;
   noDivider?: boolean;
 }) => {
@@ -21,7 +19,6 @@ const BondSelectField = ({
 
   return (
     <>
-      <p className="border-b p-2 w-fit m-auto">{label}</p>
       <Field
         as="select"
         name={name}

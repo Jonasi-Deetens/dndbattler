@@ -41,13 +41,15 @@ const BarbarianForm: React.FC = () => {
       <h2 className="border p-2">Barbarian</h2>
 
       <div className="w-1/2 m-auto">
+        <p className="border-b p-2 w-fit m-auto">
+          Select 2 skill proficiencies:
+        </p>
         <SkillCheckSelectField
           name="barbarianBonusSkillProficiencyOne"
           filter={(option: SkillCheck) =>
             option !== values.barbarianBonusSkillProficiencyTwo &&
             barbarianSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('barbarianBonusSkillProficiencyOne', value)
           }
@@ -58,11 +60,11 @@ const BarbarianForm: React.FC = () => {
             option !== values.barbarianBonusSkillProficiencyOne &&
             barbarianSkillChoices.includes(option)
           }
-          label="Select skill proficiency."
           onChange={(value: SkillCheck) =>
             setFieldValue('barbarianBonusSkillProficiencyTwo', value)
           }
         />
+        <p className="border-b p-2 w-fit m-auto">Select 2 items:</p>
         <ItemSelectField
           name="barbarianEquipmentOne"
           filter={(option: Item) =>
@@ -71,7 +73,6 @@ const BarbarianForm: React.FC = () => {
               itemChoicesOne.includes(option.type)) &&
             option.rangeType === 'Melee'
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('barbarianEquipmentOne', value.name)
           }
@@ -83,7 +84,6 @@ const BarbarianForm: React.FC = () => {
             (itemChoicesTwo.includes(option.name) ||
               itemChoicesTwo.includes(option.type))
           }
-          label="Select equipment."
           onChange={(value: Item) =>
             setFieldValue('barbarianEquipmentTwo', value.name)
           }
