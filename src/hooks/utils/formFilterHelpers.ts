@@ -7,8 +7,8 @@ import {
   NewCharacter,
   Sense,
   Skill,
-  Spell,
-} from "../../types/DBTypes";
+  Spell
+} from '../../types/DBTypes';
 
 interface Stats {
   [key: string]: number;
@@ -44,9 +44,9 @@ export const addUniqueLanguages = (
   list: Language[],
   formValues: NewCharacter
 ) => {
-  list.forEach((language) => {
+  list.forEach(language => {
     const isLanguageInForm = formValues.languages.some(
-      (formLanguage) => formLanguage.id === language.id
+      formLanguage => formLanguage.id === language.id
     );
 
     if (!isLanguageInForm) {
@@ -56,9 +56,9 @@ export const addUniqueLanguages = (
 };
 
 export const addUniqueSenses = (list: Sense[], formValues: NewCharacter) => {
-  list.forEach((sense) => {
+  list.forEach(sense => {
     const isSenseInForm = formValues.senses.some(
-      (formSense) => formSense.id === sense.id
+      formSense => formSense.id === sense.id
     );
 
     if (!isSenseInForm) {
@@ -71,9 +71,9 @@ export const addUniqueMagicSavingThrows = (
   list: AbilityScore[],
   formValues: NewCharacter
 ) => {
-  list.forEach((savingThrow) => {
+  list.forEach(savingThrow => {
     const isSavingThrowInForm = formValues.magicSavingThrows.some(
-      (formSavingThrow) => formSavingThrow === savingThrow
+      formSavingThrow => formSavingThrow === savingThrow
     );
 
     if (!isSavingThrowInForm) {
@@ -83,9 +83,9 @@ export const addUniqueMagicSavingThrows = (
 };
 
 export const addUniqueSpells = (list: Spell[], formValues: NewCharacter) => {
-  list.forEach((spell) => {
+  list.forEach(spell => {
     const isSpellInForm = formValues.spells.some(
-      (formSpell) => formSpell.id === spell.id
+      formSpell => formSpell.id === spell.id
     );
 
     if (!isSpellInForm) {
@@ -95,9 +95,9 @@ export const addUniqueSpells = (list: Spell[], formValues: NewCharacter) => {
 };
 
 export const addUniqueSkills = (list: Skill[], formValues: NewCharacter) => {
-  list.forEach((skill) => {
+  list.forEach(skill => {
     const isSkillInForm = formValues.skills.some(
-      (formSkill) => formSkill.id === skill.id
+      formSkill => formSkill.id === skill.id
     );
 
     if (!isSkillInForm) {
@@ -110,9 +110,9 @@ export const addUniqueAbilities = (
   list: Ability[],
   formValues: NewCharacter
 ) => {
-  list.forEach((ability) => {
+  list.forEach(ability => {
     const isAbilityInForm = formValues.abilities.some(
-      (formAbility) => formAbility.id === ability.id
+      formAbility => formAbility.id === ability.id
     );
 
     if (!isAbilityInForm) {
@@ -125,7 +125,7 @@ export const addUniqueProficiencies = (
   proficiencies: string[],
   formValues: NewCharacter
 ) => {
-  proficiencies.forEach((proficiency) => {
+  proficiencies.forEach(proficiency => {
     if (!formValues.proficiencies.includes(proficiency)) {
       formValues.proficiencies.push(proficiency);
     }
@@ -136,7 +136,7 @@ export const addUniqueSavingThrows = (
   savingThrows: AbilityScore[],
   formValues: NewCharacter
 ) => {
-  savingThrows.forEach((proficiency) => {
+  savingThrows.forEach(proficiency => {
     if (!formValues.savingThrows.includes(proficiency)) {
       formValues.savingThrows.push(proficiency);
     }
@@ -147,7 +147,7 @@ export const addUniqueResistances = (
   proficiencies: string[],
   formValues: NewCharacter
 ) => {
-  proficiencies.forEach((proficiency) => {
+  proficiencies.forEach(proficiency => {
     if (!formValues.proficiencies.includes(proficiency)) {
       formValues.proficiencies.push(proficiency);
     }
@@ -158,7 +158,7 @@ export const addUniqueAdvantages = (
   advantages: string[],
   formValues: NewCharacter
 ) => {
-  advantages.forEach((advantage) => {
+  advantages.forEach(advantage => {
     if (!formValues.advantages.includes(advantage)) {
       formValues.advantages.push(advantage);
     }
@@ -169,7 +169,7 @@ export const addUniqueDisadvantages = (
   disadvantages: string[],
   formValues: NewCharacter
 ) => {
-  disadvantages.forEach((disadvantages) => {
+  disadvantages.forEach(disadvantages => {
     if (!formValues.advantages.includes(disadvantages)) {
       formValues.advantages.push(disadvantages);
     }
@@ -177,7 +177,7 @@ export const addUniqueDisadvantages = (
 };
 
 export const addItems = (items: Item[], formValues: NewCharacter) => {
-  items.forEach((item) => {
+  items.forEach(item => {
     formValues.items.push(item);
   });
 };
@@ -188,7 +188,19 @@ export const addItemByName = (
   items: Item[]
 ) => {
   if (items) {
-    const item = items?.find((item) => item.name === name);
+    const item = items?.find(item => item.name === name);
+    if (item) addItems([item], formValues);
+    else addItemByType(name, formValues, items);
+  }
+};
+
+export const addItemByType = (
+  type: string,
+  formValues: NewCharacter,
+  items: Item[]
+) => {
+  if (items) {
+    const item = items?.find(item => item.type === type);
     if (item) addItems([item], formValues);
   }
 };
@@ -198,7 +210,7 @@ export const addItemsByName = (
   formValues: NewCharacter,
   items: Item[]
 ) => {
-  names.forEach((name) => {
+  names.forEach(name => {
     addItemByName(name, formValues, items);
   });
 };
@@ -209,7 +221,7 @@ export const addLanguageById = (
   languages: Language[]
 ) => {
   if (languages) {
-    const language = languages?.find((language) => language.id === id);
+    const language = languages?.find(language => language.id === id);
     if (language) addUniqueLanguages([language], formValues);
   }
 };
@@ -219,7 +231,7 @@ export const addLanguagesById = (
   formValues: NewCharacter,
   languages: Language[]
 ) => {
-  ids.forEach((id) => {
+  ids.forEach(id => {
     addLanguageById(id, formValues, languages);
   });
 };
@@ -230,7 +242,7 @@ export const addSpellById = (
   spells: Spell[]
 ) => {
   if (spells) {
-    const spell = spells?.find((spell) => spell.id === id);
+    const spell = spells?.find(spell => spell.id === id);
     if (spell) addUniqueSpells([spell], formValues);
   }
 };
@@ -240,7 +252,7 @@ export const addSpellsById = (
   formValues: NewCharacter,
   spells: Spell[]
 ) => {
-  ids.forEach((id) => {
+  ids.forEach(id => {
     addSpellById(id, formValues, spells);
   });
 };
@@ -251,7 +263,7 @@ export const addAbilityByName = (
   abilities: Ability[]
 ) => {
   if (abilities) {
-    const ability = abilities?.find((ability) => ability.name === name);
+    const ability = abilities?.find(ability => ability.name === name);
     if (ability) addUniqueAbilities([ability], formValues);
   }
 };
@@ -262,7 +274,7 @@ export const addAbilitiesByName = (
   abilities: Ability[]
 ) => {
   console.log(names);
-  names.forEach((name) => {
+  names.forEach(name => {
     console.log(name);
     addAbilityByName(name, formValues, abilities);
   });
@@ -274,7 +286,7 @@ export const addSkillByName = (
   skills: Skill[]
 ) => {
   if (skills) {
-    const skill = skills?.find((skill) => skill.name === name);
+    const skill = skills?.find(skill => skill.name === name);
     if (skill) addUniqueSkills([skill], formValues);
   }
 };
@@ -285,7 +297,7 @@ export const addSkillsByName = (
   skills: Skill[]
 ) => {
   console.log(names);
-  names.forEach((name) => {
+  names.forEach(name => {
     addSkillByName(name, formValues, skills);
   });
 };
@@ -296,7 +308,7 @@ export const addUniqueSpellByName = (
   spells: Spell[]
 ) => {
   if (spells) {
-    const spell = spells?.find((spell) => spell.name === name);
+    const spell = spells?.find(spell => spell.name === name);
     if (spell) addUniqueSpells([spell], formValues);
   }
 };
@@ -307,9 +319,9 @@ export const addUniqueSpellsByName = (
   spells: Spell[]
 ) => {
   if (names) {
-    names.forEach((name) => {
+    names.forEach(name => {
       const isSpellInForm = formValues.spells.some(
-        (spell) => spell.name === name
+        spell => spell.name === name
       );
 
       if (!isSpellInForm) {
