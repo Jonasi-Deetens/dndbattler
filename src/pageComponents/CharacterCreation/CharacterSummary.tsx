@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 import { useEffect, useState } from 'react';
 import useRaceImages from '../../hooks/useRaceImages';
 import {
@@ -115,11 +115,13 @@ const CharacterSummary: React.FC = () => {
         placeholder="Name"
         aria-label="Name"
         autoComplete="name"
-        className="p-1 text-gray-500 mb-4 mt-1"
+        className="p-1 text-gray-500 mb-2 mt-1 border border-black"
       />
-      <ErrorMessage name="name" component="div" className="error" />
-
-      <img className="w-32 h-32 border-2 border-black" src={raceImage} alt="" />
+      <img
+        className="w-32 h-32 mt-2 border-2 border-black"
+        src={raceImage}
+        alt=""
+      />
       {race &&
         (subrace ? (
           <div>

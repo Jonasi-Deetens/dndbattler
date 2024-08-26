@@ -143,6 +143,7 @@ const useFormFilter = () => {
             charisma: 1
           },
           raceId: formData.raceId,
+          subraceId: formData.subraceId || undefined,
           userId: formData.userId,
           classId: formData.classId,
           subclassId: formData.subclassId,

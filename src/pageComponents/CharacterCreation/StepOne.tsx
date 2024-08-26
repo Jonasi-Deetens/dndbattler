@@ -51,10 +51,10 @@ const StepOne: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-y-5">
-      <div className="flex justify-center items-center gap-4">
+      <div className="flex justify-center items-center gap-10">
         <button
           type="button"
-          className={`p-2 rounded-full border ${
+          className={`p-2 rounded-full border-4 ${
             values.gender === 'male' ? 'bg-blue-500 text-white' : 'bg-gray-200'
           }`}
           onClick={() => handleGenderChange('male')}
@@ -63,7 +63,7 @@ const StepOne: React.FC = () => {
         </button>
         <button
           type="button"
-          className={`p-2 rounded-full border ${
+          className={`p-2 rounded-full border-4 ${
             values.gender === 'female'
               ? 'bg-pink-500 text-white'
               : 'bg-gray-200'
@@ -74,7 +74,7 @@ const StepOne: React.FC = () => {
         </button>
       </div>
       <h2 className="border p-2">Select your race</h2>
-      <div className="flex flex-wrap w-full justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-10">
         {races &&
           races.map(race => (
             <div className="flex flex-col">
@@ -82,36 +82,36 @@ const StepOne: React.FC = () => {
                 key={race.id}
                 type="button"
                 onClick={() => handleRaceSelect(race.id)}
-                className="bg-transparent border-0"
+                className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
               >
                 <img
                   src={raceImages[race.id][values.gender as 'male' | 'female']}
                   alt={race.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
+                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150  ${
                     values.raceId === race.id
-                      ? 'border-4 border-red-400 scale-110'
+                      ? 'border-4 border-red-500 '
                       : 'border-0'
                   }`}
                 />
               </button>
-              <span>{race.name}</span>
+              <span className="mt-2">{race.name}</span>
             </div>
           ))}
       </div>
       {hasSubraces && (
         <div>
           <h2 className="border p-2 mb-5">Select your subrace</h2>
-          <div className="flex justify-around w-full gap-4">
+          <div className="flex flex-wrap justify-center gap-10">
             {subraces &&
               subraces
                 .filter(subrace => subrace.parentRaceId === values.raceId)
                 .map(subrace => (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col w-32">
                     <button
                       key={subrace.id}
                       type="button"
                       onClick={() => handleSubraceSelect(subrace.id)}
-                      className="bg-transparent border-0"
+                      className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
                     >
                       <img
                         src={
@@ -120,14 +120,14 @@ const StepOne: React.FC = () => {
                           ]
                         }
                         alt={subrace.name}
-                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
+                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150 ${
                           values.subraceId === subrace.id
-                            ? 'border-4 border-red-400 scale-110'
+                            ? 'border-4 border-red-500'
                             : 'border-0'
                         }`}
                       />
                     </button>
-                    <span>{subrace.name}</span>
+                    <span className="mt-2">{subrace.name}</span>
                   </div>
                 ))}
           </div>

@@ -71,7 +71,7 @@ const StepThree: React.FC = () => {
   return (
     <div className="flex flex-col gap-y-5">
       <h2 className="border p-2">Select your class</h2>
-      <div className="flex flex-wrap w-full justify-center gap-4">
+      <div className="flex flex-wrap w-full justify-center gap-10">
         {classes &&
           classes.map(charClass => (
             <div className="flex flex-col">
@@ -79,48 +79,48 @@ const StepThree: React.FC = () => {
                 key={charClass.id}
                 type="button"
                 onClick={() => handleClassSelect(charClass.id)}
-                className="bg-transparent border-0"
+                className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
               >
                 <img
                   src={classImages[charClass.id]}
                   alt={charClass.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
+                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150 ${
                     values.classId === charClass.id
-                      ? 'border-4 border-red-400 scale-110'
+                      ? 'border-4 border-red-500'
                       : 'border-0'
                   }`}
                 />
               </button>
-              <span>{charClass.name}</span>
+              <span className="mt-2">{charClass.name}</span>
             </div>
           ))}
       </div>
       {hasSubclasses && subclassAtLevelOne && (
         <>
           <h2 className="border p-2">Select your subclass</h2>
-          <div className="flex flex-wrap w-full justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-10">
             {subclasses &&
               subclasses
                 .filter(option => option.parentClassId === values.classId)
                 .map(subclass => (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col w-32">
                     <button
                       key={subclass.id}
                       type="button"
                       onClick={() => handleSubclassSelect(subclass.id)}
-                      className="bg-transparent border-0"
+                      className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
                     >
                       <img
                         src={subclassImages[subclass.id]}
                         alt={subclass.name}
-                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm border-red-400 hover:border-4 hover:!scale-110 rounded-md ${
+                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150 ${
                           values.subclassId === subclass.id
-                            ? 'border-4 border-red-400 scale-110'
+                            ? 'border-4 border-red-500'
                             : 'border-0'
                         }`}
                       />
                     </button>
-                    <span>{subclass.name}</span>
+                    <span className="mt-2">{subclass.name}</span>
                   </div>
                 ))}
           </div>

@@ -1,4 +1,4 @@
-import { Form, Formik, FormikConfig } from 'formik';
+import { ErrorMessage, Form, Formik, FormikConfig } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import useCharacters from '../../hooks/useCharacters';
@@ -148,8 +148,11 @@ const CharacterCreate: React.FC = () => {
                       {step !== 1 && (
                         <button
                           type="button"
-                          onClick={() => setStep(step - 1)}
-                          className="border-2 border-black"
+                          onClick={e => {
+                            e.preventDefault();
+                            setStep(step - 1);
+                          }}
+                          className="border-4"
                           disabled={isLoading}
                         >
                           Previous
@@ -159,24 +162,32 @@ const CharacterCreate: React.FC = () => {
                         <button
                           type="submit"
                           disabled={isLoading}
-                          className="border-2 border-black"
+                          className="border-4"
                         >
                           {isLoading ? 'Creating...' : 'Create'}
                         </button>
                       ) : (
                         <button
                           type="button"
-                          className="border-2 border-black"
-                          onClick={() => setStep(step + 1)}
+                          className="border-4"
+                          onClick={e => {
+                            e.preventDefault();
+                            setStep(step + 1);
+                          }}
                           disabled={isLoading}
                         >
                           Next
                         </button>
                       )}
                     </div>
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="error"
+                    />
                     <button
                       type="button"
-                      className="bg-transparent"
+                      className="bg-transparent border-0 hover:border-0 hover:underline"
                       onClick={() => {
                         navigate('/characterSelect');
                       }}

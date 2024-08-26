@@ -1,33 +1,52 @@
-import React from "react";
-import { Character } from "../types/DBTypes";
+import React, { useEffect, useState } from 'react';
+import { Character } from '../types/DBTypes';
+import useRaceImages from '../hooks/useRaceImages';
 
 const CharacterSelectCard: React.FC<{ character: Character }> = ({
-  character,
+  character
 }) => {
+  const [raceImage, setRaceImage] = useState<string>();
+  const { getImageByRaceAndGender } = useRaceImages();
+
+  const handleCharacterDetails = ({ character }: { character: Character }) => {
+    console.log(character.id);
+    console.log(character.subraceId);
+  };
+
+  useEffect(() => {
+    if (character.raceId && character.classId) {
+      let rImage: string = '';
+      if (character.subraceId) {
+        rImage = getImageByRaceAndGender({
+          raceId: character.raceId,
+          subraceId: character.subraceId,
+          gender: character.gender
+        });
+      } else
+        rImage = getImageByRaceAndGender({
+          raceId: character.raceId,
+          gender: character.gender
+        });
+      setRaceImage(rImage);
+    }
+  }, []);
+
   return (
-    <div className="border-4 rounded-md drop-shadow-md border-red-400 p-5">
-      <p className="text-xl">{character.name}</p>
-      <hr className="my-2" />
-      <section className="flex gap-x-4 text-left">
-        <div>
-          <ul className="text-sm">
-            <li>HP: {character.stats.hp}</li>
-            <li>Max HP: {character.stats.maxHp}</li>
-            <li>Level: {character.stats.level}</li>
-            <li>Armor Class: {character.stats.ac}</li>
-          </ul>
-        </div>
-        <div>
-          <ul className="text-sm">
-            <li>STR: {character.stats.strength}</li>
-            <li>DEX: {character.stats.dexterity}</li>
-            <li>CON: {character.stats.constitution}</li>
-            <li>INT: {character.stats.intelligence}</li>
-            <li>WIS: {character.stats.wisdom}</li>
-            <li>CHA: {character.stats.charisma}</li>
-          </ul>
-        </div>
-      </section>
+    <div className="flex flex-col text-gray-900 bg-red-400 justify-center border-2 shadow-lg shadow-black max-w-32 rounded-md border-black p-5">
+      {raceImage && (
+        <img className="w-24 border-2 border-gray-900" src={raceImage} alt="" />
+      )}
+      <p className="text-xl font-bold">{character.name}</p>
+      <hr className="my-2 border-gray-900" />
+      <p>Level: {character.stats.level}</p>
+      <button
+        key={character.id}
+        type="button"
+        onClick={() => handleCharacterDetails({ character: character })}
+        className="flex justify-center items-center p-1 mt-5 rounded-md bg-gray-900 border-0 hover:border-0 hover:underline active:!scale-95"
+      >
+        Details
+      </button>
     </div>
   );
 };
