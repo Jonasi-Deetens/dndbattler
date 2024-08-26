@@ -63,7 +63,7 @@ const CharacterCreate: React.FC = () => {
         rageDamage: 0,
         kiPoints: 0,
         sorceryPoints: 0,
-        sneakAttack: 0,
+        sneakAttack: '',
         invocationsKnown: 0,
         cantripsKnown: 0,
         spellsKnown: 0,

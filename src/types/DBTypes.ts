@@ -46,7 +46,7 @@ export type Character = {
   rageDamage: number;
   kiPoints: number;
   sorceryPoints: number;
-  sneakAttack: number;
+  sneakAttack: string;
   invocationsKnown: number;
   cantripsKnown: number;
   fightingStyles: FightingStyle[];
