@@ -32,9 +32,13 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
   }, []);
 
   return (
-    <div className="flex flex-col text-gray-900 bg-red-400 justify-center border-2 shadow-lg shadow-black max-w-32 rounded-md border-black p-5">
+    <div className="flex flex-col text-gray-900 bg-red-400  border-2 shadow-lg shadow-black max-w-32 rounded-md border-black justify-between">
       {raceImage && (
-        <img className="w-24 border-2 border-gray-900" src={raceImage} alt="" />
+        <img
+          className="w-32 rounded-sm border-b-2 border-black"
+          src={raceImage}
+          alt=""
+        />
       )}
       <p className="text-xl font-bold">{character.name}</p>
       <hr className="my-2 border-gray-900" />
@@ -43,7 +47,7 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
         key={character.id}
         type="button"
         onClick={() => handleCharacterDetails({ character: character })}
-        className="flex justify-center items-center p-1 mt-5 rounded-md bg-gray-900 border-0 hover:border-0 hover:underline active:!scale-95"
+        className="flex justify-center items-center p-1 m-5 rounded-md bg-gray-900 border-0 hover:border-0 hover:underline active:!scale-95"
       >
         Details
       </button>
