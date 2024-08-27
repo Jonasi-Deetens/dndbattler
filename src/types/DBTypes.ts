@@ -10,6 +10,7 @@ export type User = {
 export type Campaign = {
   id: string;
   name: string;
+  fields: Field[];
   npcs: Npc[];
 };
 
@@ -87,8 +88,20 @@ export type Character = {
   race: Race;
   class: Class;
   subrace?: Subrace | null;
+  subclass?: Subclass | null;
   abilities: Ability[];
   memberships: Membership[];
+};
+
+export type Field = {
+  id: number;
+  type: string;
+  positionX: number;
+  positionY: number;
+  isRoof: boolean;
+  isFloor: boolean;
+  isDestructible: boolean;
+  passable: boolean;
 };
 
 export type Npc = {

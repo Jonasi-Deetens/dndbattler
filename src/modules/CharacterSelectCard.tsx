@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Character } from '../types/DBTypes';
 import useRaceImages from '../hooks/useRaceImages';
 import CharacterDetailsModal from './CharacterDetailsModal';
+import { useNavigate } from 'react-router-dom';
 
 const CharacterSelectCard: React.FC<{ character: Character }> = ({
   character
 }) => {
   const [raceImage, setRaceImage] = useState<string>();
-  const { getImageByRaceAndGender } = useRaceImages();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { getImageByRaceAndGender } = useRaceImages();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (character.raceId && character.classId) {
@@ -48,8 +50,16 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
       <button
         key={character.id}
         type="button"
+        onClick={() => navigate('/game')}
+        className="primary w-full mt-4 px-4 py-2"
+      >
+        Play
+      </button>
+      <button
+        key={character.id}
+        type="button"
         onClick={() => setIsModalOpen(true)}
-        className="primary mt-4 px-4 py-2"
+        className="primary w-full mt-4 px-4 py-2"
       >
         View Details
       </button>

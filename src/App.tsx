@@ -1,22 +1,23 @@
-import { useNavigate, Route, Routes } from "react-router-dom";
-import "./App.css";
-import Login from "./pageComponents/Login";
-import Register from "./pageComponents/Register";
-import Home from "./pageComponents/Home";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { useEffect } from "react";
-import useAuth from "./hooks/useAuth";
-import Dashboard from "./pageComponents/Dashboard";
-import CharacterSelect from "./pageComponents/CharacterSelect";
-import CharacterCreate from "./pageComponents/CharacterCreation/CharacterCreate";
+import { useNavigate, Route, Routes } from 'react-router-dom';
+import './App.css';
+import Login from './pageComponents/Login';
+import Register from './pageComponents/Register';
+import Home from './pageComponents/Home';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useEffect } from 'react';
+import useAuth from './hooks/useAuth';
+import Dashboard from './pageComponents/Dashboard';
+import CharacterSelect from './pageComponents/CharacterSelect';
+import CharacterCreate from './pageComponents/CharacterCreation/CharacterCreate';
+import GameBoard from './pageComponents/Game/GameBoard';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/characterSelect");
-    else navigate("/");
+    if (isAuthenticated) navigate('/characterSelect');
+    else navigate('/');
   }, [isAuthenticated]);
 
   return (
@@ -46,6 +47,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <CharacterCreate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/game"
+          element={
+            <ProtectedRoute>
+              <GameBoard />
             </ProtectedRoute>
           }
         />
