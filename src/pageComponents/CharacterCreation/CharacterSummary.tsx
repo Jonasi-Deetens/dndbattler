@@ -35,7 +35,6 @@ const CharacterSummary: React.FC = () => {
         const raceById = await getRaceById({ id: values.raceId });
         setRace(raceById);
         setSubrace(undefined);
-        console.log(raceById);
 
         if (values.subraceId) {
           const subraceById = await getSubraceById({ id: values.subraceId });
@@ -57,7 +56,6 @@ const CharacterSummary: React.FC = () => {
         const classById = await getClassById({ id: values.classId });
         setCharClass(classById);
         setSubclass(undefined);
-        console.log(classById);
 
         if (values.subclassId) {
           const subclassById = await getSubclassById({ id: values.subclassId });
@@ -108,63 +106,63 @@ const CharacterSummary: React.FC = () => {
   }, [values.classId, values.subclassId, getImageByClass]);
 
   return (
-    <div className="flex flex-col items-center border-2 border-black p-5 bg-red-400 text-black">
+    <div className="flex flex-col items-center border-2 border-yellow-500 p-6 rounded-lg shadow-lg bg-gray-800 text-neutral-100">
+      {/* Name Input */}
       <Field
         type="text"
         name="name"
-        placeholder="Name"
+        placeholder="Character Name"
         aria-label="Name"
         autoComplete="name"
-        className="p-1 text-gray-500 mb-2 mt-1 border border-black"
+        className="p-2 text-gray-900 bg-neutral-50 rounded-md mb-5 w-full text-center border border-yellow-500 focus:outline-none"
       />
-      <img
-        className="w-32 h-32 mt-2 border-2 border-black"
-        src={raceImage}
-        alt=""
-      />
-      {race &&
-        (subrace ? (
-          <div>
-            <h2 className="font-bold border border-black my-4 py-2">
-              {subrace.name}
-            </h2>
-            <p>{subrace.description}</p>
-          </div>
-        ) : (
-          <div>
-            <h2 className="font-bold border border-black my-4 py-2">
-              {race.name}
-            </h2>
-            <p>{race.description}</p>
-          </div>
-        ))}
 
-      {charClass && (
-        <div>
-          <hr className="w-full border-black my-5" />
-          <img
-            className="w-32 h-32 border-2 border-black"
-            src={classImage}
-            alt=""
-          />
+      {/* Race Image */}
+      {raceImage && (
+        <img
+          className="w-32 h-32 mt-2 mb-4 border-4 border-yellow-500 rounded-full object-cover shadow-md"
+          src={raceImage}
+          alt={`${race?.name || ''} Image`}
+        />
+      )}
+
+      {/* Race and Subrace Description */}
+      {race && (
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-2">
+            {subrace ? subrace.name : race.name}
+          </h2>
+          <p className="text-sm text-neutral-300">
+            {subrace?.description || race.description}
+          </p>
         </div>
       )}
-      {charClass &&
-        (subclass ? (
-          <div>
-            <h2 className="font-bold border border-black my-4 py-2">
-              {subclass.name}
+
+      {/* Divider */}
+      {charClass && (
+        <>
+          <hr className="w-full border-yellow-500 my-6" />
+
+          {/* Class Image */}
+          {classImage && (
+            <img
+              className="w-32 h-32 mb-4 border-4 border-yellow-500 rounded-full object-cover shadow-md"
+              src={classImage}
+              alt={`${charClass?.name || ''} Image`}
+            />
+          )}
+
+          {/* Class and Subclass Description */}
+          <div className="text-center">
+            <h2 className="text-xl font-bold mb-2">
+              {subclass ? subclass.name : charClass.name}
             </h2>
-            <p>{subclass.description}</p>
+            <p className="text-sm text-neutral-300">
+              {subclass?.description || charClass?.description}
+            </p>
           </div>
-        ) : (
-          <div>
-            <h2 className="font-bold border border-black my-4 py-2">
-              {charClass.name}
-            </h2>
-            <p>{charClass.description}</p>
-          </div>
-        ))}
+        </>
+      )}
     </div>
   );
 };

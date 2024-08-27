@@ -6,154 +6,173 @@ const CharacterDetailsModal: React.FC<{
   onClose: () => void;
 }> = ({ character, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-red-400 border-4 rounded-3xl shadow-xl w-full max-w-4xl overflow-y-auto max-h-[90vh]">
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-          <h2 className="text-3xl font-semibold text-gray-900">
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl overflow-y-auto max-h-[90vh]">
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+          <h2 className="text-3xl font-semibold text-yellow-400">
             {character.name}
           </h2>
-          <button
-            onClick={onClose}
-            className="bg-gray-900 text-neutral-50 rounded-full w-12 h-12 flex items-center justify-center"
-          >
+          <button onClick={onClose} className="round-button">
             &times;
           </button>
         </div>
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-1">
-            <h3 className="text-xl font-semibold underline text-gray-900">
+
+        {/* Content */}
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-neutral-300">
+          {/* Basic Info */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-neutral-200">
               Basic Info
             </h3>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Age:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Age:</strong>{' '}
               {character.age}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Gender:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Gender:</strong>{' '}
               {character.gender}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Race:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Race:</strong>{' '}
               {character.race.name}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Class:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Class:</strong>{' '}
               {character.class.name}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Background:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Background:
+              </strong>{' '}
               {character.background}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Alignment:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Alignment:
+              </strong>{' '}
               {character.alignment}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Speed:</strong>{' '}
-              {character.speed}
+            <p>
+              <strong className="font-medium text-neutral-100">Speed:</strong>{' '}
+              {character.speed} ft
             </p>
           </div>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-semibold underline text-gray-900">
+          {/* Abilities & Stats */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-neutral-200">
               Abilities & Stats
             </h3>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Strength:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Strength:
+              </strong>{' '}
               {character.stats.strength}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Dexterity:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Dexterity:
+              </strong>{' '}
               {character.stats.dexterity}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">
+            <p>
+              <strong className="font-medium text-neutral-100">
                 Constitution:
               </strong>{' '}
               {character.stats.constitution}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">
+            <p>
+              <strong className="font-medium text-neutral-100">
                 Intelligence:
               </strong>{' '}
               {character.stats.intelligence}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Wisdom:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Wisdom:</strong>{' '}
               {character.stats.wisdom}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Charisma:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Charisma:
+              </strong>{' '}
               {character.stats.charisma}
             </p>
           </div>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-semibold underline text-gray-900">
+          {/* Traits & Background */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-neutral-200">
               Traits & Background
             </h3>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">
+            <p>
+              <strong className="font-medium text-neutral-100">
                 Personality Traits:
               </strong>{' '}
               {character.personalityTraits.join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Fears:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Fears:</strong>{' '}
               {character.fears.join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Ideals:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Ideals:</strong>{' '}
               {character.ideals.join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Bonds:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Bonds:</strong>{' '}
               {character.bonds.join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Flaws:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Flaws:</strong>{' '}
               {character.flaws.join(', ')}
             </p>
           </div>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-semibold underline text-gray-900">
+          {/* Skills & Proficiencies */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-neutral-200">
               Skills & Proficiencies
             </h3>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Skills:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">Skills:</strong>{' '}
               {character.skills.map(skill => skill.name).join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Languages:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Languages:
+              </strong>{' '}
               {character.languages.map(lang => lang.name).join(', ')}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">
+            <p>
+              <strong className="font-medium text-neutral-100">
                 Proficiencies:
               </strong>{' '}
               {character.proficiencies.join(', ')}
             </p>
           </div>
 
-          <div className="space-y-1 md:col-span-2">
-            <h3 className="text-xl font-semibold underline text-gray-900">
+          {/* Additional Info */}
+          <div className="space-y-2 md:col-span-2">
+            <h3 className="text-xl font-semibold text-neutral-200">
               Additional Info
             </h3>
             {character.secondaryGoals.length > 0 && (
-              <p className="text-neutral-50">
-                <strong className="font-medium text-gray-900">
+              <p>
+                <strong className="font-medium text-neutral-100">
                   Secondary Goals:
                 </strong>{' '}
                 {character.secondaryGoals.join(', ')}
               </p>
             )}
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">Backstory:</strong>{' '}
+            <p>
+              <strong className="font-medium text-neutral-100">
+                Backstory:
+              </strong>{' '}
               {character.backstory}
             </p>
-            <p className="text-neutral-50">
-              <strong className="font-medium text-gray-900">
+            <p>
+              <strong className="font-medium text-neutral-100">
                 Current Location:
               </strong>{' '}
               {character.currentLocation}

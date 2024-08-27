@@ -19,37 +19,39 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
           subraceId: character.subraceId,
           gender: character.gender
         });
-      } else
+      } else {
         rImage = getImageByRaceAndGender({
           raceId: character.raceId,
           gender: character.gender
         });
+      }
       setRaceImage(rImage);
     }
-  }, []);
+  }, [character, getImageByRaceAndGender]);
 
   return (
-    <div className="flex flex-col text-gray-900 bg-red-400  border-2 shadow-lg shadow-black max-w-32 rounded-md border-black justify-between">
+    <div className="flex flex-col items-center text-gray-900 bg-gray-800 border-2 shadow-lg max-w-sm rounded-lg border-gray-700 hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out p-4">
       {raceImage && (
         <img
-          className="w-32 rounded-sm border-b-2 border-black"
+          className="w-24 h-24 rounded-full border-4 border-gray-700 mb-4 object-cover"
           src={raceImage}
-          alt=""
+          alt={`${character.name}`}
         />
       )}
-      <p className="text-xl font-bold">{character.name}</p>
-      <hr className="my-2 border-gray-900" />
-      <p className="text-neutral-50">
-        <strong className="font-semibold text-gray-900">Level:</strong>{' '}
+      <p className="text-xl font-bold text-neutral-100 mb-2">
+        {character.name}
+      </p>
+      <p className="text-neutral-300">
+        <strong className="font-semibold text-neutral-100">Level:</strong>{' '}
         {character.stats.level}
       </p>
       <button
         key={character.id}
         type="button"
         onClick={() => setIsModalOpen(true)}
-        className="flex justify-center items-center p-1 m-5 rounded-md bg-gray-900 active:!scale-95"
+        className="primary mt-4 px-4 py-2"
       >
-        Details
+        View Details
       </button>
 
       {isModalOpen && (

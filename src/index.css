@@ -41,7 +41,7 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+button.primary {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -51,8 +51,17 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 
-  @apply bg-red-400 text-neutral-50 border-4 border-white hover:border-red-500 active:scale-95;
+  @apply py-3 rounded-lg bg-yellow-500 text-gray-900 font-bold hover:bg-yellow-400 active:bg-yellow-600 transition-all duration-200 ease-in-out;
 }
+
+.nav-button {
+  @apply text-sm text-gray-400 hover:text-yellow-500 transition-all duration-200 ease-in-out;
+}
+
+.round-button {
+  @apply bg-yellow-500 text-gray-900 font-bold hover:bg-yellow-400 active:bg-yellow-600 rounded-full w-10 h-10 flex items-center justify-center focus:outline-none;
+}
+
 button:hover {
 }
 button: focus;

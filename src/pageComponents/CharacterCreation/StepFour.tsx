@@ -20,24 +20,6 @@ type ClassName =
   | 'Warlock'
   | 'Wizard';
 
-type ClassFormComponents = {
-  [key in ClassName as string]: React.FC<object>;
-};
-const classFormComponents: ClassFormComponents = {
-  Barbarian: ClassForms.BarbarianForm,
-  Bard: ClassForms.BardForm,
-  Cleric: ClassForms.ClericForm,
-  Druid: ClassForms.DruidForm,
-  Fighter: ClassForms.FighterForm,
-  Monk: ClassForms.MonkForm,
-  Paladin: ClassForms.PaladinForm,
-  Ranger: ClassForms.RangerForm,
-  Rogue: ClassForms.RogueForm,
-  Sorcerer: ClassForms.SorcererForm,
-  Warlock: ClassForms.WarlockForm,
-  Wizard: ClassForms.WizardForm
-};
-
 type SubclassName =
   | 'Path of the Berserker'
   | 'Path of the Totem Warrior'
@@ -79,10 +61,22 @@ type SubclassName =
   | 'School of Necromancy'
   | 'School of Transmutation';
 
-type SubclassFormComponents = {
-  [key in SubclassName as string]: React.FC<object>;
+const classFormComponents: Record<ClassName, React.FC<object>> = {
+  Barbarian: ClassForms.BarbarianForm,
+  Bard: ClassForms.BardForm,
+  Cleric: ClassForms.ClericForm,
+  Druid: ClassForms.DruidForm,
+  Fighter: ClassForms.FighterForm,
+  Monk: ClassForms.MonkForm,
+  Paladin: ClassForms.PaladinForm,
+  Ranger: ClassForms.RangerForm,
+  Rogue: ClassForms.RogueForm,
+  Sorcerer: ClassForms.SorcererForm,
+  Warlock: ClassForms.WarlockForm,
+  Wizard: ClassForms.WizardForm
 };
-const subclassFormComponents: SubclassFormComponents = {
+
+const subclassFormComponents: Record<SubclassName, React.FC<object>> = {
   'Path of the Berserker': SubclassForms.PathOfTheBerserkerForm,
   'Path of the Totem Warrior': SubclassForms.PathOfTheTotemWarriorForm,
   'College of Lore': SubclassForms.CollegeOfLoreForm,
@@ -126,8 +120,8 @@ const subclassFormComponents: SubclassFormComponents = {
 
 const StepFour: React.FC = () => {
   const { values } = useFormikContext<NewCharacter>();
-  const [charClass, setCharClass] = useState<Class>();
-  const [subclass, setSubclass] = useState<Subclass>();
+  const [charClass, setCharClass] = useState<Class | null>(null);
+  const [subclass, setSubclass] = useState<Subclass | null>(null);
   const { getClassById } = useClasses();
   const { getSubclassById } = useSubclasses();
 
@@ -137,7 +131,7 @@ const StepFour: React.FC = () => {
         const classData = await getClassById({ id: values.classId });
         if (classData) setCharClass(classData);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching class data:', error);
       }
 
       if (values.subclassId) {
@@ -145,25 +139,40 @@ const StepFour: React.FC = () => {
           const subclassData = await getSubclassById({ id: values.subclassId });
           if (subclassData) setSubclass(subclassData);
         } catch (error) {
-          console.error(error);
+          console.error('Error fetching subclass data:', error);
         }
       }
     };
 
     fetchClassWithSubclass();
-  }, []);
+  }, [values.classId, values.subclassId, getClassById, getSubclassById]);
 
   const ClassFormComponent = charClass
-    ? classFormComponents[charClass.name]
+    ? classFormComponents[charClass.name as ClassName]
     : null;
   const SubclassFormComponent =
     subclass && charClass?.subClassAvailableAtLevel === 1
-      ? subclassFormComponents[subclass.name]
+      ? subclassFormComponents[subclass.name as SubclassName]
       : null;
+
   return (
-    <div className="flex flex-col gap-y-5">
-      {ClassFormComponent && <ClassFormComponent />}
-      {SubclassFormComponent && <SubclassFormComponent />}
+    <div className="flex flex-col gap-y-8 items-center">
+      {ClassFormComponent && (
+        <div className="bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-2xl">
+          <h3 className="text-2xl font-bold text-yellow-500 mb-4">
+            Class Details
+          </h3>
+          <ClassFormComponent />
+        </div>
+      )}
+      {SubclassFormComponent && (
+        <div className="bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-2xl ">
+          <h3 className="text-2xl font-bold text-yellow-500 mb-4">
+            Subclass Details
+          </h3>
+          <SubclassFormComponent />
+        </div>
+      )}
     </div>
   );
 };

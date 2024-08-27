@@ -11,7 +11,7 @@ const AddCharacterButton: React.FC = () => {
   return (
     <button
       onClick={handleClick}
-      className="flex justify-center items-center min-w-32 min-h-32 rounded-lg border-4 border-neutral-100 hover:border-red-500 hover:cursor-pointer hover:shadow-md"
+      className="primary flex justify-center items-center min-w-32 min-h-32"
     >
       <FaPlus size={21} />
     </button>

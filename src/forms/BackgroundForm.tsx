@@ -39,6 +39,7 @@ const BackgroundForm: React.FC = () => {
   return (
     <div className="flex flex-col gap-y-5">
       <div className="w-1/2 m-auto">
+        <h2 className="border p-2">BACKGROUND</h2>
         <p className="border-b p-2 w-fit m-auto">
           Tell us about your characters background:
         </p>

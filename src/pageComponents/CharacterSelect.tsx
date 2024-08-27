@@ -8,21 +8,20 @@ import { BiSolidLogOut } from 'react-icons/bi';
 const CharacterSelect: React.FC = () => {
   const { characters } = useCharacters();
   const { logout } = useAuth();
-  console.log(characters);
 
   return (
-    <div className="flex justify-center items-center bg-gray-800 w-full h-screen">
-      <div className="flex flex-wrap gap-x-2 gap-y-2 justify-center">
+    <div className="flex flex-col justify-center items-center bg-gray-800 w-full h-screen relative">
+      {/* Character Cards Container */}
+      <div className="flex flex-wrap gap-6 justify-center py-8 max-w-5xl mx-auto">
         {characters.length > 0 &&
           characters.map(character => (
             <CharacterSelectCard key={character.id} character={character} />
           ))}
         <AddCharacterButton />
       </div>
-      <button
-        className="fixed top-10 right-10 m-0 p-0 rounded-full w-10 h-10 flex items-center justify-center"
-        onClick={logout}
-      >
+
+      {/* Logout Button */}
+      <button className="fixed top-10 right-10 round-button" onClick={logout}>
         <BiSolidLogOut className="w-5 h-5" />
       </button>
     </div>

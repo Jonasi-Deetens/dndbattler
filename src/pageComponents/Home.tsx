@@ -9,11 +9,11 @@ const Home = () => {
         <hr className="m-8" />
         <div className="flex items-center justify-center gap-x-4">
           <Link to={'/login'}>
-            <button>Login</button>
+            <button className="primary">Login</button>
           </Link>
           <p>or</p>
           <Link to={'/register'}>
-            <button>Register</button>
+            <button className="primary">Register</button>
           </Link>
         </div>
       </div>

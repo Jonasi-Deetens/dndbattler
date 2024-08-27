@@ -26,6 +26,7 @@ const StepThree: React.FC = () => {
       subclass => subclass.parentClassId === newClassId
     );
     setHasSubclasses(matchingSubclasses.length > 0);
+
     if (
       matchingSubclasses.length > 0 &&
       selectedClass?.subClassAvailableAtLevel === 1
@@ -69,58 +70,65 @@ const StepThree: React.FC = () => {
   ]);
 
   return (
-    <div className="flex flex-col gap-y-5">
-      <h2 className="border p-2">Select your class</h2>
-      <div className="flex flex-wrap w-full justify-center gap-10">
+    <div className="flex flex-col gap-y-8 items-center">
+      {/* Class Selection */}
+      <h2 className="text-2xl font-semibold text-yellow-500 text-center border-b-2 border-yellow-500 pb-2">
+        Select your class
+      </h2>
+      <div className="flex flex-wrap justify-center gap-8">
         {classes &&
           classes.map(charClass => (
-            <div className="flex flex-col">
+            <div key={charClass.id} className="flex flex-col items-center">
               <button
-                key={charClass.id}
                 type="button"
                 onClick={() => handleClassSelect(charClass.id)}
-                className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
+                className="bg-transparent border-0 active:scale-95 transition-transform duration-150"
               >
                 <img
                   src={classImages[charClass.id]}
                   alt={charClass.name}
-                  className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150 ${
+                  className={`h-24 w-24 object-cover shadow-sm rounded-md transition-transform duration-150 ${
                     values.classId === charClass.id
-                      ? 'border-4 border-red-500'
-                      : 'border-0'
+                      ? 'border-4 border-yellow-500 transform scale-105'
+                      : 'border border-gray-700'
                   }`}
                 />
               </button>
-              <span className="mt-2">{charClass.name}</span>
+              <span className="mt-2 text-neutral-100">{charClass.name}</span>
             </div>
           ))}
       </div>
+
+      {/* Subclass Selection */}
       {hasSubclasses && subclassAtLevelOne && (
         <>
-          <h2 className="border p-2">Select your subclass</h2>
-          <div className="flex flex-wrap justify-center gap-10">
+          <h2 className="text-2xl font-semibold text-yellow-500 text-center border-b-2 border-yellow-500 pb-2 mt-8">
+            Select your subclass
+          </h2>
+          <div className="flex flex-wrap justify-center gap-8">
             {subclasses &&
               subclasses
-                .filter(option => option.parentClassId === values.classId)
+                .filter(subclass => subclass.parentClassId === values.classId)
                 .map(subclass => (
-                  <div className="flex flex-col w-32">
+                  <div key={subclass.id} className="flex flex-col items-center">
                     <button
-                      key={subclass.id}
                       type="button"
                       onClick={() => handleSubclassSelect(subclass.id)}
-                      className="flex justify-center items-center bg-transparent border-0 hover:!border-0 p-0 active:!scale-95"
+                      className="bg-transparent border-0 active:scale-95 transition-transform duration-150"
                     >
                       <img
                         src={subclassImages[subclass.id]}
                         alt={subclass.name}
-                        className={`h-24 w-24 object-cover flex flex-col items-center shadow-sm rounded-md border-red-500 hover:border-4 transition-transform duration-150 ${
+                        className={`h-24 w-24 object-cover shadow-sm rounded-md transition-transform duration-150 ${
                           values.subclassId === subclass.id
-                            ? 'border-4 border-red-500'
-                            : 'border-0'
+                            ? 'border-4 border-yellow-500 transform scale-105'
+                            : 'border border-gray-700'
                         }`}
                       />
                     </button>
-                    <span className="mt-2">{subclass.name}</span>
+                    <span className="mt-2 text-neutral-100">
+                      {subclass.name}
+                    </span>
                   </div>
                 ))}
           </div>

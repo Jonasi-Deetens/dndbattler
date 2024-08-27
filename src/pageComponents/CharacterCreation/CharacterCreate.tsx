@@ -44,7 +44,7 @@ const CharacterCreate: React.FC = () => {
       }
       setIsLoading(false);
     },
-    [handleAddCharacter]
+    [handleAddCharacter, getFormDataByClassAndRace, navigate]
   );
 
   const valSchema = useValidationSchema();
@@ -123,86 +123,82 @@ const CharacterCreate: React.FC = () => {
   );
 
   return (
-    <div className="bg-character-create max-h-screen py-5 w-full flex flex-col justify-center">
+    <div className="bg-gray-900 min-h-screen py-10 w-full flex flex-col items-center">
       <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
-        <Form className="m-auto w-11/12 lg:w-3/5 bg-slate-700 rounded-lg shadow-lg overflow-auto">
-          <h2 className="sticky z-50 top-0 bg-slate-700 py-5 underline shadow-red-600 border-b-2 drop-shadow-xl mb-4 text-2xl">
+        <Form className="bg-gray-800 w-full max-w-4xl rounded-xl shadow-lg overflow-auto p-8">
+          <h2 className="text-3xl font-bold border-yellow-500 text-yellow-500 border-b-2 text-center mb-8">
             Character Creation
           </h2>
-          <div className="flex flex-col lg:flex-row gap-x-4 w-full">
-            <div className="flex flex-col items-center m-auto gap-y-5 w-full p-5">
-              <div className="flex gap-x-5">
-                <div className={`w-1/3 ${step === 1 ? 'pt-16' : ''}`}>
-                  <CharacterSummary />
-                </div>
+          <div className="flex flex-col lg:flex-row gap-x-6 w-full">
+            {/* Character Summary Section */}
+            <div className="flex flex-col items-center mb-5 w-full md:w-1/3">
+              <CharacterSummary />
+            </div>
 
-                <div className="w-2/3 max-h-full overflow-auto">
-                  {step === 1 && <StepOne />}
-                  {step === 2 && <StepTwo />}
-                  {step === 3 && <StepThree />}
-                  {step === 4 && <StepFour />}
-                  {step === 5 && <StepFive />}
-                  <hr className="my-5" />
-                  <div className="w-full mb-0">
-                    <div className="flex justify-center gap-x-2 my-1">
-                      {step !== 1 && (
-                        <button
-                          type="button"
-                          onClick={e => {
-                            e.preventDefault();
-                            setStep(step - 1);
-                          }}
-                          className="border-4"
-                          disabled={isLoading}
-                        >
-                          Previous
-                        </button>
-                      )}
-                      {step === 5 ? (
-                        <button
-                          type="submit"
-                          disabled={isLoading}
-                          className="border-4"
-                        >
-                          {isLoading ? 'Creating...' : 'Create'}
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="border-4"
-                          onClick={e => {
-                            e.preventDefault();
-                            setStep(step + 1);
-                          }}
-                          disabled={isLoading}
-                        >
-                          Next
-                        </button>
-                      )}
-                    </div>
-                    <ErrorMessage
-                      name="name"
-                      component="div"
-                      className="error"
-                    />
-                    <button
-                      type="button"
-                      className="bg-transparent border-0 hover:border-0 hover:underline"
-                      onClick={() => {
-                        navigate('/characterSelect');
-                      }}
-                    >
-                      &lt; back
-                    </button>
-                  </div>
-                </div>
+            {/* Step Form Section */}
+            <div className="w-full md:w-2/3 space-y-6">
+              {step === 1 && <StepOne />}
+              {step === 2 && <StepTwo />}
+              {step === 3 && <StepThree />}
+              {step === 4 && <StepFour />}
+              {step === 5 && <StepFive />}
+
+              <div className="w-full flex justify-between mt-8">
+                {step > 1 && (
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.preventDefault();
+                      setStep(step - 1);
+                    }}
+                    className="primary"
+                    disabled={isLoading}
+                  >
+                    Previous
+                  </button>
+                )}
+                {step < 5 ? (
+                  <button
+                    type="button"
+                    className="primary ml-auto"
+                    onClick={e => {
+                      e.preventDefault();
+                      setStep(step + 1);
+                    }}
+                    disabled={isLoading}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="primary !bg-green-500 font-bold hover:!bg-green-400 active:!bg-green-600 ml-auto"
+                  >
+                    {isLoading ? 'Creating...' : 'Create'}
+                  </button>
+                )}
               </div>
             </div>
           </div>
+          <ErrorMessage
+            name="name"
+            component="div"
+            className="text-red-500 text-sm mt-4"
+          />
+          {error && <div className="text-red-500 mt-4">{error}</div>}
         </Form>
       </Formik>
 
-      {error && <div className="error">{error}</div>}
+      <button
+        type="button"
+        className="nav-button mt-4"
+        onClick={() => {
+          navigate('/characterSelect');
+        }}
+      >
+        &lt; Back to Character Select
+      </button>
     </div>
   );
 };
