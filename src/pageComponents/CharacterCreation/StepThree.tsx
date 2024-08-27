@@ -110,7 +110,10 @@ const StepThree: React.FC = () => {
               subclasses
                 .filter(subclass => subclass.parentClassId === values.classId)
                 .map(subclass => (
-                  <div key={subclass.id} className="flex flex-col items-center">
+                  <div
+                    key={subclass.id}
+                    className="flex flex-col items-center w-32"
+                  >
                     <button
                       type="button"
                       onClick={() => handleSubclassSelect(subclass.id)}

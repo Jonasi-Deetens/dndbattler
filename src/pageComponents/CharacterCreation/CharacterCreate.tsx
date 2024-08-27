@@ -123,13 +123,13 @@ const CharacterCreate: React.FC = () => {
   );
 
   return (
-    <div className="bg-gray-900 min-h-screen py-10 w-full flex flex-col items-center">
+    <div className="min-h-screen py-10 w-full flex flex-col items-center">
       <Formik<NewCharacter> {...formik} key={'character-create-formik'}>
         <Form className="bg-gray-800 w-full max-w-4xl rounded-xl shadow-lg overflow-auto p-8">
           <h2 className="text-3xl font-bold border-yellow-500 text-yellow-500 border-b-2 text-center mb-8">
             Character Creation
           </h2>
-          <div className="flex flex-col lg:flex-row gap-x-6 w-full">
+          <div className="flex flex-col md:flex-row gap-x-6 w-full">
             {/* Character Summary Section */}
             <div className="flex flex-col items-center mb-5 w-full md:w-1/3">
               <CharacterSummary />
