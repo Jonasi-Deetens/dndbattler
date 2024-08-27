@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Character } from '../types/DBTypes';
 import useRaceImages from '../hooks/useRaceImages';
+import CharacterDetailsModal from './CharacterDetailsModal';
 
 const CharacterSelectCard: React.FC<{ character: Character }> = ({
   character
 }) => {
   const [raceImage, setRaceImage] = useState<string>();
   const { getImageByRaceAndGender } = useRaceImages();
-
-  const handleCharacterDetails = ({ character }: { character: Character }) => {
-    console.log(character.id);
-    console.log(character.subraceId);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (character.raceId && character.classId) {
@@ -42,15 +39,25 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
       )}
       <p className="text-xl font-bold">{character.name}</p>
       <hr className="my-2 border-gray-900" />
-      <p>Level: {character.stats.level}</p>
+      <p className="text-neutral-50">
+        <strong className="font-semibold text-gray-900">Level:</strong>{' '}
+        {character.stats.level}
+      </p>
       <button
         key={character.id}
         type="button"
-        onClick={() => handleCharacterDetails({ character: character })}
-        className="flex justify-center items-center p-1 m-5 rounded-md bg-gray-900 border-0 hover:border-0 hover:underline active:!scale-95"
+        onClick={() => setIsModalOpen(true)}
+        className="flex justify-center items-center p-1 m-5 rounded-md bg-gray-900 active:!scale-95"
       >
         Details
       </button>
+
+      {isModalOpen && (
+        <CharacterDetailsModal
+          character={character}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

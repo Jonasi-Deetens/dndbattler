@@ -51,7 +51,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 
-  @apply bg-red-400 text-neutral-50 border-4  hover:border-red-500 active:scale-95;
+  @apply bg-red-400 text-neutral-50 border-4 border-white hover:border-red-500 active:scale-95;
 }
 button:hover {
 }

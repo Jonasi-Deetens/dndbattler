@@ -12,7 +12,7 @@ const CharacterSelect: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center bg-gray-800 w-full h-screen">
-      <div className="flex flex-wrap gap-x-2 gap-y-2 m-auto">
+      <div className="flex flex-wrap gap-x-2 gap-y-2 justify-center">
         {characters.length > 0 &&
           characters.map(character => (
             <CharacterSelectCard key={character.id} character={character} />
