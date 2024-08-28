@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
 import { Campaign, Character, Field } from '../../types/DBTypes';
 import useCampaigns from '../../hooks/useCampaigns';
 import { useLocation } from 'react-router-dom';
-import grass from '../../assets/Tiles/grass.webp';
-import path from '../../assets/Tiles/path.webp';
-import floor from '../../assets/Tiles/floor.webp';
-import topLeftCorner from '../../assets/Tiles/grass-corner-top-left.webp';
-import topRightCorner from '../../assets/Tiles/grass-corner-top-right.webp';
-import bottomLeftCorner from '../../assets/Tiles/grass-corner-bottom-left.webp';
-import bottomRightCorner from '../../assets/Tiles/grass-corner-bottom-right.webp';
-import bottomWall from '../../assets/Tiles/grass-wall-bottom.webp';
-import topWall from '../../assets/Tiles/grass-wall-top.webp';
 
-const GameBoard: React.FC = () => {
+// Lazy load FieldComponent
+const FieldComponent = lazy(() => import('./FieldComponent'));
+
+const GameBoard: React.FC = React.memo(() => {
   const [campaign, setCampaign] = useState<Campaign>();
   const [fields, setFields] = useState<Field[]>([]);
   const [maxX, setMaxX] = useState<number>();
@@ -22,14 +16,12 @@ const GameBoard: React.FC = () => {
   const location = useLocation();
   const character = location.state?.character as Character;
 
-  // Define initial character position (always centered)
-  const initialPosition = { x: 10, y: 10 }; // Adjusted to reflect center of new grid
+  const initialPosition = { x: 10, y: 10 };
   const [characterPosition, setCharacterPosition] = useState<{
     x: number;
     y: number;
   }>(initialPosition);
 
-  // Grid layout: each row's number of cells
   const gridLayout = [
     11, 11, 15, 15, 19, 23, 27, 27, 31, 31, 35, 35, 39, 39, 39, 35, 35, 31, 31,
     27, 27, 23, 19, 15, 15, 11, 11
@@ -56,34 +48,36 @@ const GameBoard: React.FC = () => {
     loadFields();
   }, [getAllCampaigns]);
 
-  // Handle character movement with arrow keys
-  const handleKeyDown = (event: KeyboardEvent) => {
-    maxX &&
-      maxY &&
-      setCharacterPosition(prevPosition => {
-        let newX = prevPosition.x;
-        let newY = prevPosition.y;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      maxX &&
+        maxY &&
+        setCharacterPosition(prevPosition => {
+          let newX = prevPosition.x;
+          let newY = prevPosition.y;
 
-        switch (event.key) {
-          case 'ArrowUp':
-            newY = Math.max(0, prevPosition.y - 1);
-            break;
-          case 'ArrowDown':
-            newY = Math.min(maxY, prevPosition.y + 1);
-            break;
-          case 'ArrowLeft':
-            newX = Math.max(0, prevPosition.x - 1);
-            break;
-          case 'ArrowRight':
-            newX = Math.min(maxX, prevPosition.x + 1);
-            break;
-          default:
-            break;
-        }
+          switch (event.key) {
+            case 'ArrowUp':
+              newY = Math.max(0, prevPosition.y - 1);
+              break;
+            case 'ArrowDown':
+              newY = Math.min(maxY, prevPosition.y + 1);
+              break;
+            case 'ArrowLeft':
+              newX = Math.max(0, prevPosition.x - 1);
+              break;
+            case 'ArrowRight':
+              newX = Math.min(maxX, prevPosition.x + 1);
+              break;
+            default:
+              break;
+          }
 
-        return { x: newX, y: newY };
-      });
-  };
+          return { x: newX, y: newY };
+        });
+    },
+    [maxX, maxY]
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -91,7 +85,7 @@ const GameBoard: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [maxX, maxY]);
+  }, [handleKeyDown]);
 
   const visibleFields = gridLayout.map((cols, rowIndex) => {
     const centerRow = Math.floor(gridLayout.length / 2);
@@ -110,69 +104,17 @@ const GameBoard: React.FC = () => {
       );
 
       rowFields.push(
-        <div
+        <Suspense
+          fallback={<div className="loading">Loading...</div>}
           key={`${rowIndex}-${colIndex}`}
-          className={`flex justify-center items-center transition-all duration-300 border ${
-            realX === characterPosition.x && realY === characterPosition.y
-              ? 'border-4 border-yellow-500'
-              : 'border-0'
-          }`}
-          style={{
-            width: '64px',
-            height: '64px',
-            position: 'relative',
-            cursor: 'pointer',
-            backgroundColor: field
-              ? field.type === 'ceiling'
-                ? 'gray'
-                : field.type === 'wall'
-                ? 'darkgray'
-                : field.type === 'water'
-                ? 'blue'
-                : field.type === 'lava'
-                ? 'brown'
-                : 'transparent'
-              : 'gray',
-            backgroundImage:
-              field?.type === 'path'
-                ? `url(${path})`
-                : field?.type === 'grass'
-                ? `url(${grass})`
-                : field?.type === 'floor'
-                ? `url(${floor})`
-                : field?.type === 'top-left-corner'
-                ? `url(${topLeftCorner})`
-                : field?.type === 'top-right-corner'
-                ? `url(${topRightCorner})`
-                : field?.type === 'bottom-left-corner'
-                ? `url(${bottomLeftCorner})`
-                : field?.type === 'bottom-right-corner'
-                ? `url(${bottomRightCorner})`
-                : field?.type === 'bottom-wall'
-                ? `url(${bottomWall})`
-                : field?.type === 'top-wall'
-                ? `url(${topWall})`
-                : 'none',
-            backgroundSize: 'cover'
-          }}
         >
-          {field && field.isDestructible && (
-            <span
-              className="absolute bottom-1 right-1 text-xs text-red-500 font-bold"
-              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-            >
-              D
-            </span>
-          )}
-          {field && !field.passable && (
-            <span
-              className="absolute top-1 left-1 text-xs text-red-500 font-bold"
-              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-            >
-              X
-            </span>
-          )}
-        </div>
+          <FieldComponent
+            field={field}
+            isCharacterPosition={
+              realX === characterPosition.x && realY === characterPosition.y
+            }
+          />
+        </Suspense>
       );
     }
     return (
@@ -224,6 +166,6 @@ const GameBoard: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default GameBoard;
