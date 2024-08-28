@@ -1,82 +1,226 @@
 import React, { useEffect, useState } from 'react';
-import { Campaign, Field } from '../../types/DBTypes';
+import { Campaign, Character, Field } from '../../types/DBTypes';
 import useCampaigns from '../../hooks/useCampaigns';
+import { useLocation } from 'react-router-dom';
+import grass from '../../assets/Tiles/grass.png';
+import path from '../../assets/Tiles/path.png';
+import floor from '../../assets/Tiles/floor.png';
+import topLeftCorner from '../../assets/Tiles/grass-corner-top-left.png';
+import topRightCorner from '../../assets/Tiles/grass-corner-top-right.png';
+import bottomLeftCorner from '../../assets/Tiles/grass-corner-bottom-left.png';
+import bottomRightCorner from '../../assets/Tiles/grass-corner-bottom-right.png';
+import bottomWall from '../../assets/Tiles/grass-wall-bottom.png';
+import topWall from '../../assets/Tiles/grass-wall-top.png';
 
 const GameBoard: React.FC = () => {
   const [campaign, setCampaign] = useState<Campaign>();
   const [fields, setFields] = useState<Field[]>([]);
+  const [maxX, setMaxX] = useState<number>();
+  const [maxY, setMaxY] = useState<number>();
   const { getAllCampaigns } = useCampaigns();
+
+  const location = useLocation();
+  const character = location.state?.character as Character;
+
+  // Define initial character position (always centered)
+  const initialPosition = { x: 10, y: 10 }; // Adjusted to reflect center of new grid
+  const [characterPosition, setCharacterPosition] = useState<{
+    x: number;
+    y: number;
+  }>(initialPosition);
+
+  // Grid layout: each row's number of cells
+  const gridLayout = [
+    11, 11, 15, 15, 19, 23, 27, 27, 31, 31, 35, 35, 39, 39, 39, 35, 35, 31, 31,
+    27, 27, 23, 19, 15, 15, 11, 11
+  ];
 
   useEffect(() => {
     const loadFields = async () => {
       const gridData = await getAllCampaigns();
-      console.log(gridData);
-      setCampaign(gridData[0]);
-      setFields(gridData[0].fields);
+      const campaignData = gridData[0];
+      setCampaign(campaignData);
+      setFields(campaignData.fields);
+
+      const maxPositionX = Math.max(
+        ...gridData[0].fields.map(field => field.positionX)
+      );
+      const maxPositionY = Math.max(
+        ...gridData[0].fields.map(field => field.positionY)
+      );
+
+      setMaxX(maxPositionX);
+      setMaxY(maxPositionY);
     };
 
     loadFields();
-  }, []);
+  }, [getAllCampaigns]);
 
-  const gridSizeX = 15; // Assuming a 15x10 grid
-  const gridSizeY = 10; // Assuming a 15x10 grid
+  // Handle character movement with arrow keys
+  const handleKeyDown = (event: KeyboardEvent) => {
+    maxX &&
+      maxY &&
+      setCharacterPosition(prevPosition => {
+        let newX = prevPosition.x;
+        let newY = prevPosition.y;
+
+        switch (event.key) {
+          case 'ArrowUp':
+            newY = Math.max(0, prevPosition.y - 1);
+            break;
+          case 'ArrowDown':
+            newY = Math.min(maxY, prevPosition.y + 1);
+            break;
+          case 'ArrowLeft':
+            newX = Math.max(0, prevPosition.x - 1);
+            break;
+          case 'ArrowRight':
+            newX = Math.min(maxX, prevPosition.x + 1);
+            break;
+          default:
+            break;
+        }
+
+        return { x: newX, y: newY };
+      });
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [maxX, maxY]);
+
+  const visibleFields = gridLayout.map((cols, rowIndex) => {
+    const centerRow = Math.floor(gridLayout.length / 2);
+    const halfRowCols = Math.floor(cols / 2);
+
+    const offsetY = characterPosition.y - centerRow;
+
+    const rowFields = [];
+
+    for (let colIndex = 0; colIndex < cols; colIndex++) {
+      const realX = colIndex - halfRowCols + characterPosition.x;
+      const realY = rowIndex + offsetY;
+
+      const field = fields.find(
+        field => field.positionX === realX && field.positionY === realY
+      );
+
+      rowFields.push(
+        <div
+          key={`${rowIndex}-${colIndex}`}
+          className={`flex justify-center items-center transition-all duration-300 border ${
+            realX === characterPosition.x && realY === characterPosition.y
+              ? 'border-4 border-yellow-500'
+              : 'border-0'
+          }`}
+          style={{
+            width: '64px',
+            height: '64px',
+            position: 'relative',
+            cursor: 'pointer',
+            backgroundColor: field
+              ? field.type === 'ceiling'
+                ? 'gray'
+                : field.type === 'wall'
+                ? 'darkgray'
+                : field.type === 'water'
+                ? 'blue'
+                : field.type === 'lava'
+                ? 'brown'
+                : 'transparent'
+              : 'gray',
+            backgroundImage:
+              field?.type === 'path'
+                ? `url(${path})`
+                : field?.type === 'grass'
+                ? `url(${grass})`
+                : field?.type === 'floor'
+                ? `url(${floor})`
+                : field?.type === 'top-left-corner'
+                ? `url(${topLeftCorner})`
+                : field?.type === 'top-right-corner'
+                ? `url(${topRightCorner})`
+                : field?.type === 'bottom-left-corner'
+                ? `url(${bottomLeftCorner})`
+                : field?.type === 'bottom-right-corner'
+                ? `url(${bottomRightCorner})`
+                : field?.type === 'bottom-wall'
+                ? `url(${bottomWall})`
+                : field?.type === 'top-wall'
+                ? `url(${topWall})`
+                : 'none',
+            backgroundSize: 'cover'
+          }}
+        >
+          {field && field.isDestructible && (
+            <span
+              className="absolute bottom-1 right-1 text-xs text-red-500 font-bold"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+            >
+              D
+            </span>
+          )}
+          {field && !field.passable && (
+            <span
+              className="absolute top-1 left-1 text-xs text-red-500 font-bold"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+            >
+              X
+            </span>
+          )}
+        </div>
+      );
+    }
+    return (
+      <div
+        key={`row-${rowIndex}`}
+        className="flex justify-center"
+        style={{ width: `${cols * 64}px` }}
+      >
+        {rowFields}
+      </div>
+    );
+  });
 
   return (
-    <div className="flex flex-col items-center py-10 bg-gray-900 min-h-screen">
-      {campaign && (
-        <h2 className="text-3xl font-bold text-yellow-400 mb-6">
-          {campaign.name}
-        </h2>
-      )}
+    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-neutral-100 relative">
+      {/* Header Overlay */}
+      <header className="w-full bg-gray-800 shadow-lg p-4 fixed top-0 z-50">
+        <div className="flex justify-between items-center max-w-6xl mx-auto">
+          {/* Game Title */}
+          <h2 className="text-2xl font-bold text-yellow-400">
+            {campaign?.name} - {character.name}
+          </h2>
 
-      <div
-        className="grid gap-0 overflow-auto w-full"
-        style={{
-          gridTemplateColumns: `repeat(${gridSizeX}, 80px)`,
-          gridTemplateRows: `repeat(${gridSizeY}, 80px)`
-        }}
-      >
-        {fields &&
-          fields.map(field => (
-            <div
-              key={field.id}
-              className={`grid-item flex justify-center items-center transition-all duration-300 ${
-                field.type === 'grass'
-                  ? 'bg-green-600'
-                  : field.type === 'ceiling'
-                  ? 'bg-gray-500'
-                  : field.type === 'wall'
-                  ? 'bg-gray-800'
-                  : field.type === 'water'
-                  ? 'bg-blue-500'
-                  : 'bg-brown-600'
-              } border border-gray-700 hover:opacity-80`}
-              style={{
-                width: '80px',
-                height: '80px',
-                position: 'relative',
-                cursor: 'pointer'
-              }}
-              title={`Type: ${field.type}, Position: (${field.positionX}, ${field.positionY})`}
-            >
-              {field.isDestructible && (
-                <span
-                  className="absolute bottom-1 right-1 text-xs text-red-500 font-bold"
-                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-                >
-                  D
-                </span>
-              )}
-              {!field.passable && (
-                <span
-                  className="absolute top-1 left-1 text-xs text-red-500 font-bold"
-                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-                >
-                  X
-                </span>
-              )}
+          {/* Character Stats */}
+          <div className="flex gap-6 items-center">
+            <div className="flex flex-col items-center">
+              <span className="font-semibold text-sm">Level</span>
+              <span className="text-lg">{character.stats.level}</span>
             </div>
-          ))}
+            <div className="flex flex-col items-center">
+              <span className="font-semibold text-sm">HP</span>
+              <span className="text-lg">
+                {character.stats.hp} / {character.stats.maxHp}
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-semibold text-sm">AC</span>
+              <span className="text-lg">{character.stats.ac}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Game Grid Container */}
+      <div className="flex-grow w-full mt-[64px] overflow-auto relative flex justify-center">
+        <div className="flex flex-col justify-center items-center min-w-max">
+          {visibleFields}
+        </div>
       </div>
     </div>
   );

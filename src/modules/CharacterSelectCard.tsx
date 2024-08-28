@@ -48,9 +48,9 @@ const CharacterSelectCard: React.FC<{ character: Character }> = ({
         {character.stats.level}
       </p>
       <button
-        key={character.id}
+        key={character.id + '-play'}
         type="button"
-        onClick={() => navigate('/game')}
+        onClick={() => navigate('/game', { state: { character } })}
         className="primary w-full mt-4 px-4 py-2"
       >
         Play
