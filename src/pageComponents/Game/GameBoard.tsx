@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Campaign, Character, Field } from '../../types/DBTypes';
 import useCampaigns from '../../hooks/useCampaigns';
 import { useLocation } from 'react-router-dom';
-import grass from '../../assets/Tiles/grass.png';
-import path from '../../assets/Tiles/path.png';
-import floor from '../../assets/Tiles/floor.png';
-import topLeftCorner from '../../assets/Tiles/grass-corner-top-left.png';
-import topRightCorner from '../../assets/Tiles/grass-corner-top-right.png';
-import bottomLeftCorner from '../../assets/Tiles/grass-corner-bottom-left.png';
-import bottomRightCorner from '../../assets/Tiles/grass-corner-bottom-right.png';
-import bottomWall from '../../assets/Tiles/grass-wall-bottom.png';
-import topWall from '../../assets/Tiles/grass-wall-top.png';
+import grass from '../../assets/Tiles/grass.webp';
+import path from '../../assets/Tiles/path.webp';
+import floor from '../../assets/Tiles/floor.webp';
+import topLeftCorner from '../../assets/Tiles/grass-corner-top-left.webp';
+import topRightCorner from '../../assets/Tiles/grass-corner-top-right.webp';
+import bottomLeftCorner from '../../assets/Tiles/grass-corner-bottom-left.webp';
+import bottomRightCorner from '../../assets/Tiles/grass-corner-bottom-right.webp';
+import bottomWall from '../../assets/Tiles/grass-wall-bottom.webp';
+import topWall from '../../assets/Tiles/grass-wall-top.webp';
 
 const GameBoard: React.FC = () => {
   const [campaign, setCampaign] = useState<Campaign>();
