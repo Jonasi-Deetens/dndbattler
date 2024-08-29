@@ -23,8 +23,8 @@ const GameBoard: React.FC = React.memo(() => {
   }>(initialPosition);
 
   const gridLayout = [
-    11, 11, 15, 15, 19, 23, 27, 27, 31, 31, 35, 35, 39, 39, 39, 35, 35, 31, 31,
-    27, 27, 23, 19, 15, 15, 11, 11
+    5, 7, 9, 11, 13, 15, 15, 17, 19, 19, 21, 21, 21, 19, 19, 17,
+    15, 15, 13, 11, 9, 7, 5
   ];
 
   useEffect(() => {
@@ -34,15 +34,32 @@ const GameBoard: React.FC = React.memo(() => {
       setCampaign(campaignData);
       setFields(campaignData.fields);
 
-      const maxPositionX = Math.max(
-        ...gridData[0].fields.map(field => field.positionX)
-      );
-      const maxPositionY = Math.max(
-        ...gridData[0].fields.map(field => field.positionY)
-      );
+      let maxPositionX = 0;
+      let maxPositionY = 0;
+      let hasPathField = false;
+
+      campaignData.fields.forEach(field => {
+        if (field.positionX > maxPositionX) {
+          maxPositionX = field.positionX;
+        }
+        if (field.positionY > maxPositionY) {
+          maxPositionY = field.positionY;
+        }
+
+        if (field.type === 'path') {
+          hasPathField = true;
+        }
+      });
 
       setMaxX(maxPositionX);
       setMaxY(maxPositionY);
+
+      // Example: Log if a 'path' field exists
+      if (hasPathField) {
+        console.log('A field with type "path" exists in the grid.');
+      } else {
+        console.log('No fields with type "path" were found.');
+      }
     };
 
     loadFields();
@@ -50,6 +67,8 @@ const GameBoard: React.FC = React.memo(() => {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
+      event.preventDefault(); // Prevent default scrolling behavior
+
       maxX &&
         maxY &&
         setCharacterPosition(prevPosition => {
@@ -103,6 +122,26 @@ const GameBoard: React.FC = React.memo(() => {
         field => field.positionX === realX && field.positionY === realY
       );
 
+      // Determine border style
+      let borderStyle = '';
+
+      // Top border
+      if (rowIndex === 0) {
+        borderStyle += 'border-t-2 border-gray-600 ';
+      }
+      // Bottom border
+      if (rowIndex === gridLayout.length - 1) {
+        borderStyle += 'border-b-2 border-gray-600 ';
+      }
+      // Left border
+      if (colIndex === 0) {
+        borderStyle += 'border-l-2 border-gray-600 ';
+      }
+      // Right border
+      if (colIndex === cols - 1) {
+        borderStyle += 'border-r-2 border-gray-600 ';
+      }
+
       rowFields.push(
         <Suspense
           fallback={<div className="loading">Loading...</div>}
@@ -113,6 +152,7 @@ const GameBoard: React.FC = React.memo(() => {
             isCharacterPosition={
               realX === characterPosition.x && realY === characterPosition.y
             }
+            additionalClasses={borderStyle}
           />
         </Suspense>
       );
@@ -159,7 +199,9 @@ const GameBoard: React.FC = React.memo(() => {
       </header>
 
       {/* Game Grid Container */}
-      <div className="flex-grow w-full mt-[64px] overflow-auto relative flex justify-center">
+      <div
+        className="bg-grass flex-grow w-full mt-[64px] overflow-hidden relative flex justify-center"
+      >
         <div className="flex flex-col justify-center items-center min-w-max">
           {visibleFields}
         </div>

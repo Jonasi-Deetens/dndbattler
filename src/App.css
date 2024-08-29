@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+.bg-grass {
+  background: url('../src/assets/Tiles/background-grass.webp') no-repeat center center;
+  background-size: cover;
+}
+
 .bg-home {
   background: url('../src/assets/home.webp') no-repeat center center;
   background-size: cover;
