@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
-import { Campaign, Character, Field } from '../../types/DBTypes';
-import useCampaigns from '../../hooks/useCampaigns';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, Suspense, lazy } from "react";
+import { Campaign, Character, Field } from "../../types/DBTypes";
+import useCampaigns from "../../hooks/useCampaigns";
+import { useLocation } from "react-router-dom";
 
 // Lazy load FieldComponent
-const FieldComponent = lazy(() => import('./FieldComponent'));
+const FieldComponent = lazy(() => import("./FieldComponent"));
 
 const GameBoard: React.FC = React.memo(() => {
   const [campaign, setCampaign] = useState<Campaign>();
   const [fields, setFields] = useState<Field[]>([]);
   const [maxX, setMaxX] = useState<number>();
   const [maxY, setMaxY] = useState<number>();
+  const [lastKeyDownTime, setLastKeyDownTime] = useState<number>(Date.now());
   const { getAllCampaigns } = useCampaigns();
 
   const location = useLocation();
@@ -23,8 +24,8 @@ const GameBoard: React.FC = React.memo(() => {
   }>(initialPosition);
 
   const gridLayout = [
-    5, 7, 9, 11, 13, 15, 15, 17, 19, 19, 21, 21, 21, 19, 19, 17,
-    15, 15, 13, 11, 9, 7, 5
+    21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21,
+    21, 21, 21, 21,
   ];
 
   useEffect(() => {
@@ -36,30 +37,18 @@ const GameBoard: React.FC = React.memo(() => {
 
       let maxPositionX = 0;
       let maxPositionY = 0;
-      let hasPathField = false;
 
-      campaignData.fields.forEach(field => {
+      campaignData.fields.forEach((field) => {
         if (field.positionX > maxPositionX) {
           maxPositionX = field.positionX;
         }
         if (field.positionY > maxPositionY) {
           maxPositionY = field.positionY;
         }
-
-        if (field.type === 'path') {
-          hasPathField = true;
-        }
       });
 
       setMaxX(maxPositionX);
       setMaxY(maxPositionY);
-
-      // Example: Log if a 'path' field exists
-      if (hasPathField) {
-        console.log('A field with type "path" exists in the grid.');
-      } else {
-        console.log('No fields with type "path" were found.');
-      }
     };
 
     loadFields();
@@ -67,106 +56,217 @@ const GameBoard: React.FC = React.memo(() => {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      event.preventDefault(); // Prevent default scrolling behavior
+      event.preventDefault();
+
+      const currentTime = Date.now();
+      if (currentTime - lastKeyDownTime < 500) {
+        return;
+      }
+
+      setLastKeyDownTime(currentTime);
 
       maxX &&
         maxY &&
-        setCharacterPosition(prevPosition => {
+        setCharacterPosition((prevPosition) => {
           let newX = prevPosition.x;
           let newY = prevPosition.y;
 
           switch (event.key) {
-            case 'ArrowUp':
+            case "ArrowUp":
               newY = Math.max(0, prevPosition.y - 1);
               break;
-            case 'ArrowDown':
+            case "ArrowDown":
               newY = Math.min(maxY, prevPosition.y + 1);
               break;
-            case 'ArrowLeft':
+            case "ArrowLeft":
               newX = Math.max(0, prevPosition.x - 1);
               break;
-            case 'ArrowRight':
+            case "ArrowRight":
               newX = Math.min(maxX, prevPosition.x + 1);
               break;
             default:
               break;
           }
 
-          return { x: newX, y: newY };
+          const targetField = fields.find(
+            (field) => field.positionX === newX && field.positionY === newY
+          );
+
+          if (targetField?.passable) {
+            return { x: newX, y: newY };
+          }
+
+          return prevPosition;
         });
     },
-    [maxX, maxY]
+    [fields, maxX, maxY, lastKeyDownTime]
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
 
-  const visibleFields = gridLayout.map((cols, rowIndex) => {
-    const centerRow = Math.floor(gridLayout.length / 2);
-    const halfRowCols = Math.floor(cols / 2);
+  const isFieldBlurry = ({ field }: { field: Field }): boolean => {
+    const deltaX = field.positionX - characterPosition.x;
+    const deltaY = field.positionY - characterPosition.y;
 
-    const offsetY = characterPosition.y - centerRow;
+    // Calculate slope for diagonal checks
+    const slope = deltaY / deltaX;
 
-    const rowFields = [];
+    let hasBlockingField = false;
 
-    for (let colIndex = 0; colIndex < cols; colIndex++) {
-      const realX = colIndex - halfRowCols + characterPosition.x;
-      const realY = rowIndex + offsetY;
+    // Traverse the fields only once
+    fields.forEach((otherField) => {
+      if (!otherField.seeThrough) {
+        const otherDeltaX = otherField.positionX - characterPosition.x;
+        const otherDeltaY = otherField.positionY - characterPosition.y;
 
-      const field = fields.find(
-        field => field.positionX === realX && field.positionY === realY
-      );
+        // Horizontal and vertical blocking checks
+        if (deltaX === 0 || deltaY === 0) {
+          const isHorizontalBlock =
+            field.positionY === characterPosition.y &&
+            otherField.positionY === field.positionY &&
+            otherField.positionX >
+              Math.min(field.positionX, characterPosition.x) &&
+            otherField.positionX <
+              Math.max(field.positionX, characterPosition.x);
 
-      // Determine border style
-      let borderStyle = '';
+          const isVerticalBlock =
+            field.positionX === characterPosition.x &&
+            otherField.positionX === field.positionX &&
+            otherField.positionY >
+              Math.min(field.positionY, characterPosition.y) &&
+            otherField.positionY <
+              Math.max(field.positionY, characterPosition.y);
 
-      // Top border
-      if (rowIndex === 0) {
-        borderStyle += 'border-t-2 border-gray-600 ';
+          if (isHorizontalBlock || isVerticalBlock) {
+            hasBlockingField = true;
+            return;
+          }
+        }
+        // Diagonal/angled blocking checks
+        if (otherDeltaX !== 0 && otherDeltaY !== 0) {
+          const otherSlope = otherDeltaY / otherDeltaX;
+
+          if (
+            slope === otherSlope && // Same slope
+            ((otherDeltaX > 0 && deltaX > 0) ||
+              (otherDeltaX < 0 && deltaX < 0)) && // Same direction in X
+            ((otherDeltaY > 0 && deltaY > 0) ||
+              (otherDeltaY < 0 && deltaY < 0)) && // Same direction in Y
+            Math.abs(otherDeltaX) < Math.abs(deltaX) &&
+            Math.abs(otherDeltaY) < Math.abs(deltaY) // Check if the blocking field is closer to the player
+          ) {
+            hasBlockingField = true;
+          }
+        }
       }
-      // Bottom border
-      if (rowIndex === gridLayout.length - 1) {
-        borderStyle += 'border-b-2 border-gray-600 ';
-      }
-      // Left border
-      if (colIndex === 0) {
-        borderStyle += 'border-l-2 border-gray-600 ';
-      }
-      // Right border
-      if (colIndex === cols - 1) {
-        borderStyle += 'border-r-2 border-gray-600 ';
-      }
+    });
 
-      rowFields.push(
-        <Suspense
-          fallback={<div className="loading">Loading...</div>}
-          key={`${rowIndex}-${colIndex}`}
-        >
-          <FieldComponent
-            field={field}
-            isCharacterPosition={
-              realX === characterPosition.x && realY === characterPosition.y
-            }
-            additionalClasses={borderStyle}
-          />
-        </Suspense>
-      );
-    }
-    return (
+    return hasBlockingField;
+  };
+
+  // Function to generate visible fields based on the current character position
+  const getVisibleFields = () => {
+    const visibleFields: {
+      field: Field;
+      realX: number;
+      realY: number;
+      rowIndex: number;
+      colIndex: number;
+      cols: number;
+    }[] = [];
+
+    gridLayout.forEach((cols, rowIndex) => {
+      const centerRow = Math.floor(gridLayout.length / 2);
+      const halfRowCols = Math.floor(cols / 2);
+
+      const offsetY = characterPosition.y - centerRow;
+
+      for (let colIndex = 0; colIndex < cols; colIndex++) {
+        const realX = colIndex - halfRowCols + characterPosition.x;
+        const realY = rowIndex + offsetY;
+
+        const field = fields.find(
+          (field) => field.positionX === realX && field.positionY === realY
+        );
+
+        if (field) {
+          visibleFields.push({ field, realX, realY, rowIndex, colIndex, cols });
+        }
+      }
+    });
+
+    return visibleFields;
+  };
+
+  // Render the filtered visible fields grouped into rows
+  const renderVisibleFields = () => {
+    const filteredVisibleFields = getVisibleFields().reduce(
+      (acc, { field, realX, realY, rowIndex, colIndex, cols }) => {
+        // Determine border style
+        let borderStyle = "";
+
+        // Top border
+        if (rowIndex === 0) {
+          borderStyle += "border-t-2 border-gray-600 ";
+        }
+        // Bottom border
+        if (rowIndex === gridLayout.length - 1) {
+          borderStyle += "border-b-2 border-gray-600 ";
+        }
+        // Left border
+        if (colIndex === 0) {
+          borderStyle += "border-l-2 border-gray-600 ";
+        }
+        // Right border
+        if (colIndex === cols - 1) {
+          borderStyle += "border-r-2 border-gray-600 ";
+        }
+
+        const blurClass = isFieldBlurry({ field }) ? "blur-sm" : "";
+
+        // Create the field component
+        const fieldComponent = (
+          <Suspense
+            fallback={<div className="loading">Loading...</div>}
+            key={`${rowIndex}-${colIndex}`}
+          >
+            <FieldComponent
+              field={field}
+              isCharacterPosition={
+                realX === characterPosition.x && realY === characterPosition.y
+              }
+              additionalClasses={`${borderStyle} ${blurClass}`}
+            />
+          </Suspense>
+        );
+
+        // Group fields into rows
+        if (!acc[rowIndex]) {
+          acc[rowIndex] = [];
+        }
+        acc[rowIndex].push(fieldComponent);
+
+        return acc;
+      },
+      [] as JSX.Element[][]
+    );
+
+    return filteredVisibleFields.map((rowFields, rowIndex) => (
       <div
         key={`row-${rowIndex}`}
         className="flex justify-center"
-        style={{ width: `${cols * 64}px` }}
+        style={{ width: `${rowFields.length * 64}px` }}
       >
         {rowFields}
       </div>
-    );
-  });
+    ));
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-neutral-100 relative">
@@ -199,11 +299,9 @@ const GameBoard: React.FC = React.memo(() => {
       </header>
 
       {/* Game Grid Container */}
-      <div
-        className="bg-grass flex-grow w-full mt-[64px] overflow-hidden relative flex justify-center"
-      >
+      <div className="bg-grass flex-grow w-full mt-[64px] overflow-hidden relative flex justify-center">
         <div className="flex flex-col justify-center items-center min-w-max">
-          {visibleFields}
+          {renderVisibleFields()}
         </div>
       </div>
     </div>

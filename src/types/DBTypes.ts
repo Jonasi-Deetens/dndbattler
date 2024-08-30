@@ -102,6 +102,7 @@ export type Field = {
   isFloor: boolean;
   isDestructible: boolean;
   passable: boolean;
+  seeThrough: boolean;
 };
 
 export type Npc = {
@@ -426,153 +427,153 @@ export type Membership = {
 };
 
 export enum FightingStyle {
-  ARCHERY = 'Archery',
-  DEFENSE = 'Defense',
-  DUELING = 'Dueling',
-  GREAT_WEAPON_FIGHTING = 'Great Weapon Fighting',
-  PROTECTION = 'Protection',
-  TWO_WEAPON_FIGHTING = 'Two Weapon Fighting'
+  ARCHERY = "Archery",
+  DEFENSE = "Defense",
+  DUELING = "Dueling",
+  GREAT_WEAPON_FIGHTING = "Great Weapon Fighting",
+  PROTECTION = "Protection",
+  TWO_WEAPON_FIGHTING = "Two Weapon Fighting",
 }
 
 export enum SkillCheck {
-  Acrobatics = 'Acrobatics',
-  AnimalHandling = 'Animal Handling',
-  Arcana = 'Arcana',
-  Athletics = 'Athletics',
-  Deception = 'Deception',
-  History = 'History',
-  Insight = 'Insight',
-  Intimidation = 'Intimidation',
-  Investigation = 'Investigation',
-  Medicine = 'Medicine',
-  Nature = 'Nature',
-  Perception = 'Perception',
-  Performance = 'Performance',
-  Persuasion = 'Persuasion',
-  Religion = 'Religion',
-  SleightOfHand = 'Sleight of Hand',
-  Stealth = 'Stealth',
-  Survival = 'Survival'
+  Acrobatics = "Acrobatics",
+  AnimalHandling = "Animal Handling",
+  Arcana = "Arcana",
+  Athletics = "Athletics",
+  Deception = "Deception",
+  History = "History",
+  Insight = "Insight",
+  Intimidation = "Intimidation",
+  Investigation = "Investigation",
+  Medicine = "Medicine",
+  Nature = "Nature",
+  Perception = "Perception",
+  Performance = "Performance",
+  Persuasion = "Persuasion",
+  Religion = "Religion",
+  SleightOfHand = "Sleight of Hand",
+  Stealth = "Stealth",
+  Survival = "Survival",
 }
 
 export enum School {
-  ABJURATION = 'Abjuration',
-  CONJURATION = 'Conjuration',
-  DIVINATION = 'Divination',
-  ENCHANTMENT = 'Enchantment',
-  EVOCATION = 'Evocation',
-  ILLUSION = 'Illusion',
-  NECROMANCY = 'Necromancy',
-  TRANSMUTATION = 'Transmutation',
-  TRANSFIGURATION = 'Transfiguration'
+  ABJURATION = "Abjuration",
+  CONJURATION = "Conjuration",
+  DIVINATION = "Divination",
+  ENCHANTMENT = "Enchantment",
+  EVOCATION = "Evocation",
+  ILLUSION = "Illusion",
+  NECROMANCY = "Necromancy",
+  TRANSMUTATION = "Transmutation",
+  TRANSFIGURATION = "Transfiguration",
 }
 
 export enum Dice {
-  D4 = 'D4',
-  D6 = 'D6',
-  D8 = 'D8',
-  D10 = 'D10',
-  D12 = 'D12',
-  D20 = 'D20',
-  D100 = 'D100'
+  D4 = "D4",
+  D6 = "D6",
+  D8 = "D8",
+  D10 = "D10",
+  D12 = "D12",
+  D20 = "D20",
+  D100 = "D100",
 }
 
 export enum AbilityScore {
-  STRENGTH = 'Strength',
-  DEXTERITY = 'Dexterity',
-  CONSTITUTION = 'Constitution',
-  INTELLIGENCE = 'Intelligence',
-  WISDOM = 'Wisdom',
-  CHARISMA = 'Charisma'
+  STRENGTH = "Strength",
+  DEXTERITY = "Dexterity",
+  CONSTITUTION = "Constitution",
+  INTELLIGENCE = "Intelligence",
+  WISDOM = "Wisdom",
+  CHARISMA = "Charisma",
 }
 
 export enum EffectType {
-  BUFF = 'Buff',
-  DEBUFF = 'Debuff',
-  HEALING = 'Healing',
-  DAMAGE = 'Damage',
-  CONTROL = 'Control',
-  SUMMONING = 'Summoning',
-  UTILITY = 'Utility',
-  PROTECTION = 'Protection',
-  MOVEMENT = 'Movement',
-  DETECTION = 'Detection',
-  TRANSFORMATION = 'Transformation',
-  TRANSPORTATION = 'Transportation',
-  RESTORATION = 'Restoration',
-  INSTANT_DEATH = 'Instant Death',
-  COMMUNICATION = 'Communication',
-  ILLUSION = 'Illusion'
+  BUFF = "Buff",
+  DEBUFF = "Debuff",
+  HEALING = "Healing",
+  DAMAGE = "Damage",
+  CONTROL = "Control",
+  SUMMONING = "Summoning",
+  UTILITY = "Utility",
+  PROTECTION = "Protection",
+  MOVEMENT = "Movement",
+  DETECTION = "Detection",
+  TRANSFORMATION = "Transformation",
+  TRANSPORTATION = "Transportation",
+  RESTORATION = "Restoration",
+  INSTANT_DEATH = "Instant Death",
+  COMMUNICATION = "Communication",
+  ILLUSION = "Illusion",
 }
 
 export enum DamageType {
-  ACID = 'Acid',
-  BLUDGEONING = 'Bludgeoning',
-  COLD = 'Cold',
-  FIRE = 'Fire',
-  FORCE = 'Force',
-  LIGHTNING = 'Lightning',
-  NECROTIC = 'Necrotic',
-  PIERCING = 'Piercing',
-  POISON = 'Poison',
-  PSYCHIC = 'Psychic',
-  RADIANT = 'Radiant',
-  SLASHING = 'Slashing',
-  THUNDER = 'Thunder',
-  VARIES = 'Varies'
+  ACID = "Acid",
+  BLUDGEONING = "Bludgeoning",
+  COLD = "Cold",
+  FIRE = "Fire",
+  FORCE = "Force",
+  LIGHTNING = "Lightning",
+  NECROTIC = "Necrotic",
+  PIERCING = "Piercing",
+  POISON = "Poison",
+  PSYCHIC = "Psychic",
+  RADIANT = "Radiant",
+  SLASHING = "Slashing",
+  THUNDER = "Thunder",
+  VARIES = "Varies",
 }
 
 export enum Alignment {
-  LAWFUL_GOOD = 'Lawful Good',
-  NEUTRAL_GOOD = 'Neutral Good',
-  CHAOTIC_GOOD = 'Chaotic Good',
-  LAWFUL_NEUTRAL = 'Lawful Neutral',
-  TRUE_NEUTRAL = 'True Neutral',
-  CHAOTIC_NEUTRAL = 'Chaotic Neutral',
-  LAWFUL_EVIL = 'Lawful Evil',
-  NEUTRAL_EVIL = 'Neutral Evil',
-  CHAOTIC_EVIL = 'Chaotic Evil'
+  LAWFUL_GOOD = "Lawful Good",
+  NEUTRAL_GOOD = "Neutral Good",
+  CHAOTIC_GOOD = "Chaotic Good",
+  LAWFUL_NEUTRAL = "Lawful Neutral",
+  TRUE_NEUTRAL = "True Neutral",
+  CHAOTIC_NEUTRAL = "Chaotic Neutral",
+  LAWFUL_EVIL = "Lawful Evil",
+  NEUTRAL_EVIL = "Neutral Evil",
+  CHAOTIC_EVIL = "Chaotic Evil",
 }
 
 export enum Ideal {
-  RESPECT = 'Respect',
-  FAIRNESS = 'Fairness',
-  GREED = 'Greed',
-  FREEDOM = 'Freedom',
-  CHARITY = 'Charity',
-  KNOWLEDGE = 'Knowledge'
+  RESPECT = "Respect",
+  FAIRNESS = "Fairness",
+  GREED = "Greed",
+  FREEDOM = "Freedom",
+  CHARITY = "Charity",
+  KNOWLEDGE = "Knowledge",
 }
 
 export enum Bond {
-  FAMILY = 'Family',
-  HONOR = 'Honor',
-  REVENGE = 'Revenge',
-  FRIENDSHIP = 'Friendship',
-  DUTY = 'Duty',
-  REDEMPTION = 'Redemption'
+  FAMILY = "Family",
+  HONOR = "Honor",
+  REVENGE = "Revenge",
+  FRIENDSHIP = "Friendship",
+  DUTY = "Duty",
+  REDEMPTION = "Redemption",
 }
 
 export enum Flaw {
-  ARROGANCE = 'Arrogance',
-  GREED = 'Greed',
-  IMPULSIVENESS = 'Impulsiveness',
-  COWARDICE = 'Cowardice',
-  PARANOIA = 'Paranoia',
-  ADDICTION = 'Addiction'
+  ARROGANCE = "Arrogance",
+  GREED = "Greed",
+  IMPULSIVENESS = "Impulsiveness",
+  COWARDICE = "Cowardice",
+  PARANOIA = "Paranoia",
+  ADDICTION = "Addiction",
 }
 
 export enum Fear {
-  DARKNESS = 'Darkness',
-  HEIGHTS = 'Heights',
-  FAILURE = 'Failure',
-  SOLITUDE = 'Solitude',
-  WATER = 'Water',
-  MAGIC = 'Magic',
-  LOSING_PEOPLE = 'Losing people'
+  DARKNESS = "Darkness",
+  HEIGHTS = "Heights",
+  FAILURE = "Failure",
+  SOLITUDE = "Solitude",
+  WATER = "Water",
+  MAGIC = "Magic",
+  LOSING_PEOPLE = "Losing people",
 }
 
 export interface NewCharacter
-  extends Omit<Character, 'id' | 'race' | 'class' | 'user'> {
+  extends Omit<Character, "id" | "race" | "class" | "user"> {
   dwarfToolProficiency?: string;
   highElfBonusCantripId?: number;
   highElfBonusLanguageId?: number;
