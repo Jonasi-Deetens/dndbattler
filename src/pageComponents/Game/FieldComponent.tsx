@@ -219,25 +219,7 @@ const FieldComponent: React.FC<FieldProps> = React.memo(
           backgroundImage: `url(${getImageUrl(field?.type)})`,
           backgroundSize: 'cover'
         }}
-      >
-        {/* Optional destructible and impassable indicators */}
-        {/* {field && field.isDestructible && (
-          <span
-            className="absolute bottom-1 right-1 text-xs text-red-500 font-bold"
-            style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-          >
-            D
-          </span>
-        )}
-        {field && !field.passable && (
-          <span
-            className="absolute top-1 left-1 text-xs text-red-500 font-bold"
-            style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-          >
-            X
-          </span>
-        )} */}
-      </div>
+      ></div>
     );
   }
 );
