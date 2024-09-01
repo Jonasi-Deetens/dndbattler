@@ -9,22 +9,23 @@ const FieldComponent = lazy(() => import('./FieldComponent'));
 const GameBoard: React.FC = React.memo(() => {
   const [campaign, setCampaign] = useState<Campaign>();
   const [fields, setFields] = useState<Field[]>([]);
-  const [maxX, setMaxX] = useState<number>();
-  const [maxY, setMaxY] = useState<number>();
+  const [maxX, setMaxX] = useState<number>(0);
+  const [maxY, setMaxY] = useState<number>(0);
+  const [fieldsMap, setFieldsMap] = useState<Map<string, Field>>(new Map());
   const [lastKeyDownTime, setLastKeyDownTime] = useState<number>(Date.now());
   const { getAllCampaigns } = useCampaigns();
 
   const location = useLocation();
   const character = location.state?.character as Character;
 
-  const initialPosition = { x: 10, y: 10 };
+  const initialPosition = { x: 5, y: 5 };
   const [characterPosition, setCharacterPosition] = useState<{
     x: number;
     y: number;
   }>(initialPosition);
 
   // Define grid layout with equal column count
-  const gridLayout = Array(23).fill(13);
+  const gridLayout = Array(15).fill(13);
 
   useEffect(() => {
     const loadFields = async () => {
@@ -37,6 +38,8 @@ const GameBoard: React.FC = React.memo(() => {
       let maxPositionX = 0;
       let maxPositionY = 0;
 
+      const newFieldsMap = new Map<string, Field>();
+
       campaignData.fields.forEach(field => {
         if (field.positionX > maxPositionX) {
           maxPositionX = field.positionX;
@@ -44,8 +47,11 @@ const GameBoard: React.FC = React.memo(() => {
         if (field.positionY > maxPositionY) {
           maxPositionY = field.positionY;
         }
+        // Add to map for quick lookup
+        newFieldsMap.set(`${field.positionX},${field.positionY}`, field);
       });
 
+      setFieldsMap(newFieldsMap);
       setMaxX(maxPositionX);
       setMaxY(maxPositionY);
     };
@@ -58,7 +64,6 @@ const GameBoard: React.FC = React.memo(() => {
     (event: KeyboardEvent) => {
       event.preventDefault();
 
-      // Throttle key events
       const currentTime = Date.now();
       if (currentTime - lastKeyDownTime < 100) {
         return;
@@ -130,13 +135,19 @@ const GameBoard: React.FC = React.memo(() => {
       const roundedX = Math.round(currentX);
       const roundedY = Math.round(currentY);
 
-      const blockingField = fields.find(
-        f =>
-          f.positionX === roundedX && f.positionY === roundedY && !f.seeThrough
-      );
+      //   const blockingField = fields.find(
+      //     f =>
+      //       f.positionX === roundedX && f.positionY === roundedY && !f.seeThrough
+      //   );
+      const chunkKey = `${roundedX},${roundedY}`;
+      const blockingField = fieldsMap.get(chunkKey);
 
-      if (blockingField) {
-        return true;
+      if (blockingField && !blockingField.seeThrough) {
+        // This field is not blurred, but subsequent ones will be
+        if (roundedX === field.positionX && roundedY === field.positionY) {
+          return false; // This is the first blocking field
+        }
+        return true; // Field beyond the first blocking field
       }
     }
 
@@ -145,38 +156,53 @@ const GameBoard: React.FC = React.memo(() => {
 
   // Function to generate visible fields based on the current character position
   const getVisibleFields = () => {
-    const visibleFields: {
-      field: Field;
-      realX: number;
-      realY: number;
-      rowIndex: number;
-      colIndex: number;
-      cols: number;
-    }[] = [];
+    const visibleFields = [];
+    const gridWidth = gridLayout[0]; // Width of your grid
+    const gridHeight = gridLayout.length; // Number of rows in your grid
 
-    gridLayout.forEach((cols, rowIndex) => {
-      const centerRow = Math.floor(gridLayout.length / 2);
+    const halfGridWidth = Math.floor(gridWidth / 2);
+    const halfGridHeight = Math.floor(gridHeight / 2);
+
+    // Calculate the visible range based on the character's position
+    const startX = Math.max(characterPosition.x - halfGridWidth, 0);
+    const endX = Math.min(characterPosition.x + halfGridWidth, maxX);
+
+    const startY = Math.max(characterPosition.y - halfGridHeight, 0);
+    const endY = Math.min(characterPosition.y + halfGridHeight, maxY);
+
+    // Loop over the specific range of fields
+    for (let y = startY; y <= endY; y++) {
+      const rowIndex = y - startY; // Relative row index for the visible grid
+      const cols = gridLayout[rowIndex];
       const halfRowCols = Math.floor(cols / 2);
 
-      const offsetY = characterPosition.y - centerRow;
-
-      for (let colIndex = 0; colIndex < cols; colIndex++) {
+      for (let x = startX; x <= endX; x++) {
+        const colIndex = x - startX; // Relative column index for the visible grid
         const realX = colIndex - halfRowCols + characterPosition.x;
-        const realY = rowIndex + offsetY;
+        const realY = y;
 
-        const field = fields.find(
-          field => field.positionX === realX && field.positionY === realY
-        );
+        // Find the field directly by its coordinates
+        const chunkKey = `${realX},${realY}`;
+        const field = fieldsMap.get(chunkKey);
+        // const field = fields.find(
+        //   field => field.positionX === realX && field.positionY === realY
+        // );
 
         if (field) {
-          visibleFields.push({ field, realX, realY, rowIndex, colIndex, cols });
+          visibleFields.push({
+            field,
+            realX,
+            realY,
+            rowIndex,
+            colIndex,
+            cols
+          });
         }
       }
-    });
+    }
 
     return visibleFields;
   };
-
   // Render the filtered visible fields grouped into rows
   const renderVisibleFields = () => {
     const filteredVisibleFields = getVisibleFields().reduce(
@@ -260,7 +286,7 @@ const GameBoard: React.FC = React.memo(() => {
         </div>
       </header>
 
-      <div className="bg-grass flex-grow w-full mt-[64px] overflow-hidden relative flex justify-center">
+      <div className=" flex-grow w-full mt-[64px] overflow-hidden relative flex justify-center">
         <div className="flex flex-col justify-center items-center min-w-max">
           {renderVisibleFields()}
         </div>
