@@ -24,7 +24,6 @@ const GameBoard: React.FC = React.memo(() => {
     y: number;
   }>(initialPosition);
 
-  // Define grid layout with equal column count
   const gridLayout = Array(15).fill(13);
 
   useEffect(() => {
@@ -34,7 +33,6 @@ const GameBoard: React.FC = React.memo(() => {
       setCampaign(campaignData);
       setFields(campaignData.fields);
 
-      // Determine maximum X and Y positions for field boundaries
       let maxPositionX = 0;
       let maxPositionY = 0;
 
@@ -59,7 +57,6 @@ const GameBoard: React.FC = React.memo(() => {
     loadFields();
   }, [getAllCampaigns]);
 
-  // Handle character movement with arrow keys
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       event.preventDefault();
@@ -116,7 +113,6 @@ const GameBoard: React.FC = React.memo(() => {
     };
   }, [handleKeyDown]);
 
-  // Determine if a field is blocked by another for shadow effect
   const isFieldBlurry = ({ field }: { field: Field }): boolean => {
     const deltaX = field.positionX - characterPosition.x;
     const deltaY = field.positionY - characterPosition.y;
@@ -135,19 +131,14 @@ const GameBoard: React.FC = React.memo(() => {
       const roundedX = Math.round(currentX);
       const roundedY = Math.round(currentY);
 
-      //   const blockingField = fields.find(
-      //     f =>
-      //       f.positionX === roundedX && f.positionY === roundedY && !f.seeThrough
-      //   );
       const chunkKey = `${roundedX},${roundedY}`;
       const blockingField = fieldsMap.get(chunkKey);
 
       if (blockingField && !blockingField.seeThrough) {
-        // This field is not blurred, but subsequent ones will be
         if (roundedX === field.positionX && roundedY === field.positionY) {
-          return false; // This is the first blocking field
+          return false;
         }
-        return true; // Field beyond the first blocking field
+        return true;
       }
     }
 
@@ -157,13 +148,12 @@ const GameBoard: React.FC = React.memo(() => {
   // Function to generate visible fields based on the current character position
   const getVisibleFields = () => {
     const visibleFields = [];
-    const gridWidth = gridLayout[0]; // Width of your grid
-    const gridHeight = gridLayout.length; // Number of rows in your grid
+    const gridWidth = gridLayout[0];
+    const gridHeight = gridLayout.length;
 
     const halfGridWidth = Math.floor(gridWidth / 2);
     const halfGridHeight = Math.floor(gridHeight / 2);
 
-    // Calculate the visible range based on the character's position
     const startX = Math.max(characterPosition.x - halfGridWidth, 0);
     const endX = Math.min(characterPosition.x + halfGridWidth, maxX);
 
@@ -172,21 +162,17 @@ const GameBoard: React.FC = React.memo(() => {
 
     // Loop over the specific range of fields
     for (let y = startY; y <= endY; y++) {
-      const rowIndex = y - startY; // Relative row index for the visible grid
+      const rowIndex = y - startY;
       const cols = gridLayout[rowIndex];
       const halfRowCols = Math.floor(cols / 2);
 
       for (let x = startX; x <= endX; x++) {
-        const colIndex = x - startX; // Relative column index for the visible grid
+        const colIndex = x - startX;
         const realX = colIndex - halfRowCols + characterPosition.x;
         const realY = y;
 
-        // Find the field directly by its coordinates
         const chunkKey = `${realX},${realY}`;
         const field = fieldsMap.get(chunkKey);
-        // const field = fields.find(
-        //   field => field.positionX === realX && field.positionY === realY
-        // );
 
         if (field) {
           visibleFields.push({
@@ -222,7 +208,9 @@ const GameBoard: React.FC = React.memo(() => {
           borderStyle += 'border-r-2 border-gray-600 ';
         }
 
-        const blurClass = isFieldBlurry({ field }) ? 'blur-sm' : '';
+        const blurClass = isFieldBlurry({ field })
+          ? 'transition duration-300 ease-in-out brightness-25 opacity-20'
+          : 'transition duration-300 ease-in-out';
 
         const fieldComponent = (
           <Suspense
