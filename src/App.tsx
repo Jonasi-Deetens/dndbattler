@@ -10,6 +10,7 @@ import Dashboard from './pageComponents/Dashboard';
 import CharacterSelect from './pageComponents/CharacterSelect';
 import CharacterCreate from './pageComponents/CharacterCreation/CharacterCreate';
 import GameBoard from './pageComponents/Game/GameBoard';
+import MapCreator from './pageComponents/MapCreation/MapCreator';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -55,6 +56,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <GameBoard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mapcreator"
+          element={
+            <ProtectedRoute>
+              <MapCreator />
             </ProtectedRoute>
           }
         />

@@ -18,7 +18,7 @@ const GameBoard: React.FC = React.memo(() => {
   const location = useLocation();
   const character = location.state?.character as Character;
 
-  const initialPosition = { x: 5, y: 5 };
+  const initialPosition = { x: 180, y: 30 };
   const [characterPosition, setCharacterPosition] = useState<{
     x: number;
     y: number;
@@ -222,7 +222,7 @@ const GameBoard: React.FC = React.memo(() => {
               isCharacterPosition={
                 realX === characterPosition.x && realY === characterPosition.y
               }
-              additionalClasses={`${borderStyle} ${blurClass}`}
+              additionalClasses={`w-16 h-16 ${borderStyle} ${blurClass}`}
             />
           </Suspense>
         );
