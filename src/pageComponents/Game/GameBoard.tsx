@@ -145,7 +145,6 @@ const GameBoard: React.FC = React.memo(() => {
     return false;
   };
 
-  // Function to generate visible fields based on the current character position
   const getVisibleFields = () => {
     const visibleFields = [];
     const gridWidth = gridLayout[0];
@@ -160,7 +159,6 @@ const GameBoard: React.FC = React.memo(() => {
     const startY = Math.max(characterPosition.y - halfGridHeight, 0);
     const endY = Math.min(characterPosition.y + halfGridHeight, maxY);
 
-    // Loop over the specific range of fields
     for (let y = startY; y <= endY; y++) {
       const rowIndex = y - startY;
       const cols = gridLayout[rowIndex];
@@ -189,7 +187,7 @@ const GameBoard: React.FC = React.memo(() => {
 
     return visibleFields;
   };
-  // Render the filtered visible fields grouped into rows
+
   const renderVisibleFields = () => {
     const filteredVisibleFields = getVisibleFields().reduce(
       (acc, { field, realX, realY, rowIndex, colIndex, cols }) => {

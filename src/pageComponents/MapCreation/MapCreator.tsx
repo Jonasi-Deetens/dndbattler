@@ -14,6 +14,7 @@ const MapCreator: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [selectedTile, setSelectedTile] = useState<string>('grass');
   const [showGrid, setShowGrid] = useState<boolean>(true);
+  const [isDragging, setIsDragging] = useState<boolean>(false); // State to track dragging
 
   useEffect(() => {
     const generateFields = () => {
@@ -61,8 +62,26 @@ const MapCreator: React.FC = () => {
     );
   };
 
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseEnter = (x: number, y: number) => {
+    if (isDragging) {
+      handleFieldClick(x, y);
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-neutral-100 w-full h-screen">
+    <div
+      className="flex flex-col min-h-screen bg-gray-900 text-neutral-100 w-full h-screen"
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
       <header className="sticky top-0 z-20 w-full bg-gray-800 shadow-md p-4">
         <div className="flex justify-between items-center mx-auto">
           <h2 className="text-2xl font-bold text-yellow-400">Map Generator</h2>
@@ -112,10 +131,14 @@ const MapCreator: React.FC = () => {
       </header>
 
       <div className="flex overflow-hidden w-full h-full">
-        <div className="overflow-hidden flex justify-center items-center w-full">
+        <div
+          className="overflow-hidden flex justify-center items-center w-full"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseUp}
+        >
           <div
-            className={`grid border-2 border-yellow-500 overflow-y-auto overflow-auto p-5 w-full h-full max-h-full ${
-              showGrid ? 'gap-1' : ''
+            className={`grid overflow-y-auto overflow-auto p-5 w-full h-full max-h-full ${
+              showGrid ? 'gap-1 border-2 border-yellow-500' : ''
             }`}
             style={{
               gridTemplateColumns: `repeat(${width}, ${zoom}px)`,
@@ -132,6 +155,7 @@ const MapCreator: React.FC = () => {
                   additionalClasses="transition duration-300 ease-in-out"
                   type={type}
                   onClick={() => handleFieldClick(x, y)}
+                  onMouseEnter={() => handleMouseEnter(x, y)}
                 />
               </Suspense>
             ))}

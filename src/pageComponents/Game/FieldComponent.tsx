@@ -8,14 +8,21 @@ interface FieldProps {
   additionalClasses: string;
   type?: string;
 
-  onClick?: () => void; // Add onClick prop here
+  onMouseEnter?: () => void;
+  onClick?: () => void;
 }
 
 const FieldComponent: React.FC<FieldProps> = React.memo(
-  ({ field, isCharacterPosition, additionalClasses, type, onClick }) => {
+  ({
+    field,
+    isCharacterPosition,
+    additionalClasses,
+    type,
+    onClick,
+    onMouseEnter
+  }) => {
     const getImageUrl = (type: string | undefined): string => {
       const tile = tileTypes.find(t => t.type === type);
-      console.log(tile?.src);
       return tile ? tile.src : '';
     };
 
@@ -32,6 +39,7 @@ const FieldComponent: React.FC<FieldProps> = React.memo(
           backgroundSize: 'cover'
         }}
         onClick={onClick}
+        onMouseEnter={onMouseEnter}
       ></div>
     );
   }
