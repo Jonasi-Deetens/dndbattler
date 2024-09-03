@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import Sidebar from './Sidebar';
 import { FiSettings } from 'react-icons/fi';
+import { adjustWallTiles, adjustWaterTiles } from '../utils/tileAdjusters';
 
 const FieldComponent = lazy(() => import('../Game/FieldComponent'));
 
@@ -76,6 +77,30 @@ const MapCreator: React.FC = () => {
     }
   };
 
+  const handleAdjustTiles = (type: string) => {
+    setFields(prevFields => {
+      const map = Array.from({ length: height }, () => Array(width).fill(''));
+      prevFields.forEach(field => {
+        map[field.y][field.x] = field.type;
+      });
+
+      switch (type) {
+        case 'wall':
+          adjustWallTiles(map, width, height);
+          break;
+
+        default:
+          adjustWaterTiles(map, width, height);
+          break;
+      }
+
+      return prevFields.map(field => ({
+        ...field,
+        type: map[field.y][field.x]
+      }));
+    });
+  };
+
   return (
     <div
       className="flex flex-col min-h-screen bg-gray-900 text-neutral-100 w-full h-screen"
@@ -126,6 +151,18 @@ const MapCreator: React.FC = () => {
                 className="mt-1 w-24"
               />
             </label>
+            <button
+              onClick={() => handleAdjustTiles('water')}
+              className="primary"
+            >
+              Adjust Water Tiles
+            </button>
+            <button
+              onClick={() => handleAdjustTiles('wall')}
+              className="primary"
+            >
+              Adjust Wall Tiles
+            </button>
           </div>
         </div>
       </header>
