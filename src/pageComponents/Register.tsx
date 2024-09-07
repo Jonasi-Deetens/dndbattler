@@ -21,7 +21,7 @@ type RegisterFormValues = {
   email: string;
   password: string;
   confirmPassword: string;
-};
+ };
 
 const Register: React.FC = () => {
   const navigate = useNavigate();

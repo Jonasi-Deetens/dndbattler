@@ -40,7 +40,7 @@ const CharacterCreate: React.FC = () => {
           setError(error.message);
         } else {
           setError('An unknown error occurred.');
-        }
+          }
       }
       setIsLoading(false);
     },

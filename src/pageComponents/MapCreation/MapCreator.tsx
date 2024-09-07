@@ -1,7 +1,21 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import Sidebar from './Sidebar';
 import { FiSettings } from 'react-icons/fi';
-import { adjustWallTiles, adjustWaterTiles } from '../utils/tileAdjusters';
+import {
+  adjustArchTiles,
+  adjustBarTiles,
+  adjustBoardTiles,
+  adjustBorderTiles,
+  adjustCarpetTiles,
+  adjustDoorTiles,
+  adjustFloorTiles,
+  adjustLadderTiles,
+  adjustPathTiles,
+  adjustScreenTiles,
+  adjustShadowTiles,
+  adjustStairsTiles,
+} from '../utils/tileAdjusters';
+import { adjustWallTiles } from '../utils/tileAdjusters';
 
 const FieldComponent = lazy(() => import('../Game/FieldComponent'));
 
@@ -9,20 +23,20 @@ const MapCreator: React.FC = () => {
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(10);
   const [fields, setFields] = useState<
-    { x: number; y: number; type: string }[]
+    { x: number; y: number; name: string }[]
   >([]);
   const [zoom, setZoom] = useState<number>(64);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [selectedTile, setSelectedTile] = useState<string>('grass');
   const [showGrid, setShowGrid] = useState<boolean>(true);
-  const [isDragging, setIsDragging] = useState<boolean>(false); // State to track dragging
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   useEffect(() => {
-    const generateFields = () => {
+    const generateFields = async () => {
       const newFields = [];
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          newFields.push({ x, y, type: 'grass' }); // Default type is 'grass'
+          newFields.push({ x, y, name: 'floor-1' });
         }
       }
       setFields(newFields);
@@ -49,15 +63,15 @@ const MapCreator: React.FC = () => {
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-  const handleTileSelect = (type: string) => {
-    setSelectedTile(type);
+  const handleTileSelect = (name: string) => {
+    setSelectedTile(name);
   };
 
   const handleFieldClick = (x: number, y: number) => {
     setFields(prevFields =>
       prevFields.map(field =>
         field.x === x && field.y === y
-          ? { ...field, type: selectedTile }
+          ? { ...field, name: selectedTile }
           : field
       )
     );
@@ -77,26 +91,30 @@ const MapCreator: React.FC = () => {
     }
   };
 
-  const handleAdjustTiles = (type: string) => {
+  const handleAdjustTiles = () => {
     setFields(prevFields => {
       const map = Array.from({ length: height }, () => Array(width).fill(''));
       prevFields.forEach(field => {
-        map[field.y][field.x] = field.type;
+        map[field.y][field.x] = field.name;
       });
 
-      switch (type) {
-        case 'wall':
-          adjustWallTiles(map, width, height);
-          break;
-
-        default:
-          adjustWaterTiles(map, width, height);
-          break;
-      }
+      adjustArchTiles(map, width, height);
+      adjustBarTiles(map, width, height);
+      adjustBoardTiles(map, width, height);
+      adjustBorderTiles(map, width, height);
+      adjustCarpetTiles(map, width, height);
+      adjustDoorTiles(map, width, height);
+      adjustFloorTiles(map, width, height);
+      adjustLadderTiles(map, width, height);
+      adjustPathTiles(map, width, height);
+      adjustScreenTiles(map, width, height);
+      adjustShadowTiles(map, width, height);
+      adjustStairsTiles(map, width, height);
+      adjustWallTiles(map, width, height);
 
       return prevFields.map(field => ({
         ...field,
-        type: map[field.y][field.x]
+        name: map[field.y][field.x],
       }));
     });
   };
@@ -151,17 +169,8 @@ const MapCreator: React.FC = () => {
                 className="mt-1 w-24"
               />
             </label>
-            <button
-              onClick={() => handleAdjustTiles('water')}
-              className="primary"
-            >
-              Adjust Water Tiles
-            </button>
-            <button
-              onClick={() => handleAdjustTiles('wall')}
-              className="primary"
-            >
-              Adjust Wall Tiles
+            <button onClick={() => handleAdjustTiles} className="primary">
+              Auto Adjust Tiles
             </button>
           </div>
         </div>
@@ -179,10 +188,10 @@ const MapCreator: React.FC = () => {
             }`}
             style={{
               gridTemplateColumns: `repeat(${width}, ${zoom}px)`,
-              gridTemplateRows: `repeat(${height}, ${zoom}px)`
+              gridTemplateRows: `repeat(${height}, ${zoom}px)`,
             }}
           >
-            {fields.map(({ x, y, type }) => (
+            {fields.map(({ x, y, name }) => (
               <Suspense
                 fallback={<div className="loading">Loading...</div>}
                 key={`${x}-${y}`}
@@ -190,7 +199,7 @@ const MapCreator: React.FC = () => {
                 <FieldComponent
                   isCharacterPosition={false}
                   additionalClasses="transition duration-300 ease-in-out"
-                  type={type}
+                  name={name}
                   onClick={() => handleFieldClick(x, y)}
                   onMouseEnter={() => handleMouseEnter(x, y)}
                 />

@@ -1,30 +1,38 @@
-import React from 'react';
-import { tileTypes } from '../utils/tileTypes'; // Adjust the path as necessary
-import { Field } from '../../types/DBTypes';
+import React, { useEffect, useState } from 'react';
+import useTiles from '../../hooks/useTiles';
+import { Tile } from '../../types/DBTypes';
 
 interface FieldProps {
-  field?: Field | undefined;
   isCharacterPosition: boolean;
   additionalClasses: string;
-  type?: string;
+  name: string;
 
   onMouseEnter?: () => void;
   onClick?: () => void;
 }
 
 const FieldComponent: React.FC<FieldProps> = React.memo(
-  ({
-    field,
-    isCharacterPosition,
-    additionalClasses,
-    type,
-    onClick,
-    onMouseEnter
-  }) => {
-    const getImageUrl = (type: string | undefined): string => {
-      const tile = tileTypes.find(t => t.type === type);
-      return tile ? tile.src : '';
+  ({ isCharacterPosition, additionalClasses, name, onClick, onMouseEnter }) => {
+    const { getAllTiles } = useTiles();
+    const [tiles, setTiles] = useState<Tile[]>([]);
+
+    const getTileByName = (name: string) => {
+      const foundTile = tiles.find(tile => tile.name === name);
+      return foundTile;
     };
+
+    useEffect(() => {
+      const fetchTiles = async () => {
+        try {
+          const fetchedTiles = await getAllTiles();
+          setTiles(fetchedTiles);
+        } catch (error) {
+          console.error('Failed to fetch tiles:', error);
+        }
+      };
+
+      fetchTiles();
+    }, []);
 
     return (
       <div
@@ -34,9 +42,9 @@ const FieldComponent: React.FC<FieldProps> = React.memo(
         style={{
           position: 'relative',
           cursor: 'pointer',
-          backgroundColor: getImageUrl(field?.type || type) ? '' : 'gray',
-          backgroundImage: `url(${getImageUrl(field?.type || type)})`,
-          backgroundSize: 'cover'
+          backgroundColor: getTileByName(name)?.imageUrl ? '' : 'gray',
+          backgroundImage: `url(${getTileByName(name)?.imageUrl})`,
+          backgroundSize: 'cover',
         }}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
