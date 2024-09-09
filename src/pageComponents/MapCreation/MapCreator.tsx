@@ -36,7 +36,7 @@ const MapCreator: React.FC = () => {
       const newFields = [];
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          newFields.push({ x, y, name: 'floor-1' });
+          newFields.push({ x, y, name: 'wall-1-bottom' });
         }
       }
       setFields(newFields);
@@ -111,6 +111,7 @@ const MapCreator: React.FC = () => {
       adjustShadowTiles(map, width, height);
       adjustStairsTiles(map, width, height);
       adjustWallTiles(map, width, height);
+      console.log('handling tiles');
 
       return prevFields.map(field => ({
         ...field,
@@ -169,7 +170,7 @@ const MapCreator: React.FC = () => {
                 className="mt-1 w-24"
               />
             </label>
-            <button onClick={() => handleAdjustTiles} className="primary">
+            <button onClick={handleAdjustTiles} className="primary">
               Auto Adjust Tiles
             </button>
           </div>

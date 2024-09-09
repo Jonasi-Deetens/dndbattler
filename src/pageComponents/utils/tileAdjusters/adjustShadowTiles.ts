@@ -1,4 +1,4 @@
-export const adjustShadowÒTiles = (
+export const adjustShadowTiles = (
   map: string[][],
   width: number,
   height: number

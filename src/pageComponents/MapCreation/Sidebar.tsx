@@ -14,6 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
   const { getAllTiles } = useTiles();
   const [tiles, setTiles] = useState<Tile[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [filter, setFilter] = useState<string>('');
   const itemsPerPage = 50;
 
   useEffect(() => {
@@ -29,9 +30,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
     fetchTiles();
   }, []);
 
+  const filteredTiles = tiles.filter(tile =>
+    tile.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentTiles = tiles.slice(startIndex, endIndex);
+  const currentTiles = filteredTiles.slice(startIndex, endIndex);
   const totalPages = Math.ceil(tiles.length / itemsPerPage);
 
   const handleNextPage = () => {
@@ -46,13 +51,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
     }
   };
 
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setPage(1);
+  };
+
   return (
     <div
       className={`w-64 z-30 bg-gray-900 p-4 transition-transform duration-300 ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } h-full shadow-lg overflow-y-auto flex flex-col`}
+      } h-full shadow-lg flex flex-col`}
     >
-      <div className="h-10 mb-5">
+      <div className="h-25 mb-5">
         <button
           className="absolute top-2 right-2 text-white p-1 hover:text-yellow-500 focus:outline-none"
           onClick={onClose}
@@ -63,6 +73,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
         <h3 className="text-white text-lg font-bold mt-4 mb-4 text-center">
           Select Tile Type
         </h3>
+        <input
+          type="text"
+          placeholder="Filter tiles..."
+          value={filter}
+          onChange={handleFilterChange}
+          className="mb-4 p-2 bg-gray-800 text-white rounded border border-gray-700 focus:outline-none"
+        />
       </div>
       <div className="flex flex-wrap gap-2 justify-center items-center h-11/12 overflow-auto">
         {tiles &&
