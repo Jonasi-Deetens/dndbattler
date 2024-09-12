@@ -1,3 +1,4 @@
+// Function to determine the correct type of wall or border based on surrounding tiles
 const determineWallType = (
   map: string[][],
   x: number,
@@ -6,132 +7,113 @@ const determineWallType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-')[0] + '-' + baseName.split('-')[1];
+  // Extract the base type (e.g., 'wall-2')
+  const tileName = baseName.split('-').slice(0, 2).join('-');
 
-  const isLeftEdge = x === 0;
-  const isRightEdge = x === width - 1;
-  const isHorizontalEdge = x === 0 || x === width - 1;
-  const isVerticalEdge = y === 0 || y === height - 1;
-
-  const hasRightCornerAbove =
-    y > 0 && map[y - 1][x].includes('corner-top-right');
-  const hasRightWallAbove = y > 0 && map[y - 1][x].includes('right');
-
-  const hasLeftCornerAbove = y > 0 && map[y - 1][x].includes('corner-top-left');
-  const hasLeftWallAbove = y > 0 && map[y - 1][x].includes('left');
-
-  const hasEndAbove = y > 0 && map[y - 1][x].includes('top-end');
-  const hasVerticalAbove = y > 0 && map[y - 1][x].includes('vertical');
-
-  const hasBorderAbove = y > 0 && map[y - 1][x].startsWith('border');
-  const hasBorderBelow = y < height - 1 && map[y + 1][x].startsWith('border');
-  const hasBorderLeft = x > 0 && map[y][x - 1].startsWith('border');
-  const hasBorderRight = x < width - 1 && map[y][x + 1].startsWith('border');
-
-  const hasBorderTopLeft =
-    x > 0 && y > 0 && map[y - 1][x - 1].startsWith('border');
-  const hasBorderTopRight =
-    x < width - 1 && y > 0 && map[y - 1][x + 1].startsWith('border');
-
-  const hasWallAbove = y > 0 && map[y - 1][x].startsWith(tileName);
-  const hasWallBelow = y < height - 1 && map[y + 1][x].startsWith(tileName);
-  const hasWallLeft = x > 0 && map[y][x - 1].startsWith(tileName);
-  const hasWallRight = x < width - 1 && map[y][x + 1].startsWith(tileName);
-
-  // Diagonal checks
-  const hasWallTopLeft =
-    x > 0 && y > 0 && map[y - 1][x - 1].startsWith(tileName);
-  const hasWallTopRight =
-    x < width - 1 && y > 0 && map[y - 1][x + 1].startsWith(tileName);
-  const hasWallBottomLeft =
-    x > 0 && y < height - 1 && map[y + 1][x - 1].startsWith(tileName);
+  // Adjacency checks for walls
+  const hasWallAbove =
+    (y > 0 && map[y - 1][x].includes('wall')) ||
+    (y > 0 && map[y - 1][x].includes('border'));
+  const hasWallBelow =
+    (y < height - 1 && map[y + 1][x].includes('wall')) ||
+    (y < height - 1 && map[y + 1][x].includes('border'));
+  const hasWallLeft =
+    (x > 0 && map[y][x - 1].includes('wall')) ||
+    (x > 0 && map[y][x - 1].includes('border'));
+  const hasWallRight =
+    (x < width - 1 && map[y][x + 1].includes('wall')) ||
+    (x < width - 1 && map[y][x + 1].includes('border'));
   const hasWallBottomRight =
-    x < width - 1 && y < height - 1 && map[y + 1][x + 1].startsWith(tileName);
+    (x < width - 1 && y < height - 1 && map[y + 1][x + 1].includes('wall')) ||
+    (x < width - 1 && y < height - 1 && map[y + 1][x + 1].includes('border'));
+  const hasWallBottomLeft =
+    (x > 0 && y < height - 1 && map[y + 1][x - 1].includes('wall')) ||
+    (x > 0 && y < height - 1 && map[y + 1][x - 1].includes('border'));
+  const hasWallTopRight =
+    (x < width - 1 && y > 0 && map[y - 1][x + 1].includes('wall')) ||
+    (x < width - 1 && y > 0 && map[y - 1][x + 1].includes('border'));
+  const hasWallTopLeft =
+    (x > 0 && y > 0 && map[y - 1][x - 1].includes('wall')) ||
+    (x > 0 && y > 0 && map[y - 1][x - 1].includes('border'));
 
-  if (!hasWallAbove) {
-    if (hasBorderAbove || isVerticalEdge) {
-      if (
-        (hasWallTopLeft && hasWallTopRight) ||
-        (isHorizontalEdge &&
-          !hasBorderTopLeft &&
-          !hasBorderTopRight &&
-          (!hasWallLeft || !hasWallRight) &&
-          !isVerticalEdge)
-      )
-        return tileName + '-top-end-outer';
+  const hasWallTwoBelow =
+    (y < height - 2 && map[y + 2][x].includes('wall')) ||
+    (y < height - 2 && map[y + 2][x].includes('border'));
 
-      if (hasBorderRight || hasBorderLeft) return tileName + '-top-outer';
-      if (
-        hasWallTopLeft ||
-        ((isVerticalEdge || isHorizontalEdge) && !hasWallLeft) ||
-        (!hasWallLeft && !hasBorderLeft)
-      )
-        return tileName + '-corner-top-left-outer';
-      if (
-        hasWallTopRight ||
-        ((isVerticalEdge || isHorizontalEdge) && !hasWallRight) ||
-        (!hasWallRight && !hasBorderRight)
-      )
-        return tileName + '-corner-top-right-outer';
-      return tileName + '-top-outer';
-    } else {
-      if (hasWallLeft && hasWallRight) return tileName + '-top';
-      if (
-        (hasWallLeft && isHorizontalEdge) ||
-        hasBorderRight ||
-        (!hasWallAbove && !hasWallRight && !isHorizontalEdge) ||
-        (isLeftEdge && !hasWallRight)
-      )
-        return tileName + '-corner-top-right';
-      if (
-        (hasWallRight && isHorizontalEdge) ||
-        hasBorderLeft ||
-        (!hasWallAbove && !hasWallLeft && !isHorizontalEdge) ||
-        (isRightEdge && !hasWallLeft)
-      )
-        return tileName + '-corner-top-left';
-    }
+  const hasBottomEndBelow =
+    y < height - 1 && map[y + 1][x].includes('top-end-outer');
+
+  // Adjacency checks for borders
+  const hasBorderAbove = y > 0 && map[y - 1][x].includes('border');
+  const hasBorderBelow = y < height - 1 && map[y + 1][x].includes('border');
+  const hasBorderLeft = x > 0 && map[y][x - 1].includes('border');
+  const hasBorderRight = x < width - 1 && map[y][x + 1].includes('border');
+
+  // Determine if the wall should be converted to a border based on surrounding tiles
+
+  if (hasBottomEndBelow) {
+    if (!hasWallAbove) return 'border-1-top-end';
+    else return 'border-1-vertical-large';
   }
-
   if (!hasWallBelow) {
-    if (hasVerticalAbove || hasEndAbove) return tileName + '-bottom-end';
-    if (
-      hasWallLeft &&
-      hasWallRight &&
-      (!hasWallBottomRight || !hasWallBottomLeft)
-    ) {
-      return tileName + '-bottom';
-    }
-    if (hasBorderRight || hasBorderLeft) return tileName + '-bottom';
-    if (hasWallLeft || hasWallBottomRight)
-      return tileName + '-corner-bottom-right';
-    if (hasWallRight || hasBorderLeft) return tileName + '-corner-bottom-left';
+    if (hasWallRight && !hasWallLeft) return tileName + '-corner-bottom-left';
+    if (!hasWallRight && hasWallLeft) return tileName + '-corner-bottom-right';
+    if (!hasWallRight && !hasWallLeft) return tileName + '-bottom-end';
+    return tileName + '-bottom';
   }
-
-  if (hasVerticalAbove || hasEndAbove) return tileName + '-vertical';
 
   if (
-    (!hasWallLeft && !hasBorderLeft && hasWallRight) ||
-    (!hasWallLeft && isRightEdge) ||
-    ((hasLeftWallAbove || hasLeftCornerAbove) &&
-      hasWallAbove &&
-      (hasWallRight || hasBorderRight) &&
-      hasWallBelow)
-  ) {
-    return tileName + '-left';
-  } else if (
-    (!hasWallRight && !hasBorderRight && hasWallLeft) ||
-    (!hasWallRight && isLeftEdge) ||
-    ((hasRightWallAbove || hasRightCornerAbove) &&
-      hasWallAbove &&
-      (hasWallLeft || hasBorderLeft) &&
-      hasWallBelow)
-  ) {
-    return tileName + '-right';
+    !hasWallTwoBelow &&
+    !hasWallBottomLeft &&
+    !hasWallTopLeft &&
+    !hasWallBottomRight &&
+    !hasWallTopRight
+  )
+    return tileName + '-top-end-outer';
+
+  if (
+    ((!hasWallLeft && !hasWallRight) || hasBorderAbove) &&
+    hasWallBelow &&
+    !hasWallTwoBelow &&
+    hasWallTopLeft &&
+    hasWallTopRight
+  )
+    return tileName + '-top-end-outer';
+  if (!hasWallAbove || hasBorderAbove) {
+    if (hasWallRight && !hasWallLeft && hasBorderBelow)
+      if (hasBorderAbove) return 'border-1-vertical-large';
+      else return 'border-1-top-end';
+    if (!hasWallRight && hasWallLeft && hasBorderBelow)
+      if (hasBorderAbove) return 'border-1-vertical-large';
+      else return 'border-1-top-end';
+    if (hasWallRight && !hasWallLeft) return tileName + '-corner-top-left';
+    if (!hasWallRight && hasWallLeft) return tileName + '-corner-top-right';
+    if (!hasWallRight && !hasWallLeft && !hasBorderAbove)
+      return 'border-1-top-end';
+    if (!hasWallRight && !hasWallLeft && hasBorderAbove) {
+      if (hasWallBelow) return 'border-1-vertical-large';
+    }
+    if (!hasWallAbove && hasBorderBelow) return 'border-1-top-end';
+    if (hasBorderAbove && hasBorderBelow) return 'border-1-vertical-large';
+    return tileName + '-top';
   }
-  return tileName + '';
+
+  if (hasWallAbove && hasWallBelow) {
+    if (hasWallRight && !hasWallLeft && !hasBorderBelow)
+      return tileName + '-left';
+    if (!hasWallRight && hasWallLeft && !hasBorderBelow)
+      return tileName + '-right';
+    if (!hasWallBottomLeft && !hasWallBottomRight && !hasWallTwoBelow)
+      return tileName + '-top-end-outer';
+    if ((!hasWallRight && !hasWallLeft) || hasBorderBelow)
+      return 'border-1-vertical-large';
+    if (!hasWallBottomLeft && !hasWallBottomRight)
+      return 'border-1-vertical-large';
+  }
+  return tileName;
 };
 
+// Function to adjust all tiles in the map
 export const adjustWallTiles = (
   map: string[][],
   width: number,
@@ -139,7 +121,7 @@ export const adjustWallTiles = (
 ) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      if (map[y][x].includes('wall')) {
+      if (map[y][x].includes('wall') && !map[y][x].includes('top-end-outer')) {
         map[y][x] = determineWallType(map, x, y, width, height, map[y][x]);
       }
     }

@@ -14,8 +14,10 @@ import {
   adjustScreenTiles,
   adjustShadowTiles,
   adjustStairsTiles,
+  addBorders,
 } from '../utils/tileAdjusters';
 import { adjustWallTiles } from '../utils/tileAdjusters';
+import GridPrinter from '../../modules/GridPrinter';
 
 const FieldComponent = lazy(() => import('../Game/FieldComponent'));
 
@@ -30,13 +32,14 @@ const MapCreator: React.FC = () => {
   const [selectedTile, setSelectedTile] = useState<string>('grass');
   const [showGrid, setShowGrid] = useState<boolean>(true);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [grid, setGrid] = useState<string[][]>([]);
 
   useEffect(() => {
     const generateFields = async () => {
       const newFields = [];
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          newFields.push({ x, y, name: 'wall-1-bottom' });
+          newFields.push({ x, y, name: 'sky' });
         }
       }
       setFields(newFields);
@@ -98,6 +101,8 @@ const MapCreator: React.FC = () => {
         map[field.y][field.x] = field.name;
       });
 
+      /* 
+      addBorders(map, width, height); */
       adjustArchTiles(map, width, height);
       adjustBarTiles(map, width, height);
       adjustBoardTiles(map, width, height);
@@ -206,6 +211,11 @@ const MapCreator: React.FC = () => {
                 />
               </Suspense>
             ))}
+          </div>
+        </div>
+        <div className="relative">
+          <div className="absolute top-1/2 overflow-auto h-96 top-0">
+            <GridPrinter grid={grid} />
           </div>
         </div>
         <div className="relative">
