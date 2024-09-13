@@ -46,8 +46,11 @@ const determineWallType = (
   // Adjacency checks for borders
   const hasBorderAbove = y > 0 && map[y - 1][x].includes('border');
   const hasBorderBelow = y < height - 1 && map[y + 1][x].includes('border');
-  const hasBorderLeft = x > 0 && map[y][x - 1].includes('border');
-  const hasBorderRight = x < width - 1 && map[y][x + 1].includes('border');
+  const hasStairsBottomLeft =
+    x > 0 && y < height - 1 && map[y + 1][x - 1].includes('stair');
+
+  const hasStairsBottomRight =
+    x < width - 1 && y < height - 1 && map[y + 1][x + 1].includes('stairs');
 
   // Determine if the wall should be converted to a border based on surrounding tiles
 
@@ -59,15 +62,18 @@ const determineWallType = (
     if (hasWallRight && !hasWallLeft) return tileName + '-corner-bottom-left';
     if (!hasWallRight && hasWallLeft) return tileName + '-corner-bottom-right';
     if (!hasWallRight && !hasWallLeft) return tileName + '-bottom-end';
+
     return tileName + '-bottom';
   }
 
   if (
     !hasWallTwoBelow &&
-    !hasWallBottomLeft &&
-    !hasWallTopLeft &&
-    !hasWallBottomRight &&
-    !hasWallTopRight
+    ((!hasWallBottomLeft &&
+      !hasWallTopLeft &&
+      !hasWallBottomRight &&
+      !hasWallTopRight) ||
+      hasStairsBottomLeft ||
+      hasStairsBottomRight)
   )
     return tileName + '-top-end-outer';
 
@@ -110,6 +116,7 @@ const determineWallType = (
     if (!hasWallBottomLeft && !hasWallBottomRight)
       return 'border-1-vertical-large';
   }
+
   return tileName;
 };
 

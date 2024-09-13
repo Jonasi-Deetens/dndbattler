@@ -106,7 +106,7 @@ const MapCreator: React.FC = () => {
       adjustArchTiles(map, width, height);
       adjustBarTiles(map, width, height);
       adjustBoardTiles(map, width, height);
-      adjustBorderTiles(map, width, height);
+      //adjustBorderTiles(map, width, height);
       adjustCarpetTiles(map, width, height);
       adjustDoorTiles(map, width, height);
       adjustFloorTiles(map, width, height);
