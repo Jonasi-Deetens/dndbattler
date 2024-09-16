@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FaArrowRight, FaTimes } from 'react-icons/fa';
 import useTiles from '../../hooks/useTiles';
-import { Tile } from '../../types/DBTypes';
+import { Layer, Tile } from '../../types/DBTypes';
 import { FaArrowLeft } from 'react-icons/fa6';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectTile: (name: string) => void;
+  onSelectTile: (tile: Tile) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
@@ -22,6 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
       try {
         const fetchedTiles = await getAllTiles();
         setTiles(fetchedTiles);
+        if (fetchedTiles) onSelectTile(fetchedTiles[0]);
       } catch (error) {
         console.error('Failed to fetch tiles:', error);
       }
@@ -86,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
           currentTiles.map(tile => (
             <div
               key={tile.name}
-              onClick={() => onSelectTile(tile.name)}
+              onClick={() => onSelectTile(tile)}
               className="cursor-pointer w-16 h-16 border-2 border-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg active:scale-95 hover:border-yellow-500 transition duration-200 transform hover:scale-105"
             >
               <img

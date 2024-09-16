@@ -22,66 +22,15 @@ const determineStairsType = (
   const hasFloorLeft = x > 0 && map[y][x - 1].includes('floor');
   const hasFloorRight = x < width - 1 && map[y][x + 1].includes('floor');
 
-  const hasWallAbove =
-    (y > 0 && map[y - 1][x].includes('wall')) ||
-    (y > 0 && map[y - 1][x].includes('border'));
-  const hasWallBelow =
-    (y < height - 1 && map[y + 1][x].includes('wall')) ||
-    (y < height - 1 && map[y + 1][x].includes('border'));
-  const hasWallLeft =
-    (x > 0 && map[y][x - 1].includes('wall')) ||
-    (x > 0 && map[y][x - 1].includes('border'));
-  const hasWallRight =
-    (x < width - 1 && map[y][x + 1].includes('wall')) ||
-    (x < width - 1 && map[y][x + 1].includes('border'));
+  if (!hasTileAbove && hasFloorRight) return tileName + '-stairs-left-top';
+  if (hasTileAbove && hasFloorRight) return tileName + '-stairs-left-bottom';
+  if (!hasTileAbove && hasFloorLeft) return tileName + '-stairs-right-top';
+  if (hasTileAbove && hasFloorLeft) return tileName + '-stairs-right-bottom';
 
-  if (isHorizontalEdge && hasTileRight && hasWallAbove)
-    return tileName + '-stairs-top-left';
-  if (isHorizontalEdge && hasTileLeft && hasWallAbove)
-    return tileName + '-stairs-top';
-  if (isHorizontalEdge && hasTileRight && hasWallBelow)
-    return tileName + '-stairs-bottom-left';
-  if (isHorizontalEdge && hasTileLeft && hasWallBelow)
-    return tileName + '-stairs-bottom';
-
-  if (isHorizontalEdge && !hasTileAbove && hasFloorRight)
-    return tileName + '-stairs-left-top';
-  if (isHorizontalEdge && hasTileAbove && hasFloorRight)
-    return tileName + '-stairs-left-bottom';
-  if (isHorizontalEdge && !hasTileAbove && hasFloorLeft)
-    return tileName + '-stairs-right-top';
-  if (isHorizontalEdge && hasTileAbove && hasFloorLeft)
-    return tileName + '-stairs-right-bottom';
-
-  if (isVerticalEdge && hasTileAbove && hasWallLeft)
-    return tileName + '-stairs-left-bottom';
-  if (isVerticalEdge && hasTileBelow && hasWallLeft)
-    return tileName + '-stairs-left-top';
-  if (isVerticalEdge && hasTileAbove && hasWallRight)
-    return tileName + '-stairs-right-bottom';
-  if (isVerticalEdge && hasTileBelow && hasWallRight)
-    return tileName + '-stairs-right-top';
-
-  if (isVerticalEdge && hasTileLeft && hasFloorAbove)
-    return tileName + '-stairs-bottom';
-  if (isVerticalEdge && !hasTileLeft && hasFloorAbove)
-    return tileName + '-stairs-bottom-left';
-  if (isVerticalEdge && hasTileLeft && hasFloorBelow)
-    return tileName + '-stairs-top';
-  if (isVerticalEdge && !hasTileLeft && hasFloorBelow)
-    return tileName + '-stairs-top-left';
-
-  if (hasTileAbove && hasWallLeft) return tileName + '-stairs-left-bottom';
-  if (hasWallAbove && hasWallLeft && !hasTileRight)
-    return tileName + '-stairs-left-top';
-  if (hasTileAbove && hasWallRight) return tileName + '-stairs-right-bottom';
-  if (hasWallAbove && hasWallRight && !hasTileLeft)
-    return tileName + '-stairs-right-top';
-
-  if (hasTileLeft && hasWallAbove) return tileName + '-stairs-top';
-  if (hasWallLeft && hasWallAbove) return tileName + '-stairs-top-left';
-  if (hasTileLeft && hasWallBelow) return tileName + '-stairs-bottom';
-  if (hasWallLeft && hasWallBelow) return tileName + '-stairs-bottom-left';
+  if (hasTileLeft && hasFloorAbove) return tileName + '-stairs-bottom';
+  if (!hasTileLeft && hasFloorAbove) return tileName + '-stairs-bottom-left';
+  if (hasTileLeft && hasFloorBelow) return tileName + '-stairs-top';
+  if (!hasTileLeft && hasFloorBelow) return tileName + '-stairs-top-left';
 
   return baseName;
 };

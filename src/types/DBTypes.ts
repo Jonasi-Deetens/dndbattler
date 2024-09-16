@@ -7,6 +7,14 @@ export type User = {
   characters?: Character[];
 };
 
+export enum Layer {
+  FLOOR = 'floor',
+  WALL = 'wall',
+  OBJECT = 'object',
+  ROOF = 'roof',
+  OVERLAY = 'overlay',
+}
+
 export type Campaign = {
   id: string;
   name: string;
@@ -94,24 +102,32 @@ export type Character = {
 };
 
 export type Field = {
-  id: number;
-  name: string;
-  tile: Tile;
-  positionX: number;
-  positionY: number;
-  campaign: Campaign;
+  id?: number | null;
+  x: number;
+  y: number;
+  layers: {
+    floor?: Tile | null;
+    wall?: Tile | null;
+    detail?: Tile | null;
+    object?: Tile | null;
+    roof?: Tile | null;
+    overlay?: Tile | null;
+  };
+
+  campaign?: Campaign | null;
 };
 
 export type Tile = {
-  id: number;
+  id?: number | null;
   name: string;
-  tileType: TileType;
-  imageUrl: string;
+  tileType?: TileType;
+  imageUrl?: string;
 };
 
 export type TileType = {
   id: number;
   name: string;
+  layer: Layer;
   isRoof: boolean;
   isFloor: boolean;
   isDestructible: boolean;

@@ -1,54 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import useTiles from '../../hooks/useTiles';
-import { Tile } from '../../types/DBTypes';
+import React from 'react';
+import { Field } from '../../types/DBTypes';
 
 interface FieldProps {
-  isCharacterPosition: boolean;
-  additionalClasses: string;
-  name: string;
-
+  field?: Field | undefined;
+  isCharacterPosition?: boolean;
+  additionalClasses?: string;
+  type?: string;
   onMouseEnter?: () => void;
   onClick?: () => void;
 }
 
 const FieldComponent: React.FC<FieldProps> = React.memo(
-  ({ isCharacterPosition, additionalClasses, name, onClick, onMouseEnter }) => {
-    const { getAllTiles } = useTiles();
-    const [tiles, setTiles] = useState<Tile[]>([]);
-
-    const getTileByName = (name: string) => {
-      const foundTile = tiles.find(tile => tile.name === name);
-      return foundTile;
+  ({
+    field,
+    isCharacterPosition,
+    additionalClasses,
+    onClick,
+    onMouseEnter,
+  }) => {
+    const layers = field?.layers || {
+      floor: undefined,
+      wall: undefined,
+      detail: undefined,
+      object: undefined,
+      roof: undefined,
+      overlay: undefined,
     };
-
-    useEffect(() => {
-      const fetchTiles = async () => {
-        try {
-          const fetchedTiles = await getAllTiles();
-          setTiles(fetchedTiles);
-        } catch (error) {
-          console.error('Failed to fetch tiles:', error);
-        }
-      };
-
-      fetchTiles();
-    }, []);
 
     return (
       <div
-        className={`flex justify-center items-center ${
+        className={`relative flex justify-center items-center ${additionalClasses} ${
           isCharacterPosition ? 'border-4 border-yellow-500' : ''
-        } ${additionalClasses}`}
-        style={{
-          position: 'relative',
-          cursor: 'pointer',
-          backgroundColor: getTileByName(name)?.imageUrl ? '' : 'gray',
-          backgroundImage: `url(${getTileByName(name)?.imageUrl})`,
-          backgroundSize: 'cover',
-        }}
+        }`}
+        style={{ cursor: 'pointer' }}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
-      ></div>
+      >
+        {/* Floor Layer */}
+        {layers.floor && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.floor.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 1,
+            }}
+          />
+        )}
+
+        {/* Wall Layer */}
+        {layers.wall && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.wall.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 2,
+            }}
+          />
+        )}
+
+        {/* Detail Layer */}
+        {layers.detail && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.detail.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 3,
+            }}
+          />
+        )}
+
+        {/* Object Layer */}
+        {layers.object && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.object.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {/* Roof Layer */}
+        {layers.roof && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.roof.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 5,
+            }}
+          />
+        )}
+
+        {/* Overlay Layer */}
+        {layers.overlay && (
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${layers.overlay.imageUrl})`,
+              backgroundSize: 'cover',
+              zIndex: 6,
+            }}
+          />
+        )}
+      </div>
     );
   }
 );

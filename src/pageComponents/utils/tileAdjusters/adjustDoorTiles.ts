@@ -1,3 +1,16 @@
+const determineDoorType = (
+  map: string[][],
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  baseName: string
+) => {
+  const tileName = baseName.split('-')[0] + '-' + baseName.split('-')[1];
+
+  return baseName;
+};
+
 export const adjustDoorTiles = (
   map: string[][],
   width: number,
@@ -5,8 +18,8 @@ export const adjustDoorTiles = (
 ) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      if (map[y][x].includes('wall')) {
-        //map[y][x] = determineWallType(map, x, y, width, height);
+      if (map[y][x].includes('door')) {
+        map[y][x] = determineDoorType(map, x, y, width, height, map[y][x]);
       }
     }
   }

@@ -12,10 +12,8 @@ import { adjustShadowTiles } from './adjustShadowTiles';
 import { adjustStairsTiles } from './adjustStairsTiles';
 import { adjustWallTiles } from './adjustWallTiles';
 import { adjustWaterTiles } from './adjustWaterTiles';
-import { addBorders } from './addBorders';
 
 export {
-  addBorders,
   adjustArchTiles,
   adjustBarTiles,
   adjustBoardTiles,

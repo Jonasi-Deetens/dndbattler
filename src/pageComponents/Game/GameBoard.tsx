@@ -39,14 +39,14 @@ const GameBoard: React.FC = React.memo(() => {
       const newFieldsMap = new Map<string, Field>();
 
       campaignData.fields.forEach(field => {
-        if (field.positionX > maxPositionX) {
-          maxPositionX = field.positionX;
+        if (field.x > maxPositionX) {
+          maxPositionX = field.x;
         }
-        if (field.positionY > maxPositionY) {
-          maxPositionY = field.positionY;
+        if (field.y > maxPositionY) {
+          maxPositionY = field.y;
         }
         // Add to map for quick lookup
-        newFieldsMap.set(`${field.positionX},${field.positionY}`, field);
+        newFieldsMap.set(`${field.x},${field.y}`, field);
       });
 
       setFieldsMap(newFieldsMap);
@@ -92,10 +92,10 @@ const GameBoard: React.FC = React.memo(() => {
           }
 
           const targetField = fields.find(
-            field => field.positionX === newX && field.positionY === newY
+            field => field.x === newX && field.y === newY
           );
 
-          if (targetField?.passable) {
+          if (targetField?.layers.floor?.tileType?.passable) {
             return { x: newX, y: newY };
           }
 
@@ -114,8 +114,8 @@ const GameBoard: React.FC = React.memo(() => {
   }, [handleKeyDown]);
 
   const isFieldBlurry = ({ field }: { field: Field }): boolean => {
-    const deltaX = field.positionX - characterPosition.x;
-    const deltaY = field.positionY - characterPosition.y;
+    const deltaX = field.x - characterPosition.x;
+    const deltaY = field.y - characterPosition.y;
 
     const steps = Math.max(Math.abs(deltaX), Math.abs(deltaY));
     const stepX = deltaX / steps;
@@ -134,8 +134,8 @@ const GameBoard: React.FC = React.memo(() => {
       const chunkKey = `${roundedX},${roundedY}`;
       const blockingField = fieldsMap.get(chunkKey);
 
-      if (blockingField && !blockingField.seeThrough) {
-        if (roundedX === field.positionX && roundedY === field.positionY) {
+      if (blockingField && !blockingField.layers.floor?.tileType?.seeThrough) {
+        if (roundedX === field.x && roundedY === field.y) {
           return false;
         }
         return true;
@@ -179,7 +179,7 @@ const GameBoard: React.FC = React.memo(() => {
             realY,
             rowIndex,
             colIndex,
-            cols
+            cols,
           });
         }
       }

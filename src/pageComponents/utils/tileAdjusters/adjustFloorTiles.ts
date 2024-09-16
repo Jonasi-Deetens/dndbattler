@@ -1,5 +1,7 @@
 const determineFloorType = (
   map: string[][],
+  wallMap: string[][],
+  borderMap: string[][],
   x: number,
   y: number,
   width: number,
@@ -8,35 +10,37 @@ const determineFloorType = (
 ) => {
   const tileName = baseName.split('-')[0] + '-' + baseName.split('-')[1];
 
-  const hasTileAbove = y > 0 && map[y - 1][x].includes(tileName);
-  const hasTileBelow = y < height - 1 && map[y + 1][x].includes(tileName);
-  const hasTileLeft = x > 0 && map[y][x - 1].includes(tileName);
-  const hasTileRight = x < width - 1 && map[y][x + 1].includes(tileName);
+  const hasWallAbove =
+    (y > 0 && wallMap[y - 1][x].includes('wall')) ||
+    (y > 0 && borderMap[y - 1][x].includes('border'));
+  const hasWallBelow =
+    (y < height - 1 && wallMap[y + 1][x].includes('wall')) ||
+    (y < height - 1 && borderMap[y + 1][x].includes('border'));
+  const hasWallLeft =
+    (x > 0 && wallMap[y][x - 1].includes('wall')) ||
+    (x > 0 && borderMap[y][x - 1].includes('border'));
+  const hasWallRight =
+    (x < width - 1 && wallMap[y][x + 1].includes('wall')) ||
+    (x < width - 1 && borderMap[y][x + 1].includes('border'));
 
-  // Diagonal checks
-  const hasTileTopLeft = x > 0 && y > 0 && map[y - 1][x - 1].includes(tileName);
-  const hasTileTopRight =
-    x < width - 1 && y > 0 && map[y - 1][x + 1].includes(tileName);
-  const hasTileBottomLeft =
-    x > 0 && y < height - 1 && map[y + 1][x - 1].includes(tileName);
-  const hasTileBottomRight =
-    x < width - 1 && y < height - 1 && map[y + 1][x + 1].includes(tileName);
+  const hasWallTopLeft =
+    x > 0 && y > 0 && wallMap[y - 1][x - 1].includes('wall');
 
-  // Determine specific floor type based on adjacency
-  if (hasTileAbove && !hasTileLeft) {
-    return tileName + '-corner-bottom-left'; // Surrounded on top, bottom, right
+  if (!hasWallAbove && hasWallLeft) {
+    return tileName + '-corner-bottom-left';
   }
-  if (!hasTileAbove && hasTileLeft) {
-    return tileName + '-top'; // Surrounded on bottom, left, right
+  if (hasWallAbove && !hasWallLeft) {
+    return tileName + '-top';
   }
-  if (!hasTileAbove && !hasTileLeft) {
-    return tileName + '-corner-top-left'; // No tile above or left, but bottom and right are present
+  if (hasWallAbove && hasWallLeft) {
+    return tileName + '-corner-top-left';
   }
-  if (hasTileAbove && hasTileLeft && !hasTileTopLeft) {
-    return tileName + '-corner-top-right'; // No tile above or right, but bottom and left are present
+  if (!hasWallAbove && !hasWallLeft && hasWallTopLeft) {
+    return tileName + '-corner-top-right';
   }
-  if (hasTileAbove && !hasTileBelow && hasTileLeft && !hasTileRight) {
-    return tileName + '-corner-bottom-right'; // No tile below or right, but top and left are present
+  if (!hasWallAbove && hasWallBelow && !hasWallLeft && hasWallRight) {
+    // return tileName + '-corner-bottom-right';
+    return tileName + '-bottom';
   }
 
   // Default fallback
@@ -45,13 +49,24 @@ const determineFloorType = (
 
 export const adjustFloorTiles = (
   map: string[][],
+  wallMap: string[][],
+  borderMap: string[][],
   width: number,
   height: number
 ) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       if (map[y][x].includes('floor')) {
-        map[y][x] = determineFloorType(map, x, y, width, height, map[y][x]);
+        map[y][x] = determineFloorType(
+          map,
+          wallMap,
+          borderMap,
+          x,
+          y,
+          width,
+          height,
+          map[y][x]
+        );
       }
     }
   }

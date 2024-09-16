@@ -14,32 +14,50 @@ import {
   adjustScreenTiles,
   adjustShadowTiles,
   adjustStairsTiles,
-  addBorders,
 } from '../utils/tileAdjusters';
 import { adjustWallTiles } from '../utils/tileAdjusters';
-import GridPrinter from '../../modules/GridPrinter';
+import { Field, Layer, Tile } from '../../types/DBTypes';
+import useTiles from '../../hooks/useTiles';
 
 const FieldComponent = lazy(() => import('../Game/FieldComponent'));
 
 const MapCreator: React.FC = () => {
+  const { getAllTiles } = useTiles();
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(10);
-  const [fields, setFields] = useState<
-    { x: number; y: number; name: string }[]
-  >([]);
-  const [zoom, setZoom] = useState<number>(64);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [zoom, setZoom] = useState<number>(48);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [selectedTile, setSelectedTile] = useState<string>('grass');
+  const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
+  const [tiles, setTiles] = useState<Tile[]>([]);
   const [showGrid, setShowGrid] = useState<boolean>(true);
+  const [isReplace, setIsReplace] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [grid, setGrid] = useState<string[][]>([]);
 
   useEffect(() => {
     const generateFields = async () => {
-      const newFields = [];
+      const tiles = await getAllTiles();
+      setTiles(tiles);
+
+      const fieldMap = new Map(fields.map(f => [`${f.x},${f.y}`, f]));
+
+      const newFields: Field[] = [];
+
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          newFields.push({ x, y, name: 'sky' });
+          const existingField = fieldMap.get(`${x},${y}`);
+
+          newFields.push({
+            x,
+            y,
+            layers: {
+              floor: existingField?.layers.floor || null,
+              wall: existingField?.layers.wall || null,
+              object: existingField?.layers.object || null,
+              roof: existingField?.layers.roof || null,
+              overlay: existingField?.layers.overlay || null,
+            },
+          });
         }
       }
       setFields(newFields);
@@ -64,20 +82,54 @@ const MapCreator: React.FC = () => {
     setShowGrid(e.target.checked);
   };
 
+  const handleReplaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsReplace(e.target.checked);
+  };
+
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-  const handleTileSelect = (name: string) => {
-    setSelectedTile(name);
+  const handleTileSelect = (tile: Tile) => {
+    setSelectedTile(tile);
   };
 
   const handleFieldClick = (x: number, y: number) => {
-    setFields(prevFields =>
-      prevFields.map(field =>
-        field.x === x && field.y === y
-          ? { ...field, name: selectedTile }
-          : field
-      )
-    );
+    if (!selectedTile) return;
+
+    if (isReplace) {
+      setFields(prevFields =>
+        prevFields.map(field =>
+          field.x === x && field.y === y
+            ? {
+                ...field,
+                layers: {
+                  floor: null,
+                  wall: null,
+                  object: null,
+                  roof: null,
+                  overlay: null,
+                  [selectedTile.tileType!.layer.toLowerCase() as Layer]:
+                    selectedTile,
+                },
+              }
+            : field
+        )
+      );
+    } else {
+      setFields(prevFields =>
+        prevFields.map(field =>
+          field.x === x && field.y === y
+            ? {
+                ...field,
+                layers: {
+                  ...field.layers,
+                  [selectedTile.tileType!.layer.toLowerCase() as Layer]:
+                    selectedTile,
+                },
+              }
+            : field
+        )
+      );
+    }
   };
 
   const handleMouseDown = () => {
@@ -96,31 +148,94 @@ const MapCreator: React.FC = () => {
 
   const handleAdjustTiles = () => {
     setFields(prevFields => {
-      const map = Array.from({ length: height }, () => Array(width).fill(''));
-      prevFields.forEach(field => {
-        map[field.y][field.x] = field.name;
-      });
+      const floorMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
 
-      /* 
-      addBorders(map, width, height); */
-      adjustArchTiles(map, width, height);
-      adjustBarTiles(map, width, height);
-      adjustBoardTiles(map, width, height);
-      //adjustBorderTiles(map, width, height);
-      adjustCarpetTiles(map, width, height);
-      adjustDoorTiles(map, width, height);
-      adjustFloorTiles(map, width, height);
-      adjustLadderTiles(map, width, height);
-      adjustPathTiles(map, width, height);
-      adjustScreenTiles(map, width, height);
-      adjustShadowTiles(map, width, height);
-      adjustStairsTiles(map, width, height);
-      adjustWallTiles(map, width, height);
-      console.log('handling tiles');
+          return (field?.layers.wall || field?.layers.roof) &&
+            field?.layers.floor?.name !== 'sky'
+            ? ''
+            : field?.layers.floor?.name || '';
+        })
+      );
+      const wallMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+          return field?.layers.wall?.name || '';
+        })
+      );
+
+      const detailMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+          return field?.layers.detail?.name || '';
+        })
+      );
+
+      const objectMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+          return field?.layers.object?.name || '';
+        })
+      );
+
+      const roofMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+          return field?.layers.roof?.name || '';
+        })
+      );
+
+      const overlayMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+          return field?.layers.overlay?.name || '';
+        })
+      );
+
+      adjustArchTiles(floorMap, width, height);
+      adjustBarTiles(floorMap, width, height);
+      adjustBoardTiles(detailMap, width, height);
+      adjustCarpetTiles(detailMap, width, height);
+      adjustDoorTiles(floorMap, width, height);
+      adjustFloorTiles(floorMap, wallMap, roofMap, width, height);
+      adjustLadderTiles(floorMap, width, height);
+      adjustPathTiles(floorMap, width, height);
+      adjustScreenTiles(floorMap, width, height);
+      adjustShadowTiles(floorMap, width, height);
+
+      adjustBorderTiles(roofMap, wallMap, floorMap, width, height);
+      adjustStairsTiles(floorMap, width, height);
+      adjustWallTiles(wallMap, roofMap, width, height);
 
       return prevFields.map(field => ({
         ...field,
-        name: map[field.y][field.x],
+        layers: {
+          floor: field.layers.floor
+            ? tiles.find(tile => tile.name === floorMap[field.y][field.x]) ||
+              null
+            : null,
+          wall: field.layers.wall
+            ? tiles.find(tile => tile.name === wallMap[field.y][field.x]) ||
+              null
+            : null,
+          detail: field.layers.detail
+            ? tiles.find(tile => tile.name === detailMap[field.y][field.x]) ||
+              null
+            : null,
+          object: field.layers.object
+            ? tiles.find(tile => tile.name === objectMap[field.y][field.x]) ||
+              null
+            : null,
+          roof: field.layers.roof
+            ? tiles.find(tile => tile.name === roofMap[field.y][field.x]) ||
+              null
+            : null,
+          overlay: field.layers.overlay
+            ? tiles.find(tile => tile.name === overlayMap[field.y][field.x]) ||
+              null
+            : null,
+        },
       }));
     });
   };
@@ -135,6 +250,15 @@ const MapCreator: React.FC = () => {
         <div className="flex justify-between items-center mx-auto">
           <h2 className="text-2xl font-bold text-yellow-400">Map Generator</h2>
           <div className="flex items-center gap-4">
+            <label className="flex items-center text-sm">
+              Replace
+              <input
+                type="checkbox"
+                checked={isReplace}
+                onChange={handleReplaceChange}
+                className="ml-2"
+              />
+            </label>
             <label className="flex items-center text-sm">
               Show Grid
               <input
@@ -197,25 +321,18 @@ const MapCreator: React.FC = () => {
               gridTemplateRows: `repeat(${height}, ${zoom}px)`,
             }}
           >
-            {fields.map(({ x, y, name }) => (
+            {fields.flat().map(field => (
               <Suspense
                 fallback={<div className="loading">Loading...</div>}
-                key={`${x}-${y}`}
+                key={`${field.x}-${field.y}`}
               >
                 <FieldComponent
-                  isCharacterPosition={false}
-                  additionalClasses="transition duration-300 ease-in-out"
-                  name={name}
-                  onClick={() => handleFieldClick(x, y)}
-                  onMouseEnter={() => handleMouseEnter(x, y)}
+                  field={field}
+                  onClick={() => handleFieldClick(field.x, field.y)}
+                  onMouseEnter={() => handleMouseEnter(field.x, field.y)}
                 />
               </Suspense>
             ))}
-          </div>
-        </div>
-        <div className="relative">
-          <div className="absolute top-1/2 overflow-auto h-96 top-0">
-            <GridPrinter grid={grid} />
           </div>
         </div>
         <div className="relative">
