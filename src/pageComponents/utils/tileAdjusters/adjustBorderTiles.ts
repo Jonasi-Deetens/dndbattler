@@ -25,6 +25,7 @@ const determineBorderType = (
   const hasLargeTileAbove = y > 0 && map[y - 1][x].includes('large');
   const hasLargeTileLeft = x > 0 && map[y][x - 1].includes('large');
   const hasLargeTileRight = x < width - 1 && map[y][x + 1].includes('large');
+  const hasLargeTileBelow = y < height - 1 && map[y + 1][x].includes('large');
 
   const hasTileBottomLeft =
     x > 0 && y < height - 1 && map[y + 1][x - 1].includes(tileName);
@@ -34,9 +35,19 @@ const determineBorderType = (
   const hasTileTopRight =
     x < width - 1 && y > 0 && map[y - 1][x + 1].includes(tileName);
 
+  const hasWall = wallMap[y][x].includes('wall');
   const hasWallBelow = y < height - 1 && wallMap[y + 1][x].includes('wall');
   const hasWallLeft = x > 0 && wallMap[y][x - 1].includes('wall');
   const hasWallRight = x < width - 1 && wallMap[y][x + 1].includes('wall');
+
+  const hasWallTopRight =
+    x < width - 1 && y > 0 && wallMap[y - 1][x + 1].includes('wall');
+  const hasWallTopLeft =
+    x > 0 && y > 0 && wallMap[y - 1][x - 1].includes('wall');
+  const hasWallBottomLeft =
+    x > 0 && y < height - 1 && wallMap[y + 1][x - 1].includes('wall');
+  const hasWallBottomRight =
+    x < width - 1 && y < height - 1 && wallMap[y + 1][x + 1].includes('wall');
 
   const hasSkyAbove = y > 0 && floorMap[y - 1][x].includes('sky');
   const hasSkyBelow = y < height - 1 && floorMap[y + 1][x].includes('sky');
@@ -61,12 +72,12 @@ const determineBorderType = (
     (x > 0 && y > 0 && floorMap[y - 1][x - 1].includes('floor')) ||
     (x > 0 && y > 0 && floorMap[y - 1][x - 1].includes('stair'));
 
-  // if (hasLargeTileLeft && hasLargeTileRight) {
-  //   // if (!hasTileAbove) return tileName + '-top-large';
-  //   return tileName;
-  // }
-
-  if (hasTileAbove && hasTileBelow && hasTileRight && hasTileLeft)
+  if (
+    hasTileAbove &&
+    (hasTileBelow || hasWallBelow) &&
+    hasLargeTileRight &&
+    hasLargeTileLeft
+  )
     return tileName;
   if (
     hasTileAbove &&
@@ -114,7 +125,7 @@ const determineBorderType = (
     hasTileBelow &&
     (hasTileLeft || hasSkyLeft)
   ) {
-    if (hasFloorRight && !hasTileLeft)
+    if ((hasFloorRight && !hasTileLeft) || hasLargeTileBelow)
       return tileName + '-corner-top-right-large';
     return tileName + '-corner-top-right';
   }
@@ -124,19 +135,34 @@ const determineBorderType = (
     hasTileBelow &&
     !hasTileLeft
   ) {
-    if (hasFloorLeft && !hasTileRight)
+    if ((hasFloorLeft && !hasTileRight) || hasLargeTileBelow)
       return tileName + '-corner-top-left-large';
     return tileName + '-corner-top-left';
   }
-  if (hasTileAbove && !hasTileRight && !hasTileBelow && hasTileLeft)
+  if (
+    hasTileAbove &&
+    !hasTileRight &&
+    !hasTileBelow &&
+    hasTileLeft &&
+    !hasLargeTileAbove
+  )
     return tileName + '-corner-bottom-right';
-  if (hasTileAbove && hasTileRight && !hasTileBelow && !hasTileLeft)
+  if (
+    hasTileAbove &&
+    hasTileRight &&
+    !hasTileBelow &&
+    !hasTileLeft &&
+    !hasLargeTileAbove
+  )
     return tileName + '-corner-bottom-left';
-  if (hasTileLeft && hasTileRight && hasTileBelow) {
-    if (hasLargeTileLeft && hasLargeTileRight) return tileName + '-top-large';
-    if (hasLargeTileLeft) return tileName + '-link-top-left-large';
-    if (hasLargeTileRight) return tileName + '-link-top-right-large';
-    return tileName + '-link-top-large';
+  if (hasTileLeft && hasTileRight && (hasTileBelow || !hasWall)) {
+    if (hasLargeTileLeft && hasLargeTileRight && hasTileBelow)
+      return tileName + '-top-large';
+    if (hasLargeTileLeft && hasTileBelow)
+      return tileName + '-link-top-left-large';
+    if (hasLargeTileRight && hasTileBelow)
+      return tileName + '-link-top-right-large';
+    if (hasTileBelow) return tileName + '-link-top-large';
   }
   if (
     (hasWallBelow ||
@@ -145,8 +171,11 @@ const determineBorderType = (
       hasTileTopLeft ||
       hasTileTopRight) &&
     hasTileLeft &&
-    hasTileRight
+    hasTileRight &&
+    (!hasLargeTileAbove ||
+      (hasLargeTileAbove && (hasTileTopLeft || hasTileTopRight)))
   ) {
+    if (hasWallBelow && !hasWall) return tileName + '-link-top-large';
     return tileName + '-bottom-outer';
   }
   if (
@@ -155,31 +184,56 @@ const determineBorderType = (
     (hasWallLeft && hasFloorRight) ||
     (hasFloorLeft && hasWallRight)
   ) {
-    if (hasFloorAbove && hasWallLeft && !hasWallRight)
+    if (
+      (hasFloorAbove || hasTileAbove) &&
+      hasWallLeft &&
+      !hasWallRight &&
+      !hasWallTopLeft
+    )
       return tileName + '-corner-top-right-large';
-    if (hasFloorAbove && !hasWallLeft && hasWallRight)
+    if (
+      (hasFloorAbove || hasTileAbove) &&
+      !hasWallLeft &&
+      hasWallRight &&
+      !hasWallTopRight
+    )
       return tileName + '-corner-top-left-large';
-    if (hasFloorAbove && hasWallLeft && hasWallRight)
+    if (
+      hasFloorTopLeft &&
+      hasFloorTopRight &&
+      hasWallBottomLeft &&
+      hasWallBottomRight &&
+      !(hasTileAbove && hasTileBelow)
+    )
       return tileName + '-link-top-large';
-    if (hasWallLeft && hasWallRight && hasWallBelow)
+    if (!hasLargeTileLeft && !hasLargeTileRight && hasTileAbove)
+      return tileName + '-vertical-large';
+    if (hasFloorAbove && hasWallLeft && hasWallRight && hasTileBelow)
+      return tileName + '-link-top-large';
+    if (!hasWallLeft && !hasWallRight && hasWallBelow && !hasTileBelow)
       return tileName + '-link-bottom-large';
     if (hasFloorAbove) return tileName + '-top-end';
-    return tileName + '-vertical-large';
   }
+
   if (hasFloorLeft || hasWallLeft) {
-    if (hasLargeTileAbove && hasTileTopRight && hasTileRight)
+    if (hasLargeTileAbove && hasTileTopRight && hasTileRight && !hasWall)
       return tileName + '-left-large';
     if (hasLargeTileAbove && hasTileRight && hasTileBelow)
       return tileName + '-link-left-large';
     if (hasWallBelow && !hasTileLeft && hasTileRight)
       return tileName + '-corner-top-left';
-    if (hasWallLeft && hasTileTopLeft && (hasTileTwoAbove || !hasTileAbove))
+    if (
+      hasWallLeft &&
+      hasTileTopLeft &&
+      (hasTileTwoAbove || !hasTileAbove) &&
+      !hasLargeTileLeft
+    )
       return tileName + '-corner-top-right-outer';
 
-    return tileName + '-right-outer';
+    if (!hasLargeTileLeft) return tileName + '-right-outer';
   }
   if (hasFloorRight || hasWallRight) {
-    if (hasLargeTileAbove && hasTileTopLeft && hasTileLeft)
+    if (hasLargeTileAbove && hasTileTopLeft && hasTileLeft && !hasWall)
       return tileName + '-right-large';
     if (hasLargeTileAbove && hasTileLeft && hasTileBelow)
       return tileName + '-link-right-large';
@@ -188,6 +242,16 @@ const determineBorderType = (
     if (hasWallRight && hasTileTopRight && (hasTileTwoAbove || !hasTileAbove))
       return tileName + '-corner-top-left-outer';
     return tileName + '-left-outer';
+  }
+
+  if (
+    hasTileLeft &&
+    hasTileRight &&
+    hasTileAbove &&
+    (!hasTileTopRight || !hasTileTopLeft)
+  ) {
+    if (!hasWallBelow) return tileName + '-link-bottom-large';
+    return tileName + '-bottom-outer';
   }
 
   return tileName;
