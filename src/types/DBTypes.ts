@@ -8,11 +8,17 @@ export type User = {
 };
 
 export enum Layer {
-  FLOOR = 'floor',
-  WALL = 'wall',
-  OBJECT = 'object',
-  ROOF = 'roof',
-  OVERLAY = 'overlay',
+  GROUND, // This layer contains the basic terrain tiles, such as grass, sand, water, or any foundational elements.
+  FLOOR, // Used for additional floor tiles that sit on top of the base layer, such as carpets, roads, or pathways.
+  WALLS, // Contains wall tiles that form the vertical boundaries of structures.
+  BORDERS, // Includes tiles that create visual transitions between different types of terrain or tiles, such as cliffs, fences, or decorative edges.
+  OBJECTS, // Contains various objects like trees, rocks, furniture, or other interactive elements that are not part of the ground or walls.
+  COLLISIONS, // A non-visible layer that defines which tiles are passable or impassable.
+  OVERLAY, // Contains elements that should appear above characters or objects, such as tree canopies, roofs, or bridges.
+  DECORATION, // Includes small decorative elements like flowers, grass tufts, or scattered debris.
+  INTERACTION, // Contains invisible tiles that represent interactive zones or triggers, such as events, transitions, or special areas.
+  SHADOWS, // Used for adding shadow effects, lighting, or other visual effects that change the ambiance of the map.
+  FOREGROUND, // Elements that are meant to be drawn above everything else, including the player, such as clouds or foreground decorations.
 }
 
 export type Campaign = {

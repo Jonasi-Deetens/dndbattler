@@ -8,6 +8,7 @@ const determineArchType = (
 ) => {
   const tileName = baseName.split('-').slice(0, 2).join('-');
 
+  console.log(tileName);
   const hasTileAbove = y > 0 && map[y - 1][x].includes(tileName);
   const hasTileBelow = y < height - 1 && map[y + 1][x].includes(tileName);
   const hasTileLeft = x > 0 && map[y][x - 1].includes(tileName);
@@ -37,7 +38,7 @@ const determineArchType = (
   }
 
   // Default fallback
-  return tileName + '-bottom';
+  return tileName + '-left';
 };
 
 export const adjustArchTiles = (

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Sidebar from './Sidebar';
+import '@pixi/events';
 import { FiSettings } from 'react-icons/fi';
 import {
   adjustArchTiles,
@@ -18,10 +19,11 @@ import {
 import { adjustWallTiles } from '../utils/tileAdjusters';
 import { Field, Layer, Tile } from '../../types/DBTypes';
 import useTiles from '../../hooks/useTiles';
-
-const FieldComponent = lazy(() => import('../Game/FieldComponent'));
+import { Container, Sprite, Stage, Text } from '@pixi/react';
+import { BlurFilter, TextStyle } from 'pixi.js';
 
 const MapCreator: React.FC = () => {
+  const blurFilter = useMemo(() => new BlurFilter(2), []);
   const { getAllTiles } = useTiles();
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(10);
@@ -30,7 +32,6 @@ const MapCreator: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
   const [tiles, setTiles] = useState<Tile[]>([]);
-  const [showGrid, setShowGrid] = useState<boolean>(true);
   const [isReplace, setIsReplace] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -51,7 +52,7 @@ const MapCreator: React.FC = () => {
             x,
             y,
             layers: {
-              floor: existingField?.layers.floor || null,
+              floor: existingField?.layers.floor || tiles[0],
               wall: existingField?.layers.wall || null,
               object: existingField?.layers.object || null,
               roof: existingField?.layers.roof || null,
@@ -78,10 +79,6 @@ const MapCreator: React.FC = () => {
     setZoom(Math.max(16, parseInt(e.target.value) || 64));
   };
 
-  const handleShowGridChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setShowGrid(e.target.checked);
-  };
-
   const handleReplaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsReplace(e.target.checked);
   };
@@ -89,10 +86,12 @@ const MapCreator: React.FC = () => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   const handleTileSelect = (tile: Tile) => {
+    console.log(tile);
     setSelectedTile(tile);
   };
 
   const handleFieldClick = (x: number, y: number) => {
+    console.log('yes');
     if (!selectedTile) return;
 
     if (isReplace) {
@@ -143,6 +142,7 @@ const MapCreator: React.FC = () => {
   const handleMouseEnter = (x: number, y: number) => {
     if (isDragging) {
       handleFieldClick(x, y);
+      console.log('yes');
     }
   };
 
@@ -193,7 +193,7 @@ const MapCreator: React.FC = () => {
         })
       );
 
-      adjustArchTiles(floorMap, width, height);
+      adjustArchTiles(overlayMap, width, height);
       adjustBarTiles(floorMap, width, height);
       adjustBoardTiles(detailMap, width, height);
       adjustCarpetTiles(detailMap, width, height);
@@ -259,15 +259,6 @@ const MapCreator: React.FC = () => {
                 className="ml-2"
               />
             </label>
-            <label className="flex items-center text-sm">
-              Show Grid
-              <input
-                type="checkbox"
-                checked={showGrid}
-                onChange={handleShowGridChange}
-                className="ml-2"
-              />
-            </label>
             <label className="flex flex-col items-center text-sm">
               Width
               <input
@@ -312,28 +303,62 @@ const MapCreator: React.FC = () => {
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseUp}
         >
-          <div
-            className={`grid overflow-y-auto overflow-auto p-5 w-full h-full max-h-full ${
-              showGrid ? 'gap-1 border-2 border-yellow-500' : ''
-            }`}
-            style={{
-              gridTemplateColumns: `repeat(${width}, ${zoom}px)`,
-              gridTemplateRows: `repeat(${height}, ${zoom}px)`,
-            }}
+          <Stage
+            width={width * zoom}
+            height={height * zoom}
+            options={{ backgroundColor: 0x1099bb }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
           >
-            {fields.flat().map(field => (
-              <Suspense
-                fallback={<div className="loading">Loading...</div>}
+            {fields.map(field => (
+              <Container
                 key={`${field.x}-${field.y}`}
+                x={field.x * zoom}
+                y={field.y * zoom}
+                interactive={true}
+                pointerdown={() => handleFieldClick(field.x, field.y)}
+                pointerover={() => handleMouseEnter(field.x, field.y)}
+                mousedown={() => handleFieldClick(field.x, field.y)}
+                mouseover={() => handleMouseEnter(field.x, field.y)}
               >
-                <FieldComponent
-                  field={field}
-                  onClick={() => handleFieldClick(field.x, field.y)}
-                  onMouseEnter={() => handleMouseEnter(field.x, field.y)}
-                />
-              </Suspense>
+                {field.layers.floor && (
+                  <Sprite
+                    image={field.layers.floor.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers.wall && (
+                  <Sprite
+                    image={field.layers.wall.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers.object && (
+                  <Sprite
+                    image={field.layers.object.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers.roof && (
+                  <Sprite
+                    image={field.layers.roof.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers.overlay && (
+                  <Sprite
+                    image={field.layers.overlay.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+              </Container>
             ))}
-          </div>
+          </Stage>
         </div>
         <div className="relative">
           <button
