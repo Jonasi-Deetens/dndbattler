@@ -8,7 +8,7 @@ const determineFloorType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-')[0] + '-' + baseName.split('-')[1];
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   const hasWallAbove =
     (y > 0 && wallMap[y - 1][x].includes('wall')) ||

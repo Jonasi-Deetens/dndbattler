@@ -6,7 +6,7 @@ const determineDoorType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-')[0] + '-' + baseName.split('-')[1];
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   return baseName;
 };

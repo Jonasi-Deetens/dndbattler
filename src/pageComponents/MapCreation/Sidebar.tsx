@@ -6,11 +6,17 @@ import { FaArrowLeft } from 'react-icons/fa6';
 
 interface SidebarProps {
   isOpen: boolean;
+  layer: Layer;
   onClose: () => void;
   onSelectTile: (tile: Tile) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  onSelectTile,
+  layer,
+}) => {
   const { getAllTiles } = useTiles();
   const [tiles, setTiles] = useState<Tile[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -21,15 +27,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onSelectTile }) => {
     const fetchTiles = async () => {
       try {
         const fetchedTiles = await getAllTiles();
-        setTiles(fetchedTiles);
-        if (fetchedTiles) onSelectTile(fetchedTiles[0]);
+        const tiles = fetchedTiles.filter(tile => tile.layer === layer);
+        setTiles(tiles);
+        if (fetchedTiles) onSelectTile(tiles[0]);
       } catch (error) {
         console.error('Failed to fetch tiles:', error);
       }
     };
 
     fetchTiles();
-  }, []);
+  }, [layer]);
 
   const filteredTiles = tiles.filter(tile =>
     tile.name.toLowerCase().includes(filter.toLowerCase())

@@ -6,7 +6,7 @@ const determineCarpetType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-').slice(0, 2).join('-');
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   const hasTileLeft = x > 0 && map[y][x - 1].includes(tileName);
   const hasTileRight = x < width - 1 && map[y][x + 1].includes(tileName);

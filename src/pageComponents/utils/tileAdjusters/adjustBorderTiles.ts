@@ -8,7 +8,7 @@ const determineBorderType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-').slice(0, 2).join('-');
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   const isRightEdge = x === width - 1;
   const isLeftEdge = x === 0;

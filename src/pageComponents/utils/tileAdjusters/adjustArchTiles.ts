@@ -6,7 +6,7 @@ const determineArchType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-').slice(0, 2).join('-');
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   console.log(tileName);
   const hasTileAbove = y > 0 && map[y - 1][x].includes(tileName);

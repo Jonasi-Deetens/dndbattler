@@ -20,18 +20,28 @@ import { adjustWallTiles } from '../utils/tileAdjusters';
 import { Field, Layer, Tile } from '../../types/DBTypes';
 import useTiles from '../../hooks/useTiles';
 import { Container, Sprite, Stage, Text } from '@pixi/react';
-import { BlurFilter, TextStyle } from 'pixi.js';
+
+interface GameObject {
+  id: number;
+  name: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  imageUrl: string;
+}
 
 const MapCreator: React.FC = () => {
-  const blurFilter = useMemo(() => new BlurFilter(2), []);
   const { getAllTiles } = useTiles();
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(10);
-  const [fields, setFields] = useState<Field[]>([]);
   const [zoom, setZoom] = useState<number>(48);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
   const [tiles, setTiles] = useState<Tile[]>([]);
+  const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [objects, setObjects] = useState<GameObject[]>([]);
+  const [layer, setLayer] = useState<Layer>(Layer.GROUND);
   const [isReplace, setIsReplace] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -40,23 +50,25 @@ const MapCreator: React.FC = () => {
       const tiles = await getAllTiles();
       setTiles(tiles);
 
-      const fieldMap = new Map(fields.map(f => [`${f.x},${f.y}`, f]));
-
       const newFields: Field[] = [];
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const existingField = fieldMap.get(`${x},${y}`);
-
           newFields.push({
             x,
             y,
             layers: {
-              floor: existingField?.layers.floor || tiles[0],
-              wall: existingField?.layers.wall || null,
-              object: existingField?.layers.object || null,
-              roof: existingField?.layers.roof || null,
-              overlay: existingField?.layers.overlay || null,
+              ground: tiles[60],
+              floor: null,
+              wall: null,
+              border: null,
+              object: null,
+              detail: null,
+              collision: null,
+              overlay: null,
+              interaction: null,
+              shadow: null,
+              foreground: null,
             },
           });
         }
@@ -86,14 +98,11 @@ const MapCreator: React.FC = () => {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   const handleTileSelect = (tile: Tile) => {
-    console.log(tile);
     setSelectedTile(tile);
   };
 
   const handleFieldClick = (x: number, y: number) => {
-    console.log('yes');
-    if (!selectedTile) return;
-
+    if (!selectedTile || !layer) return;
     if (isReplace) {
       setFields(prevFields =>
         prevFields.map(field =>
@@ -101,13 +110,18 @@ const MapCreator: React.FC = () => {
             ? {
                 ...field,
                 layers: {
+                  ground: null,
                   floor: null,
                   wall: null,
+                  border: null,
                   object: null,
-                  roof: null,
+                  detail: null,
+                  collision: null,
                   overlay: null,
-                  [selectedTile.tileType!.layer.toLowerCase() as Layer]:
-                    selectedTile,
+                  interaction: null,
+                  shadow: null,
+                  foreground: null,
+                  [layer.toString().toLowerCase()]: selectedTile,
                 },
               }
             : field
@@ -121,8 +135,7 @@ const MapCreator: React.FC = () => {
                 ...field,
                 layers: {
                   ...field.layers,
-                  [selectedTile.tileType!.layer.toLowerCase() as Layer]:
-                    selectedTile,
+                  [layer.toString().toLowerCase()]: selectedTile,
                 },
               }
             : field
@@ -142,75 +155,112 @@ const MapCreator: React.FC = () => {
   const handleMouseEnter = (x: number, y: number) => {
     if (isDragging) {
       handleFieldClick(x, y);
-      console.log('yes');
     }
   };
 
   const handleAdjustTiles = () => {
     setFields(prevFields => {
+      const groundMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+
+          return field?.layers.ground?.name || '';
+        })
+      );
       const floorMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
 
-          return (field?.layers.wall || field?.layers.roof) &&
-            field?.layers.floor?.name !== 'sky'
-            ? ''
-            : field?.layers.floor?.name || '';
+          return field?.layers.floor?.name || '';
         })
       );
       const wallMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
+
           return field?.layers.wall?.name || '';
         })
       );
-
-      const detailMap = Array.from({ length: height }, (_, y) =>
+      const borderMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
-          return field?.layers.detail?.name || '';
+
+          return field?.layers.border?.name || '';
         })
       );
-
       const objectMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
+
           return field?.layers.object?.name || '';
         })
       );
-
-      const roofMap = Array.from({ length: height }, (_, y) =>
+      const collisionMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
-          return field?.layers.roof?.name || '';
+
+          return field?.layers.collision?.name || '';
         })
       );
-
       const overlayMap = Array.from({ length: height }, (_, y) =>
         Array.from({ length: width }, (_, x) => {
           const field = prevFields.find(f => f.x === x && f.y === y);
+
           return field?.layers.overlay?.name || '';
         })
       );
+      const detailMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
 
+          return field?.layers.detail?.name || '';
+        })
+      );
+      const interactionMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+
+          return field?.layers.interaction?.name || '';
+        })
+      );
+      const shadowMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+
+          return field?.layers.shadow?.name || '';
+        })
+      );
+      const foregroundMap = Array.from({ length: height }, (_, y) =>
+        Array.from({ length: width }, (_, x) => {
+          const field = prevFields.find(f => f.x === x && f.y === y);
+
+          return field?.layers.foreground?.name || '';
+        })
+      );
+      console.log(overlayMap);
       adjustArchTiles(overlayMap, width, height);
-      adjustBarTiles(floorMap, width, height);
+      adjustBarTiles(detailMap, width, height);
       adjustBoardTiles(detailMap, width, height);
-      adjustCarpetTiles(detailMap, width, height);
-      adjustDoorTiles(floorMap, width, height);
-      adjustFloorTiles(floorMap, wallMap, roofMap, width, height);
+      adjustCarpetTiles(floorMap, width, height);
+      adjustDoorTiles(overlayMap, width, height);
+      adjustFloorTiles(groundMap, wallMap, overlayMap, width, height);
       adjustLadderTiles(floorMap, width, height);
       adjustPathTiles(floorMap, width, height);
       adjustScreenTiles(floorMap, width, height);
       adjustShadowTiles(floorMap, width, height);
 
-      adjustBorderTiles(roofMap, wallMap, floorMap, width, height);
-      adjustStairsTiles(floorMap, width, height);
-      adjustWallTiles(wallMap, roofMap, width, height);
+      adjustBorderTiles(borderMap, wallMap, groundMap, width, height);
+      adjustStairsTiles(floorMap, wallMap, width, height);
+      adjustWallTiles(wallMap, borderMap, width, height);
 
+      console.log(wallMap);
       return prevFields.map(field => ({
         ...field,
         layers: {
+          ground: field.layers.ground
+            ? tiles.find(tile => tile.name === groundMap[field.y][field.x]) ||
+              null
+            : null,
           floor: field.layers.floor
             ? tiles.find(tile => tile.name === floorMap[field.y][field.x]) ||
               null
@@ -219,21 +269,40 @@ const MapCreator: React.FC = () => {
             ? tiles.find(tile => tile.name === wallMap[field.y][field.x]) ||
               null
             : null,
-          detail: field.layers.detail
-            ? tiles.find(tile => tile.name === detailMap[field.y][field.x]) ||
+          border: field.layers.border
+            ? tiles.find(tile => tile.name === borderMap[field.y][field.x]) ||
               null
             : null,
           object: field.layers.object
             ? tiles.find(tile => tile.name === objectMap[field.y][field.x]) ||
               null
             : null,
-          roof: field.layers.roof
-            ? tiles.find(tile => tile.name === roofMap[field.y][field.x]) ||
-              null
+          collision: field.layers.collision
+            ? tiles.find(
+                tile => tile.name === collisionMap[field.y][field.x]
+              ) || null
             : null,
           overlay: field.layers.overlay
             ? tiles.find(tile => tile.name === overlayMap[field.y][field.x]) ||
               null
+            : null,
+          detail: field.layers.detail
+            ? tiles.find(tile => tile.name === detailMap[field.y][field.x]) ||
+              null
+            : null,
+          interaction: field.layers.interaction
+            ? tiles.find(
+                tile => tile.name === interactionMap[field.y][field.x]
+              ) || null
+            : null,
+          shadow: field.layers.shadow
+            ? tiles.find(tile => tile.name === shadowMap[field.y][field.x]) ||
+              null
+            : null,
+          foreground: field.layers.foreground
+            ? tiles.find(
+                tile => tile.name === foregroundMap[field.y][field.x]
+              ) || null
             : null,
         },
       }));
@@ -250,6 +319,21 @@ const MapCreator: React.FC = () => {
         <div className="flex justify-between items-center mx-auto">
           <h2 className="text-2xl font-bold text-yellow-400">Map Generator</h2>
           <div className="flex items-center gap-4">
+            <div className="flex gap-2 mb-4">
+              {Object.values(Layer).map(layerVal => (
+                <button
+                  key={layerVal}
+                  className={`p-2 rounded ${layer === layerVal ? 'bg-yellow-400' : 'bg-gray-600'}`}
+                  onClick={() => setLayer(layerVal as Layer)}
+                >
+                  {layerVal}
+                </button>
+              ))}
+            </div>
+            <label className="flex items-center text-sm flex-col">
+              Selected Tile
+              <img src={selectedTile?.imageUrl} />
+            </label>
             <label className="flex items-center text-sm">
               Replace
               <input
@@ -306,7 +390,7 @@ const MapCreator: React.FC = () => {
           <Stage
             width={width * zoom}
             height={height * zoom}
-            options={{ backgroundColor: 0x1099bb }}
+            options={{ backgroundColor: 0x002211 }}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
           >
@@ -321,37 +405,44 @@ const MapCreator: React.FC = () => {
                 mousedown={() => handleFieldClick(field.x, field.y)}
                 mouseover={() => handleMouseEnter(field.x, field.y)}
               >
-                {field.layers.floor && (
+                {field.layers?.ground && (
                   <Sprite
-                    image={field.layers.floor.imageUrl}
+                    image={field?.layers?.ground.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
                 )}
-                {field.layers.wall && (
+                {field.layers?.floor && (
                   <Sprite
-                    image={field.layers.wall.imageUrl}
+                    image={field?.layers?.floor.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
                 )}
-                {field.layers.object && (
+                {field.layers?.wall && (
                   <Sprite
-                    image={field.layers.object.imageUrl}
+                    image={field?.layers?.wall.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
                 )}
-                {field.layers.roof && (
+                {field.layers?.border && (
                   <Sprite
-                    image={field.layers.roof.imageUrl}
+                    image={field.layers?.border?.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
                 )}
-                {field.layers.overlay && (
+                {field.layers?.collision && (
                   <Sprite
-                    image={field.layers.overlay.imageUrl}
+                    image={field.layers.collision.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers?.detail && (
+                  <Sprite
+                    image={field.layers.detail.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
@@ -375,6 +466,7 @@ const MapCreator: React.FC = () => {
             isOpen={isSidebarOpen}
             onClose={() => setSidebarOpen(false)}
             onSelectTile={handleTileSelect}
+            layer={layer}
           />
         )}
       </div>

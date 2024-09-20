@@ -7,8 +7,7 @@ const determineWallType = (
   height: number,
   baseName: string
 ) => {
-  const tileName = baseName.split('-').slice(0, 2).join('-');
-
+  const tileName = baseName.split('-').slice(0, 3).join('-');
   const hasBorder = roofMap[y][x].includes('border');
   const hasWallAbove = y > 0 && map[y - 1][x].includes('wall');
   const hasWallBelow = y < height - 1 && map[y + 1][x].includes('wall');

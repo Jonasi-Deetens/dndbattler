@@ -7,7 +7,7 @@ const determineBarType = (
   baseName: string
 ) => {
   // Extract the base type (e.g., 'wall-2')
-  const tileName = baseName.split('-').slice(0, 2).join('-');
+  const tileName = baseName.split('-').slice(0, 3).join('-');
 
   const hasTileLeft = x > 0 && map[y][x - 1].includes(tileName);
 
