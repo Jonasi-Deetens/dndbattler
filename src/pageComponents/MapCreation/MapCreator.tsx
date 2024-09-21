@@ -50,30 +50,40 @@ const MapCreator: React.FC = () => {
       const tiles = await getAllTiles();
       setTiles(tiles);
 
-      const newFields: Field[] = [];
+      setFields(prevFields => {
+        const newFields: Field[] = [];
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            const existingField = prevFields.find(
+              field => field.x === x && field.y === y
+            );
 
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          newFields.push({
-            x,
-            y,
-            layers: {
-              ground: tiles[60],
-              floor: null,
-              wall: null,
-              border: null,
-              object: null,
-              detail: null,
-              collision: null,
-              overlay: null,
-              interaction: null,
-              shadow: null,
-              foreground: null,
-            },
-          });
+            if (existingField) {
+              newFields.push(existingField);
+            } else {
+              newFields.push({
+                x,
+                y,
+                layers: {
+                  ground:
+                    tiles.find(tile => tile.name.includes('sky')) || tiles[0],
+                  floor: null,
+                  wall: null,
+                  border: null,
+                  object: null,
+                  detail: null,
+                  collision: null,
+                  overlay: null,
+                  interaction: null,
+                  shadow: null,
+                  foreground: null,
+                },
+              });
+            }
+          }
         }
-      }
-      setFields(newFields);
+        return newFields;
+      });
     };
 
     generateFields();
@@ -121,7 +131,7 @@ const MapCreator: React.FC = () => {
                   interaction: null,
                   shadow: null,
                   foreground: null,
-                  [layer.toString().toLowerCase()]: selectedTile,
+                  [layer.toLowerCase()]: selectedTile,
                 },
               }
             : field
@@ -135,7 +145,7 @@ const MapCreator: React.FC = () => {
                 ...field,
                 layers: {
                   ...field.layers,
-                  [layer.toString().toLowerCase()]: selectedTile,
+                  [layer.toLowerCase()]: selectedTile,
                 },
               }
             : field
@@ -237,11 +247,10 @@ const MapCreator: React.FC = () => {
           return field?.layers.foreground?.name || '';
         })
       );
-      console.log(overlayMap);
       adjustArchTiles(overlayMap, width, height);
       adjustBarTiles(detailMap, width, height);
       adjustBoardTiles(detailMap, width, height);
-      adjustCarpetTiles(floorMap, width, height);
+      adjustCarpetTiles(floorMap, wallMap, borderMap, width, height);
       adjustDoorTiles(overlayMap, width, height);
       adjustFloorTiles(groundMap, wallMap, overlayMap, width, height);
       adjustLadderTiles(floorMap, width, height);
@@ -249,11 +258,10 @@ const MapCreator: React.FC = () => {
       adjustScreenTiles(floorMap, width, height);
       adjustShadowTiles(floorMap, width, height);
 
-      adjustBorderTiles(borderMap, wallMap, groundMap, width, height);
-      adjustStairsTiles(floorMap, wallMap, width, height);
+      adjustBorderTiles(borderMap, wallMap, groundMap, floorMap, width, height);
+      adjustStairsTiles(floorMap, wallMap, borderMap, width, height);
       adjustWallTiles(wallMap, borderMap, width, height);
 
-      console.log(wallMap);
       return prevFields.map(field => ({
         ...field,
         layers: {
@@ -319,17 +327,6 @@ const MapCreator: React.FC = () => {
         <div className="flex justify-between items-center mx-auto">
           <h2 className="text-2xl font-bold text-yellow-400">Map Generator</h2>
           <div className="flex items-center gap-4">
-            <div className="flex gap-2 mb-4">
-              {Object.values(Layer).map(layerVal => (
-                <button
-                  key={layerVal}
-                  className={`p-2 rounded ${layer === layerVal ? 'bg-yellow-400' : 'bg-gray-600'}`}
-                  onClick={() => setLayer(layerVal as Layer)}
-                >
-                  {layerVal}
-                </button>
-              ))}
-            </div>
             <label className="flex items-center text-sm flex-col">
               Selected Tile
               <img src={selectedTile?.imageUrl} />
@@ -440,9 +437,23 @@ const MapCreator: React.FC = () => {
                     height={zoom}
                   />
                 )}
+                {field.layers?.overlay && (
+                  <Sprite
+                    image={field.layers.overlay.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
                 {field.layers?.detail && (
                   <Sprite
                     image={field.layers.detail.imageUrl}
+                    width={zoom}
+                    height={zoom}
+                  />
+                )}
+                {field.layers?.shadow && (
+                  <Sprite
+                    image={field.layers.shadow.imageUrl}
                     width={zoom}
                     height={zoom}
                   />
@@ -452,6 +463,19 @@ const MapCreator: React.FC = () => {
           </Stage>
         </div>
         <div className="relative">
+          <div className="absolute right-20 flex flex-col items-left gap-2 mt-10">
+            {Object.values(Layer)
+              .filter(key => isNaN(Number(key)))
+              .map(layerKey => (
+                <button
+                  key={layerKey}
+                  className={`primary p-2 rounded ${layer.toString() === layerKey ? 'bg-yellow-400' : '!bg-gray-600 hover:!bg-yellow-400'}`}
+                  onClick={() => setLayer(layerKey as Layer)}
+                >
+                  {layerKey}
+                </button>
+              ))}
+          </div>
           <button
             onClick={toggleSidebar}
             className={`absolute top-1/2 transform -translate-y-1/2 bg-gray-700 p-2 rounded-l shadow-lg z-30 hover:bg-gray-600 transition-colors ${

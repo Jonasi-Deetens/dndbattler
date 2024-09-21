@@ -1,5 +1,7 @@
 const determineCarpetType = (
   map: string[][],
+  wallMap: string[][],
+  borderMap: string[][],
   x: number,
   y: number,
   width: number,
@@ -13,7 +15,8 @@ const determineCarpetType = (
 
   const hasBorderLeft =
     x > 0 &&
-    (map[y][x - 1].includes('border') || map[y][x - 1].includes('wall'));
+    (borderMap[y][x - 1].includes('border') ||
+      wallMap[y][x - 1].includes('wall'));
 
   if (!hasTileLeft && hasTileRight) {
     if (hasBorderLeft) return tileName + '-left-shadow';
@@ -30,13 +33,24 @@ const determineCarpetType = (
 
 export const adjustCarpetTiles = (
   map: string[][],
+  wallMap: string[][],
+  borderMap: string[][],
   width: number,
   height: number
 ) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       if (map[y][x].includes('carpet')) {
-        map[y][x] = determineCarpetType(map, x, y, width, height, map[y][x]);
+        map[y][x] = determineCarpetType(
+          map,
+          wallMap,
+          borderMap,
+          x,
+          y,
+          width,
+          height,
+          map[y][x]
+        );
       }
     }
   }

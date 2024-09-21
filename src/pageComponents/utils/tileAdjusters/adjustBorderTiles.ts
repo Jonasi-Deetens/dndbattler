@@ -1,6 +1,7 @@
 const determineBorderType = (
   map: string[][],
   wallMap: string[][],
+  groundMap: string[][],
   floorMap: string[][],
   x: number,
   y: number,
@@ -49,27 +50,29 @@ const determineBorderType = (
   const hasWallBottomRight =
     x < width - 1 && y < height - 1 && wallMap[y + 1][x + 1].includes('wall');
 
-  const hasSkyAbove = y > 0 && floorMap[y - 1][x].includes('sky');
-  const hasSkyBelow = y < height - 1 && floorMap[y + 1][x].includes('sky');
-  const hasSkyLeft = x > 0 && floorMap[y][x - 1].includes('sky');
-  const hasSkyRight = x < width - 1 && floorMap[y][x + 1].includes('sky');
+  const hasSkyAbove = y > 0 && groundMap[y - 1][x].includes('sky');
+  const hasSkyBelow = y < height - 1 && groundMap[y + 1][x].includes('sky');
+  const hasSkyLeft = x > 0 && groundMap[y][x - 1].includes('sky');
+  const hasSkyRight = x < width - 1 && groundMap[y][x + 1].includes('sky');
 
-  const hasFloorAbove =
-    (y > 0 && floorMap[y - 1][x].includes('floor')) ||
+  const hasGroundAbove =
+    (y > 0 && groundMap[y - 1][x].includes('ground-ground')) ||
     (y > 0 && floorMap[y - 1][x].includes('stair'));
-  const hasFloorLeft =
-    (x > 0 && floorMap[y][x - 1].includes('floor')) ||
+  const hasGroundLeft =
+    (x > 0 && groundMap[y][x - 1].includes('ground-ground')) ||
     (x > 0 && floorMap[y][x - 1].includes('stair'));
-  const hasFloorRight =
-    (x < width - 1 && floorMap[y][x + 1].includes('floor')) ||
+  const hasGroundRight =
+    (x < width - 1 && groundMap[y][x + 1].includes('ground-ground')) ||
     (x < width - 1 && floorMap[y][x + 1].includes('stair'));
 
-  const hasFloorTopRight =
-    (x < width - 1 && y > 0 && floorMap[y - 1][x + 1].includes('floor')) ||
+  const hasGroundTopRight =
+    (x < width - 1 &&
+      y > 0 &&
+      groundMap[y - 1][x + 1].includes('ground-ground')) ||
     (x < width - 1 && y > 0 && floorMap[y - 1][x + 1].includes('stair'));
 
-  const hasFloorTopLeft =
-    (x > 0 && y > 0 && floorMap[y - 1][x - 1].includes('floor')) ||
+  const hasGroundTopLeft =
+    (x > 0 && y > 0 && groundMap[y - 1][x - 1].includes('ground-ground')) ||
     (x > 0 && y > 0 && floorMap[y - 1][x - 1].includes('stair'));
 
   if (
@@ -84,7 +87,7 @@ const determineBorderType = (
     hasTileRight &&
     (hasSkyBelow || isBottomEdge) &&
     (hasSkyLeft || isLeftEdge) &&
-    hasFloorTopRight
+    hasGroundTopRight
   )
     if (!hasLargeTileAbove) return tileName + '-corner-bottom-left-outer';
   if (
@@ -92,7 +95,7 @@ const determineBorderType = (
     (hasSkyRight || isRightEdge) &&
     (hasSkyBelow || isBottomEdge) &&
     hasTileLeft &&
-    hasFloorTopLeft
+    hasGroundTopLeft
   )
     if (!hasLargeTileAbove) return tileName + '-corner-bottom-right-outer';
   if (
@@ -125,7 +128,7 @@ const determineBorderType = (
     hasTileBelow &&
     (hasTileLeft || hasSkyLeft)
   ) {
-    if ((hasFloorRight && !hasTileLeft) || hasLargeTileBelow)
+    if ((hasGroundRight && !hasTileLeft) || hasLargeTileBelow)
       return tileName + '-corner-top-right-large';
     return tileName + '-corner-top-right';
   }
@@ -135,7 +138,7 @@ const determineBorderType = (
     hasTileBelow &&
     !hasTileLeft
   ) {
-    if ((hasFloorLeft && !hasTileRight) || hasLargeTileBelow)
+    if ((hasGroundLeft && !hasTileRight) || hasLargeTileBelow)
       return tileName + '-corner-top-left-large';
     return tileName + '-corner-top-left';
   }
@@ -166,7 +169,7 @@ const determineBorderType = (
   }
   if (
     (hasWallBelow ||
-      hasFloorAbove ||
+      hasGroundAbove ||
       hasSkyAbove ||
       hasTileTopLeft ||
       hasTileTopRight) &&
@@ -179,28 +182,28 @@ const determineBorderType = (
     return tileName + '-bottom-outer';
   }
   if (
-    (hasFloorRight && hasFloorLeft) ||
+    (hasGroundRight && hasGroundLeft) ||
     (hasWallLeft && hasWallRight) ||
-    (hasWallLeft && hasFloorRight) ||
-    (hasFloorLeft && hasWallRight)
+    (hasWallLeft && hasGroundRight) ||
+    (hasGroundLeft && hasWallRight)
   ) {
     if (
-      (hasFloorAbove || hasTileAbove) &&
+      (hasGroundAbove || hasTileAbove) &&
       hasWallLeft &&
       !hasWallRight &&
       !hasWallTopLeft
     )
       return tileName + '-corner-top-right-large';
     if (
-      (hasFloorAbove || hasTileAbove) &&
+      (hasGroundAbove || hasTileAbove) &&
       !hasWallLeft &&
       hasWallRight &&
       !hasWallTopRight
     )
       return tileName + '-corner-top-left-large';
     if (
-      hasFloorTopLeft &&
-      hasFloorTopRight &&
+      hasGroundTopLeft &&
+      hasGroundTopRight &&
       hasWallBottomLeft &&
       hasWallBottomRight &&
       !(hasTileAbove && hasTileBelow)
@@ -208,14 +211,14 @@ const determineBorderType = (
       return tileName + '-link-top-large';
     if (!hasLargeTileLeft && !hasLargeTileRight && hasTileAbove)
       return tileName + '-vertical-large';
-    if (hasFloorAbove && hasWallLeft && hasWallRight && hasTileBelow)
+    if (hasGroundAbove && hasWallLeft && hasWallRight && hasTileBelow)
       return tileName + '-link-top-large';
     if (!hasWallLeft && !hasWallRight && hasWallBelow && !hasTileBelow)
       return tileName + '-link-bottom-large';
-    if (hasFloorAbove) return tileName + '-top-end';
+    if (hasGroundAbove) return tileName + '-top-end';
   }
 
-  if (hasFloorLeft || hasWallLeft) {
+  if (hasGroundLeft || hasWallLeft) {
     if (hasLargeTileAbove && hasTileTopRight && hasTileRight && !hasWall)
       return tileName + '-left-large';
     if (hasLargeTileAbove && hasTileRight && hasTileBelow)
@@ -232,7 +235,7 @@ const determineBorderType = (
 
     if (!hasLargeTileLeft) return tileName + '-right-outer';
   }
-  if (hasFloorRight || hasWallRight) {
+  if (hasGroundRight || hasWallRight) {
     if (hasLargeTileAbove && hasTileTopLeft && hasTileLeft && !hasWall)
       return tileName + '-right-large';
     if (hasLargeTileAbove && hasTileLeft && hasTileBelow)
@@ -260,6 +263,7 @@ const determineBorderType = (
 export const adjustBorderTiles = (
   map: string[][],
   wallMap: string[][],
+  groundMap: string[][],
   floorMap: string[][],
   width: number,
   height: number
@@ -270,6 +274,7 @@ export const adjustBorderTiles = (
         map[y][x] = determineBorderType(
           map,
           wallMap,
+          groundMap,
           floorMap,
           x,
           y,

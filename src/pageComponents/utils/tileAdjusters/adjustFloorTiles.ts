@@ -56,7 +56,7 @@ export const adjustFloorTiles = (
 ) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      if (map[y][x].includes('floor')) {
+      if (map[y][x].includes('ground') && !map[y][x].includes('sky')) {
         map[y][x] = determineFloorType(
           map,
           wallMap,
